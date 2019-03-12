@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SLoanDamagedMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SLoanDamaged">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+    <result column="pay_amount_usd" jdbcType="DECIMAL" property="payAmountUsd" />
+    <result column="pay_overdue_amount" jdbcType="DECIMAL" property="payOverdueAmount" />
+    <result column="pay_overdue_amount_usd" jdbcType="DECIMAL" property="payOverdueAmountUsd" />
+    <result column="damaged_repay_amount" jdbcType="DECIMAL" property="damagedRepayAmount" />
+    <result column="damaged_repay_amount_usd" jdbcType="DECIMAL" property="damagedRepayAmountUsd" />
+    <result column="damaged_overdue_amount" jdbcType="DECIMAL" property="damagedOverdueAmount" />
+    <result column="damaged_overdue_amount_usd" jdbcType="DECIMAL" property="damagedOverdueAmountUsd" />
+    <result column="damaged_all_amount" jdbcType="DECIMAL" property="damagedAllAmount" />
+    <result column="damaged_all_amount_usd" jdbcType="DECIMAL" property="damagedAllAmountUsd" />
+    <result column="damaged_amount_type" jdbcType="INTEGER" property="damagedAmountType" />
+    <result column="damaged_type" jdbcType="INTEGER" property="damagedType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+</mapper>

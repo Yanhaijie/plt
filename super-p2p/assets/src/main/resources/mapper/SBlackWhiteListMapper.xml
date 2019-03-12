@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supers.p2p.assets.dao.SBlackWhiteListMapper">
+  <resultMap id="BaseResultMap" type="com.supers.p2p.assets.entity.SBlackWhiteList">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="target_company_id" jdbcType="INTEGER" property="targetCompanyId" />
+    <result column="target_company_name" jdbcType="VARCHAR" property="targetCompanyName" />
+    <result column="owner_type" jdbcType="INTEGER" property="ownerType" />
+    <result column="relation_type" jdbcType="INTEGER" property="relationType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+  <resultMap id="AssetFoundVoMap" extends="BaseResultMap" type="com.supers.p2p.assets.entity.vo.AssetFoundVo">
+    <result column="asset_id" jdbcType="INTEGER" property="assetId" />
+    <result column="asset_name" jdbcType="VARCHAR" property="assetName" />
+    <result column="found_id" jdbcType="INTEGER" property="foundId" />
+    <result column="found_name" jdbcType="VARCHAR" property="foundName" />
+  </resultMap>
+
+  <select id="selectAssetFoundRelation" resultType="java.util.Map" parameterType="map">
+    SELECT
+        s0.id AS asset_id,
+        s0.abbreviation_name AS asset_name,
+        s2.id AS found_id,
+        s2.abbreviation_name AS found_name
+    FROM
+        s_company s0
+            JOIN
+        (SELECT
+            t.company_id, t.target_company_id
+        FROM
+            s_black_white_list t
+        JOIN s_black_white_list t1 ON t.company_id = t1.target_company_id
+            AND t.target_company_id = t1.company_id
+            AND t.id != t1.id
+            AND t.owner_type = 1) s1 ON s0.id = s1.company_id
+            JOIN
+        s_company s2 ON s2.id = s1.target_company_id
+    where 1=1
+    <if test="assetId!=null and assetId!='' ">
+      and s0.id =#{assetId}
+    </if>
+    <if test="assetName!=null and assetName!='' ">
+      and s0.abbreviation_name =#{assetName}
+    </if>
+    <if test="foundId!=null and foundId!='' ">
+      and s2.id =#{foundId}
+    </if>
+    <if test="foundName!=null and foundName!='' ">
+      and s2.abbreviation_name =#{foundName}
+    </if>
+  </select>
+
+
+  <select id="selectListByObj" resultMap="BaseResultMap" parameterType="com.supers.p2p.assets.entity.SBlackWhiteList">
+    select * from s_black_white_list
+    where 1=1
+    <if test="companyId!=null and companyId!='' ">
+      AND company_id =#{companyId}
+    </if>
+    <if test="targetCompanyId!=null and targetCompanyId!='' ">
+      AND target_company_id =#{targetCompanyId}
+    </if>
+    order by create_time desc
+  </select>
+
+<delete id="deleteByObj" parameterType="com.supers.p2p.assets.entity.SBlackWhiteList">
+  delete from s_black_white_list
+  where 1=1
+  <if test="companyId!=null and companyId!='' ">
+    AND company_id =#{companyId}
+  </if>
+  <if test="targetCompanyId!=null and targetCompanyId!='' ">
+    AND target_company_id =#{targetCompanyId}
+  </if>
+
+</delete>
+
+
+  <select id="getMyAssetCompanyList" resultType="java.util.Map" parameterType="map">
+    SELECT
+    t1.id,
+    t1.company_type,
+    t1.full_name,
+    t1.abbreviation_name,
+    t.asset_size,
+    t.month_size,
+    t.every_deadline,
+    t.every_sum,
+    CONCAT(CONCAT('M0:', overdue_M0, ','),
+    CONCAT('M1:', overdue_M1, ','),
+    CONCAT('M2:', overdue_M2, ','),
+    CONCAT('M3:', overdue_M3, ',')) AS overdue,
+    t.accept_found,
+    t.business_area,
+    t.is_performance_insurance,
+    t.is_guarantee
+    FROM
+    s_asset_company t
+    JOIN
+    s_company t1 ON t1.id = t.company_id
+    join s_black_white_list t2 on t.company_id = t2.target_company_id
+    and t2.company_id = #{my_company_id}
+    WHERE 1=1
+    <if test="id != null and id!=''">
+      AND t.company_id=#{id}
+    </if>
+    <if test="asset_type != null and asset_type!=''">
+      AND CONCAT(',',t.asset_info,',') LIKE CONCAT('%,',#{asset_type},',%')
+    </if>
+    <if test="every_deadline != null and every_deadline!=''">
+      AND t.every_deadline=#{every_deadline}
+    </if>
+    <if test="every_sum != null and every_sum!=''">
+      AND t.every_sum=#{every_sum}
+    </if>
+    <if test="business_area != null and business_area!=''">
+      AND t.business_area LIKE CONCAT('%',#{business_area},'%')
+    </if>
+    <if test="full_name != null and full_name!=''">
+      AND t1.full_name LIKE CONCAT('%',#{full_name},'%')
+    </if>
+    <if test="abbreviation_name != null and abbreviation_name!=''">
+      AND t1.abbreviation_name LIKE CONCAT('%',#{abbreviation_name},'%')
+    </if>
+  </select>
+
+
+</mapper>

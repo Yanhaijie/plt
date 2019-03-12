@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SActivityWhiteListMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SActivityWhiteList">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="gift_id" jdbcType="INTEGER" property="giftId" />
+    <result column="lottery_count" jdbcType="INTEGER" property="lotteryCount" />
+    <result column="lottery_record_id" jdbcType="INTEGER" property="lotteryRecordId" />
+    <result column="is_sent" jdbcType="TINYINT" property="isSent" />
+  </resultMap>
+
+  <select id="selectWhiteListByParam" resultMap="BaseResultMap" parameterType="map">
+      SELECT * FROM s_activity_white_list WHERE activity_name=#{activityName} AND user_id = #{userId} AND is_sent = 0
+  </select>
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SLoanRepayMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SLoanRepay">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="repay_code" jdbcType="VARCHAR" property="repayCode" />
+    <result column="grant_code" jdbcType="VARCHAR" property="grantCode" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="repay_method" jdbcType="INTEGER" property="repayMethod" />
+    <result column="repay_amount" jdbcType="DECIMAL" property="repayAmount" />
+    <result column="period" jdbcType="INTEGER" property="period" />
+    <result column="cur_period" jdbcType="INTEGER" property="curPeriod" />
+    <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+    <result column="repay_end_time" jdbcType="TIMESTAMP" property="repayEndTime" />
+    <result column="repay_time" jdbcType="TIMESTAMP" property="repayTime" />
+    <result column="overdue_limit" jdbcType="INTEGER" property="overdueLimit" />
+    <result column="overdue_amount" jdbcType="DECIMAL" property="overdueAmount" />
+    <result column="pay_overdue_amount" jdbcType="DECIMAL" property="payOverdueAmount" />
+    <result column="repay_status" jdbcType="INTEGER" property="repayStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+
+    <result column="repay_amount_usd" jdbcType="DECIMAL" property="repayAmountUsd" />
+    <result column="pay_amount_usd" jdbcType="DECIMAL" property="payAmountUsd" />
+    <result column="overdue_amount_usd" jdbcType="DECIMAL" property="overdueAmountUsd" />
+    <result column="pay_overdue_amount_usd" jdbcType="DECIMAL" property="payOverdueAmountUsd" />
+  </resultMap>
+
+  <resultMap id="BaseVo"  extends="BaseResultMap" type="com.supermoney.loan.mg.entity.vo.SLoanRepayVo">
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseVo" parameterType="map">
+    select t1.*,t2.user_name from  s_loan_repay t1
+    inner  join s_user t2 on t2.id = t1.user_id
+    where 1=1
+    <if test="userId!=null and userId!='' ">
+      AND  t1.user_id = #{userId}
+    </if>
+    <if test="mobile!=null and mobile!='' ">
+      AND t2.mobile  LIKE CONCAT('%',#{mobile},'%')
+    </if>
+    <if test="orderCode != null and orderCode!=''">
+      AND t1.order_code=#{orderCode}
+    </if>
+    <if test="grantCode != null and grantCode!=''">
+      AND t1.grant_code=#{grantCode}
+    </if>
+    <if test="repayStatus!=null and repayStatus!='' ">
+      AND t1.repay_status=#{repayStatus}
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ t1.update_time>= #{startDate}]]>
+      AND <![CDATA[ t1.update_time<= #{endDate}]]>
+    </if>
+    <if test="startRepayDate != null and startRepayDate!='' and endRepayDate!=null and endRepayDate!='' ">
+      AND <![CDATA[ t1.repay_end_time>= #{startRepayDate}]]>
+      AND <![CDATA[ t1.repay_end_time<= #{endRepayDate}]]>
+    </if>
+  </select>
+
+  <select id="getRecordList" resultType="map" parameterType="map">
+    select t5.user_name,t1.user_id,t1.name,t1.order_id,t3.order_code,t1.account_type,t1.is_closed,t1.expected_amount,
+    t2.callback_virtual_account_id,t2.external_id,t2.account_number,t2.bank_code,t2.amount,t2.transaction_timestamp
+    from s_xendit_virtual_account_callback  t2
+    inner join s_xendit_virtual_account t1 on t1.external_id=t2.external_id
+    left join s_loan_order t3  on t3.id=t1.order_id
+    left join s_user t5 on t5.id=t1.user_id
+      WHERE  1=1
+    <if test="userId!=null and userId!='' ">
+      AND  t1.user_id = #{userId}
+    </if>
+    <if test="mobile!=null and mobile!='' ">
+      AND t5.user_name  LIKE CONCAT('%',#{mobile},'%')
+    </if>
+    <if test="orderCode != null and orderCode!=''">
+      AND t3.order_code=#{orderCode}
+    </if>
+    <if test="bankCode != null and bankCode!=''">
+      AND t2.bank_code=#{bankCode}
+    </if>
+    <if test="isClosed != null and isClosed!=''">
+      AND t1.is_closed=#{isClosed}
+    </if>
+    <if test="accountType!=null and accountType!='' ">
+      AND t1.account_type=#{accountType}
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ t2.transaction_timestamp>= #{startDate}]]>
+      AND <![CDATA[ t2.transaction_timestamp<= #{endDate}]]>
+    </if>
+</select>
+
+</mapper>

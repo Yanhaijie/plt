@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.STransfertoTopupHisMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.STransfertoTopupHis">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="destination_currency" jdbcType="VARCHAR" property="destinationCurrency" />
+    <result column="transactionid" jdbcType="VARCHAR" property="transactionid" />
+    <result column="msisdn" jdbcType="VARCHAR" property="msisdn" />
+    <result column="destination_msisdn" jdbcType="VARCHAR" property="destinationMsisdn" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="countryid" jdbcType="VARCHAR" property="countryid" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="operatorid" jdbcType="VARCHAR" property="operatorid" />
+    <result column="reference_operator" jdbcType="VARCHAR" property="referenceOperator" />
+    <result column="originating_currency" jdbcType="VARCHAR" property="originatingCurrency" />
+    <result column="product_requested" jdbcType="VARCHAR" property="productRequested" />
+    <result column="actual_product_sent" jdbcType="VARCHAR" property="actualProductSent" />
+    <result column="wholesale_price" jdbcType="VARCHAR" property="wholesalePrice" />
+    <result column="retail_price" jdbcType="VARCHAR" property="retailPrice" />
+    <result column="balance" jdbcType="VARCHAR" property="balance" />
+    <result column="sms_sent" jdbcType="VARCHAR" property="smsSent" />
+    <result column="sms" jdbcType="VARCHAR" property="sms" />
+    <result column="cid1" jdbcType="VARCHAR" property="cid1" />
+    <result column="cid2" jdbcType="VARCHAR" property="cid2" />
+    <result column="cid3" jdbcType="VARCHAR" property="cid3" />
+    <result column="info_txt" jdbcType="VARCHAR" property="infoTxt" />
+    <result column="authentication_key" jdbcType="VARCHAR" property="authenticationKey" />
+    <result column="error_code" jdbcType="VARCHAR" property="errorCode" />
+    <result column="error_txt" jdbcType="VARCHAR" property="errorTxt" />
+    <result column="response_body" jdbcType="VARCHAR" property="responseBody" />
+    <result column="transaction_price" jdbcType="INTEGER" property="transactionPrice" />
+    <result column="transaction_price_usd" jdbcType="INTEGER" property="transactionPriceUsd" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+  </resultMap>
+
+
+  <insert id="saveTopUpRecord" parameterType="map">
+    insert into s_transferto_topup_his(transactionid,msisdn,destination_msisdn,country,countryid,operator,operatorid,reference_operator,originating_currency,destination_currency
+    ,product_requested,actual_product_sent,wholesale_price,retail_price,balance,sms_sent,sms,cid1,cid2,cid3,info_txt,authentication_key,error_code,error_txt,response_body,user_id,transaction_price,transaction_price_usd)
+    value (
+            #{transactionid,jdbcType=VARCHAR},
+            #{msisdn,jdbcType=VARCHAR},
+            #{destination_msisdn,jdbcType=VARCHAR},
+            #{country,jdbcType=VARCHAR},
+            #{countryid,jdbcType=VARCHAR},
+            #{operator,jdbcType=VARCHAR},
+            #{operatorid,jdbcType=VARCHAR},
+            #{reference_operator,jdbcType=VARCHAR},
+            #{originating_currency,jdbcType=VARCHAR},
+            #{destination_currency,jdbcType=VARCHAR},
+            #{product_requested,jdbcType=VARCHAR},
+            #{actual_product_sent,jdbcType=VARCHAR},
+            #{wholesale_price,jdbcType=VARCHAR},
+            #{retail_price,jdbcType=VARCHAR},
+            #{balance,jdbcType=VARCHAR},
+            #{sms_sent,jdbcType=VARCHAR},
+            #{sms,jdbcType=VARCHAR},
+            #{cid1,jdbcType=VARCHAR},
+            #{cid2,jdbcType=VARCHAR},
+            #{cid3,jdbcType=VARCHAR},
+            #{info_txt,jdbcType=VARCHAR},
+            #{authentication_key,jdbcType=VARCHAR},
+            #{error_code,jdbcType=VARCHAR},
+            #{error_txt,jdbcType=VARCHAR},
+            #{response_body,jdbcType=VARCHAR},
+            #{user_id,jdbcType=INTEGER},
+            #{transaction_price,jdbcType=INTEGER},
+            #{transaction_price_usd,jdbcType=INTEGER}
+            )
+  </insert>
+
+    <select id="findByUserId" parameterType="map" resultType="map">
+        SELECT destination_msisdn,product_requested,transaction_price,create_time
+        FROM super_money.s_transferto_topup_his
+        where user_id = #{userId}
+        and error_code = 0
+        order by create_time desc
+        <if test="takesize != null ">
+            limit #{takesize},#{size}
+        </if>
+    </select>
+
+
+    <select id="topUpService" parameterType="map" resultType="map">
+        SELECT product,transaction_price
+        FROM super_money.s_transferto_topup_fee
+        where 1=1
+        <if test="phoneNumberType != null">
+          and phone_number_type=#{phoneNumberType}
+        </if>
+        order by product asc
+        <if test="takesize != null ">
+            limit #{takesize},#{size}
+        </if>
+    </select>
+
+    <select id="getProductSum" parameterType="map" resultType="map">
+        SELECT sum(product_requested) productSum FROM super_money.s_transferto_topup_his
+        where user_id = #{userId}
+        and error_code = 0
+        and to_days(create_time) = to_days(now());
+    </select>
+
+
+</mapper>

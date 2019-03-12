@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SLoanRepayMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SLoanRepay">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="repay_code" jdbcType="VARCHAR" property="repayCode" />
+    <result column="grant_code" jdbcType="VARCHAR" property="grantCode" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="repay_method" jdbcType="INTEGER" property="repayMethod" />
+    <result column="repay_amount" jdbcType="DECIMAL" property="repayAmount" />
+    <result column="period" jdbcType="INTEGER" property="period" />
+    <result column="cur_period" jdbcType="INTEGER" property="curPeriod" />
+    <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+    <result column="repay_end_time" jdbcType="TIMESTAMP" property="repayEndTime" />
+    <result column="repay_time" jdbcType="TIMESTAMP" property="repayTime" />
+    <result column="overdue_limit" jdbcType="INTEGER" property="overdueLimit" />
+    <result column="overdue_amount" jdbcType="DECIMAL" property="overdueAmount" />
+    <result column="pay_overdue_amount" jdbcType="DECIMAL" property="payOverdueAmount" />
+    <result column="repay_status" jdbcType="INTEGER" property="repayStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+
+    <result column="repay_amount_usd" jdbcType="DECIMAL" property="repayAmountUsd" />
+    <result column="pay_amount_usd" jdbcType="DECIMAL" property="payAmountUsd" />
+    <result column="overdue_amount_usd" jdbcType="DECIMAL" property="overdueAmountUsd" />
+    <result column="pay_overdue_amount_usd" jdbcType="DECIMAL" property="payOverdueAmountUsd" />
+
+  </resultMap>
+</mapper>

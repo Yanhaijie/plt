@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SLoanGrantMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SLoanGrant">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="grant_code" jdbcType="VARCHAR" property="grantCode" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="grant_amount" jdbcType="DECIMAL" property="grantAmount" />
+    <result column="repay_amount" jdbcType="DECIMAL" property="repayAmount" />
+    <result column="grant_method" jdbcType="INTEGER" property="grantMethod" />
+    <result column="repay_method" jdbcType="INTEGER" property="repayMethod" />
+    <result column="repay_limit" jdbcType="INTEGER" property="repayLimit" />
+    <result column="repay_unit" jdbcType="INTEGER" property="repayUnit" />
+    <result column="period" jdbcType="INTEGER" property="period" />
+    <result column="last_limit" jdbcType="INTEGER" property="lastLimit" />
+    <result column="overdue_amount" jdbcType="DECIMAL" property="overdueAmount" />
+    <result column="overdue_limit" jdbcType="INTEGER" property="overdueLimit" />
+    <result column="platform_amount" jdbcType="DECIMAL" property="platformAmount" />
+    <result column="offset_amount" jdbcType="DECIMAL" property="offsetAmount" />
+    <result column="pay_interest" jdbcType="DECIMAL" property="payInterest" />
+    <result column="pay_fee_amount" jdbcType="DECIMAL" property="payFeeAmount" />
+    <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+    <result column="pay_overdue_amount" jdbcType="DECIMAL" property="payOverdueAmount" />
+    <result column="grant_status" jdbcType="INTEGER" property="grantStatus" />
+    <result column="repayment_time" jdbcType="TIMESTAMP" property="repaymentTime" />
+    <result column="repay_end_time" jdbcType="TIMESTAMP" property="repayEndTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+
+    <result column="grant_amount_usd" jdbcType="DECIMAL" property="grantAmountUsd" />
+    <result column="overdue_amount_usd" jdbcType="DECIMAL" property="overdueAmountUsd" />
+    <result column="offset_amount_usd" jdbcType="DECIMAL" property="offsetAmountUsd" />
+    <result column="pay_overdue_amount_usd" jdbcType="DECIMAL" property="payOverdueAmountUsd" />
+    <result column="repay_amount_usd" jdbcType="DECIMAL" property="repayAmountUsd" />
+    <result column="pay_amount_usd" jdbcType="DECIMAL" property="payAmountUsd" />
+  </resultMap>
+
+  <resultMap id="BaseVo"  extends="BaseResultMap" type="com.supermoney.loan.mg.entity.vo.SLoanGrantVo">
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseVo" parameterType="map">
+    select t1.*,t2.user_name from  s_loan_grant t1
+    inner  join s_user t2 on t2.id = t1.user_id
+    where 1=1
+    <if test="userId!=null and userId!='' ">
+      AND  t1.user_id = #{userId}
+    </if>
+    <if test="mobile!=null and mobile!='' ">
+      AND t2.mobile  LIKE CONCAT('%',#{mobile},'%')
+    </if>
+    <if test="orderCode != null and orderCode!=''">
+      AND t1.order_code=#{orderCode}
+    </if>
+    <if test="grantCode != null and grantCode!=''">
+      AND t1.grant_code=#{grantCode}
+    </if>
+    <if test="grantStatus!=null and grantStatus!='' ">
+      AND t1.grant_status=#{grantStatus}
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ t1.update_time>= #{startDate}]]>
+      AND <![CDATA[ t1.update_time<= #{endDate}]]>
+    </if>
+    <if test="startRepayDate != null and startRepayDate!='' and endRepayDate!=null and endRepayDate!='' ">
+      AND <![CDATA[ t1.repay_end_time>= #{startRepayDate}]]>
+      AND <![CDATA[ t1.repay_end_time<= #{endRepayDate}]]>
+    </if>
+      order by t1.create_time desc
+  </select>
+
+</mapper>

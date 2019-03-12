@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SRiskSourceMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SRiskSource">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+    <result column="got_way" jdbcType="INTEGER" property="gotWay" />
+    <result column="got_from" jdbcType="VARCHAR" property="gotFrom" />
+    <result column="transfer_param" jdbcType="VARCHAR" property="transferParam" />
+    <result column="return_object" jdbcType="VARCHAR" property="returnObject" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+  <select id="getDrop" resultType="map" parameterType="map">
+     select  id,source_name,return_object from s_risk_source
+  </select>
+
+
+</mapper>

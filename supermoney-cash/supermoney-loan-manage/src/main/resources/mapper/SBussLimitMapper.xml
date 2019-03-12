@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SBussLimitMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SBussLimit">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="limit_type" jdbcType="INTEGER" property="limitType" />
+    <result column="relate_id" jdbcType="INTEGER" property="relateId" />
+    <result column="startVal" jdbcType="DECIMAL" property="startval" />
+    <result column="endVal" jdbcType="DECIMAL" property="endval" />
+    <result column="termVal" jdbcType="DECIMAL" property="termval" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <select id="selectFeeLimit" resultType="map" parameterType="INTEGER">
+    select b1.startVal,b1.endVal,b1.termVal as rate from s_buss_limit b1
+    inner join (
+    select t2.id,t2.bounty_Id from  s_bounty_loan t2
+    inner join s_bounty t3 on t2.bounty_Id=t3.id
+    where t3.id=#{bountyId} and t3.ads_type=2 and t3.merchant_id is not null
+    and t2.bounty_loan_status=1 limit 1
+    ) b2 on b2.id=b1.relate_id and b1.limit_type=0
+  </select>
+
+</mapper>

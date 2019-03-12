@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SUserCashMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SUserCash">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_bind_id" jdbcType="INTEGER" property="userBindId" />
+    <result column="cash_money" jdbcType="DECIMAL" property="cashMoney" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="cash_platform" jdbcType="VARCHAR" property="cashPlatform" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="cash_status" jdbcType="INTEGER" property="cashStatus" />
+    <result column="cash_type" jdbcType="INTEGER" property="cashType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+  <select id="statusCashTotal" resultType="INTEGER" parameterType="map">
+    select count(*) from s_user_cash WHERE cash_status=#{status}  and user_id=#{userId}
+  </select>
+
+  <select id="lastCash" resultMap="BaseResultMap" parameterType="Integer">
+    select *  from s_user_cash WHERE cash_status in (0,1,3)  and user_id=#{userId} limit 0,1
+  </select>
+
+</mapper>

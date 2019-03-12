@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>productList</title>
+	<link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/swiper-4.2.2.min.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/flexible.js"></script>
+    <script src="js/swiper-4.2.2.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		     <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="images/019.png"></div>
+                    <div class="swiper-slide"><img src="images/020.png"></div>
+                    <div class="swiper-slide"><img src="images/021.png"></div>
+                    <div class="swiper-slide"><img src="images/022.png"></div>
+                </div>
+            </div>
+            <div class="pro-box">
+            	<div class="name-box">
+            		<img src="images/icon.png"  class="pro-logo">
+            		<div class="pro-name">RupiahPlus</div>
+            		<div class="pro-score">4.5</div>
+            		<img src="images/rate.png" class="score">
+            	</div>
+            	<div class="pro-detail">
+            		<div class="detail-t">
+            			<div class="detail-tl">
+            				<div class="loan-money">
+            					<span class="min-money">0.6</span> ~
+            					<span class="max-money">1.5</span>
+            				</div>
+            				<div class="money-detail">Kuota(juta Rp)
+							</div>
+            			</div>
+            			<div class="detail-tm">
+            				<div ><img src="images/money_rate.png"><span class="money-rate">≥1.00%</span>/Hari</div>
+            				<div><img src="images/time.png"><span class="money-check">2</span>Hari</div>
+            			</div>
+            			<div class="detail-tr">GO</div>
+            			<img src="images/red_more.png" class="detail-right">
+            		</div> 
+            	</div>
+            	<div class="detail-b">
+            			Urgent butuh duit? Solusi efektif Pin …
+            	</div>
+            </div>
+	</div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var mySwiper = new Swiper('.swiper-container', {
+            autoplay: true, //可选选项，自动滑动
+            loop: true,
+        });
+
+    });
+</script>
+</html>

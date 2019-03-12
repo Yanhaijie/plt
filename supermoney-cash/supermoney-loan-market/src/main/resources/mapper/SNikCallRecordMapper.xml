@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.market.dao.SNikCallRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.market.entity.SNikCallRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="nik_id" jdbcType="VARCHAR" property="nikId" />
+    <result column="call_status" jdbcType="INTEGER" property="callStatus" />
+    <result column="nik" jdbcType="VARCHAR" property="nik" />
+    <result column="source_tag" jdbcType="INTEGER" property="sourceTag" />
+  </resultMap>
+</mapper>

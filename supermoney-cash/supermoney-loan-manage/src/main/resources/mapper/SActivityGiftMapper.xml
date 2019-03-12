@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SActivityGiftMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SActivityGift">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="gift_name" jdbcType="VARCHAR" property="giftName" />
+    <result column="use_way" jdbcType="TINYINT" property="useWay" />
+    <result column="gift_type" jdbcType="TINYINT" property="giftType" />
+    <result column="gift_count" jdbcType="INTEGER" property="giftCount" />
+    <result column="gift_img" jdbcType="VARCHAR" property="giftImg" />
+    <result column="gift_desc" jdbcType="VARCHAR" property="giftDesc" />
+    <result column="probability" jdbcType="DECIMAL" property="probability" />
+    <result column="daily_count" jdbcType="INTEGER" property="dailyCount" />
+    <result column="remain_count" jdbcType="INTEGER" property="remainCount" />
+    <result column="max_count" jdbcType="INTEGER" property="maxCount" />
+  </resultMap>
+
+  <select id="selectGiftByMap" parameterType="map" resultType="map">
+      SELECT
+      id,
+      gift_name AS giftName,
+      gift_count AS giftCount,
+      probability AS probability,
+      remain_count AS remainCount,
+      max_count AS maxCount,
+      (CASE use_way WHEN 0 THEN '移动端抽奖' WHEN 1 THEN '后台抽奖' WHEN 2 THEN '下架' END) AS useWayName,
+      gift_img AS giftImg,
+      gift_desc AS giftDesc,
+      use_way AS useWay,
+      gift_type AS giftType
+      FROM s_activity_gift
+      <where>
+        <if test="activityName!=null and activityName!='' ">
+          AND activity_name =#{activityName}
+        </if>
+        <if test="useWay!=null and useWay!='' ">
+          AND use_way =#{useWay}
+        </if>
+      </where>
+    ORDER BY probability DESC
+  </select>
+
+  <select id="selectSearchGiftByMap" parameterType="map" resultType="map">
+    SELECT
+    gift_name AS 'label',
+    id AS 'value'
+    FROM s_activity_gift
+    <where>
+      <if test="activityName!=null and activityName!='' ">
+        AND activity_name =#{activityName}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectBackGiftByMap" parameterType="map" resultType="map">
+    SELECT
+    gift_name AS 'label',
+    id AS 'value'
+    FROM s_activity_gift
+    <where>
+      use_way = 1
+      <if test="activityName!=null and activityName!='' ">
+        AND activity_name =#{activityName}
+      </if>
+    </where>
+  </select>
+
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SBountyRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SBountyRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="bounty_id" jdbcType="INTEGER" property="bountyId" />
+    <result column="bounty_name" jdbcType="VARCHAR" property="bountyName" />
+    <result column="bounty_money" jdbcType="DECIMAL" property="bountyMoney" />
+    <result column="ads_id" jdbcType="VARCHAR" property="adsId" />
+    <result column="agency_down" jdbcType="INTEGER" property="agencyDown" />
+    <result column="click_id" jdbcType="VARCHAR" property="clickId" />
+    <result column="gaid" jdbcType="VARCHAR" property="gaid" />
+    <result column="idfa" jdbcType="VARCHAR" property="idfa" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="cb_event_name" jdbcType="VARCHAR" property="cbEventName" />
+    <result column="event_type" jdbcType="INTEGER" property="eventType" />
+    <result column="record_status" jdbcType="INTEGER" property="recordStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="use_dsc" jdbcType="VARCHAR" property="useDsc" />
+  </resultMap>
+
+
+  <resultMap id="userVoResultMap" type="com.supermoney.loan.api.entity.vo.SBountyUserRecordVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="bounty_id" jdbcType="INTEGER" property="bountyId" />
+    <result column="bounty_name" jdbcType="VARCHAR" property="bountyName" />
+    <result column="bounty_money" jdbcType="DECIMAL" property="bountyMoney" />
+    <result column="agency_down" jdbcType="INTEGER" property="agencyDown" />
+    <result column="cb_event_name" jdbcType="VARCHAR" property="cbEventName" />
+    <result column="record_status" jdbcType="INTEGER" property="recordStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <select id="selectUserList" resultMap="userVoResultMap" parameterType="map">
+    select t1.*,t2.ads_ico,t2.ads_pic from s_bounty_record t1
+    left join s_bounty t2 on t1.bounty_id=t2.id
+    where (t1.record_status=1 OR t1.record_status=3)    AND t1.user_id=#{userId}
+    <if test="agencyDown!=null and agencyDown!='' ">
+      AND t1.agency_down=#{agencyDown}
+    </if>
+  </select>
+
+  <select id="userRecordTotal" resultType="DECIMAL" parameterType="map">
+    select COALESCE(SUM(bounty_money),0)  from s_bounty_record
+    where record_status=3 AND user_id=#{userId}
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select *,t2.bounty_name from s_bounty_record t1
+    inner join s_bounty t2 on t2.id = t1.bounty_id
+    where 1=1
+    <if test="userId!=null and userId!='' ">
+      AND t1.user_id=#{userId}
+    </if>
+
+    <if test="agencyDown!=null and agencyDown!='' ">
+      AND t1.agency_down=#{agencyDown}
+    </if>
+
+    <if test="bountyId!=null and bountyId!='' ">
+      AND t1.bounty_id=#{bountyId}
+    </if>
+    <if test="recordStatus!=null and recordStatus!='' ">
+      AND t1.record_status=#{recordStatus}
+    </if>
+
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ t1.update_time>= #{startDate}]]>
+      AND <![CDATA[ t1.update_time<= #{endDate}]]>
+    </if>
+  </select>
+</mapper>

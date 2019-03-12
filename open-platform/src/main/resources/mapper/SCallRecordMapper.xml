@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.open.platform.dao.SCallRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.open.platform.entity.SCallRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="interface_id" jdbcType="INTEGER" property="interfaceId" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="param_json" jdbcType="VARCHAR" property="paramJson" />
+    <result column="respond_json" jdbcType="VARCHAR" property="respondJson" />
+    <result column="result_id" jdbcType="INTEGER" property="resultId" />
+    <result column="request_status" jdbcType="INTEGER" property="requestStatus" />
+  </resultMap>
+
+  <select id="selectCallRecordByParam" parameterType="map" resultType="map">
+      SELECT
+      t1.merchant_id AS merchantId,
+      t1.param_json AS paramJson,
+      t1.request_status AS requestStatus,
+      t1.respond_json AS respondJson,
+      t1.result_id AS resultId,
+      t2.interface_name AS interfaceName
+      FROM s_call_record t1
+      LEFT JOIN s_interface t2 ON t1.interface_id = t2.id
+      <where>
+          <if test="requestStatus != null and requestStatus != ''">
+              AND t1.request_status = #{requestStatus}
+          </if>
+          <if test="merchantId != null and merchantId != ''">
+              AND t1.merchant_id = #{merchantId}
+          </if>
+          <if test="interfaceId != null and interfaceId != ''">
+              AND t1.interface_id = #{interfaceId}
+          </if>
+      </where>
+  </select>
+</mapper>

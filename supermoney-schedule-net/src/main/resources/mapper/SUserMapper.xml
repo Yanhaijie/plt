@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.dao.SUserMapper">
+  <resultMap id="SUserResultMap" type="com.supermoney.loan.entity.SUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="user_status" jdbcType="INTEGER" property="userStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="sms_send_number" jdbcType="VARCHAR" property="smsSendNumber" />
+  </resultMap>
+
+    <resultMap id="UserSendSmsVoMap" type="com.supermoney.loan.vo.UserSendSmsVo">
+        <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+        <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+
+    </resultMap>
+
+
+    <!--超过N天未登录-->
+  <select id="getAllSUser" resultMap="UserSendSmsVoMap">
+      select
+        su.id as user_id,su.real_name as user_name,su.mobile as mobile,ss.send_time as send_time,su.last_login_time as last_login_time
+      from
+      s_send_sms_record ss right join s_user su
+      on su.id=ss.user_id
+      where
+      date_sub( now(), interval 3 DAY) &gt;= timestamp(last_login_time) and
+      date_sub( now(), interval 16 DAY) &lt;= timestamp(last_login_time) and
+      su.user_status=0  and last_login_time is not null and
+      (send_time is null or (send_time is not null and ss.status != 1  and ss.type =1))
+  </select>
+
+    <select id="getUserById" resultMap="SUserResultMap" parameterType="java.lang.Integer">
+        select * from s_user where id=#{userId}
+    </select>
+
+    <update id="updateUserLoginLastTime" parameterType="com.supermoney.loan.entity.SUser">
+        update s_user
+        <set>
+            <if test="smsSendNumber!=null">
+                sms_send_number = #{smsSendNumber}
+            </if>
+        </set>
+        where id = #{id}
+
+    </update>
+</mapper>
+

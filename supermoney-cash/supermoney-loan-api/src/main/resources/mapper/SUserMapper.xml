@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SUserMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="user_level" jdbcType="INTEGER" property="userLevel" />
+    <result column="credit_score" jdbcType="INTEGER" property="creditScore" />
+    <result column="credit_grade" jdbcType="INTEGER" property="creditGrade" />
+    <result column="credit_modify" jdbcType="INTEGER" property="creditModify" />
+    <result column="need_amount" jdbcType="INTEGER" property="needAmount" />
+    <result column="need_cycle" jdbcType="INTEGER" property="needCycle" />
+    <result column="person_one" jdbcType="VARCHAR" property="personOne" />
+    <result column="person_two" jdbcType="VARCHAR" property="personTwo" />
+    <result column="person_three" jdbcType="VARCHAR" property="personThree" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="country_area" jdbcType="VARCHAR" property="countryArea" />
+    <result column="reg_source" jdbcType="VARCHAR" property="regSource" />
+    <result column="reg_ip" jdbcType="VARCHAR" property="regIp" />
+    <result column="user_status" jdbcType="INTEGER" property="userStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="lottery_count" jdbcType="INTEGER" property="lotteryCount" />
+  </resultMap>
+
+  <resultMap id="UserInfoResultMap" type="com.supermoney.loan.api.entity.vo.UserInfoVo" >
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_level" jdbcType="INTEGER" property="userLevel" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="credit_score" jdbcType="INTEGER" property="creditScore" />
+    <result column="available_amount" jdbcType="DECIMAL" property="availableAmount"/>
+    <result column="freeze_amount" jdbcType="DECIMAL" property="freezeAmount"/>
+    <result column="cashAmount" jdbcType="DECIMAL" property="cashAmount"/>
+    <result column="bindStatus" jdbcType="INTEGER" property="bindStatus" />
+    <result column="realNameStatus" jdbcType="INTEGER" property="realNameStatus" />
+    <result column="gotLottery" jdbcType="INTEGER" property="gotLottery" />
+  </resultMap>
+
+  <select id="getUserByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select * from s_user where user_name=#{userName} limit 1
+  </select>
+
+  <select id="getUserInfo" parameterType="map" resultMap="UserInfoResultMap">
+    select
+    t1.id as user_id,
+    t1.user_level,
+    t1.age,
+    t1.sex,
+    t1.user_name,
+    t1.real_name,
+    t1.email,
+    t1.mobile,
+    t1.country,
+    t1.credit_score,
+    t2.available_amount,
+    t2.freeze_amount,
+    IFNULL(t4.cashMoney,0) as cashAmount,
+    IFNULL( t3.card_status,1) as bindStatus,
+    IFNULL( t5.identity_status,3) as realNameStatus,
+    IFNULL( t6.gotLottery,0) as gotLottery
+    from s_user t1
+    inner join s_user_account t2 on t1.id=t2.user_id
+    left join (select * from s_user_bind where card_status=2  and user_id=#{userId} limit 0,1 ) t3 on t1.id =t3.user_id
+    left join (
+      select user_id, sum(amount) as cashMoney from s_user_account_book where  buss_type=2 and  opt_type=21 and user_id=#{userId}  group by user_id
+    ) t4 on t1.id=t4.user_id
+    left JOIN ( select * from s_at_identity WHERE identity_status in(0,3)   and user_id=#{userId} limit 0,1 ) t5 on t1.id=t5.user_id
+    left join (select user_id,CASE pay_status WHEN 1 then 1 ELSE 0 END as gotLottery   from s_user_pay where  pay_type=1001 and user_id=#{userId} limit 1) t6 on t1.id=t6.user_id
+    where t1.user_status=0  AND t1.id=#{userId} AND t2.account_type=1
+
+  </select>
+
+  <select id="getUserCount" parameterType="map" resultType="com.supermoney.loan.api.entity.vo.UserCountVo">
+      select
+      t1.id  as userId,
+      t2.available_amount as availableAmount,
+      t2.freeze_amount as freezeAmount,
+      IFNULL(t3.cashMoney,0) as cashAmount,
+      (t2.available_amount+freeze_amount+IFNULL(t3.cashMoney,0) ) as allAmount
+
+      from s_user t1
+      inner join s_user_account t2 on t1.id=t2.user_id
+      left join (
+      select user_id, sum(amount) * -1 as cashMoney from s_user_account_book where  buss_type=2 and  opt_type=21 and user_id=#{userId}  group by user_id
+      ) t3 on t1.id=t3.user_id
+      where t1.user_status=0  AND t1.id=#{userId} AND t2.account_type=1
+    </select>
+
+  <select id="getUserByOpenId" parameterType="map" resultMap="BaseResultMap">
+    select t1.* from s_user t1
+    inner join s_user_open  t2 on t1.id=t2.user_id
+    where t2.user_id is not null and t2.open_id=#{openId} and t2.platform_name=#{platformName};
+  </select>
+
+  <update id="updateCreditInfo">
+      UPDATE s_user
+      SET credit_modify=#{creditModify}
+      <if test="creditGrade != null and creditGrade != ''">
+        ,credit_grade=#{creditGrade}
+      </if>
+      <if test="creditScore != null and creditScore != ''">
+        ,credit_score=#{creditScore}
+      </if>
+      WHERE id = #{userId}
+  </update>
+
+  <select id="selectCreditModifyUser" resultType="map">
+      SELECT  id FROM s_user WHERE credit_modify=1
+  </select>
+
+    <update id="updatelastLoginTime">
+        update s_user set
+        last_login_time = now()
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SUserPayMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SUserPay">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="pay_source_id" jdbcType="INTEGER" property="paySourceId" />
+    <result column="pay_money" jdbcType="DECIMAL" property="payMoney" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="pay_platform" jdbcType="VARCHAR" property="payPlatform" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+    <result column="pay_type" jdbcType="INTEGER" property="payType" />
+    <result column="get_status" jdbcType="INTEGER" property="getStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="related_id" jdbcType="VARCHAR" property="relatedId" />
+  </resultMap>
+
+  <select id="getList" resultMap="BaseResultMap" parameterType="com.supermoney.loan.api.entity.SUserPay">
+    select * from s_user_pay
+    where 1=1
+    <if test="userId!=null and userId!='' ">
+      AND user_id=#{userId}
+    </if>
+    <if test="payType != null and payType!=''">
+      AND pay_type =#{payType}
+    </if>
+    <if test="payPlatform != null and payPlatform!=''">
+      AND pay_platform =#{payPlatform}
+    </if>
+    <if test="payStatus != null">
+      AND pay_status =#{payStatus}
+    </if>
+    <if test="getStatus != null">
+      AND get_status =#{getStatus}
+    </if>
+    order by
+    create_time desc
+  </select>
+
+  <select id="getPaySum" resultType="DECIMAL" parameterType="com.supermoney.loan.api.entity.SUserPay">
+    select coalesce(sum(pay_money)) from s_user_pay
+    where 1=1
+    <if test="userId!=null and userId!='' ">
+      AND user_id=#{userId}
+    </if>
+    <if test="payPlatform != null and payPlatform!=''">
+      AND pay_platform =#{payPlatform}
+    </if>
+    <if test="payStatus != null">
+      AND pay_status =#{payStatus}
+    </if>
+    <if test="getStatus != null">
+      AND get_status =#{getStatus}
+    </if>
+  </select>
+
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supers.p2p.assets.dao.SItemInfoMapper">
+  <resultMap id="BaseResultMap" type="com.supers.p2p.assets.entity.SItemInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="item_title" jdbcType="VARCHAR" property="itemTitle" />
+      <result column="borrow_amount" jdbcType="INTEGER" property="borrowAmount" />
+      <result column="amount_unit" jdbcType="VARCHAR" property="amountUnit" />
+      <result column="is_split" jdbcType="INTEGER" property="isSplit" />
+      <result column="split_info" jdbcType="VARCHAR" property="splitInfo" />
+      <result column="borrow_deadline" jdbcType="INTEGER" property="borrowDeadline" />
+      <result column="repay_way" jdbcType="INTEGER" property="repayWay" />
+      <result column="borrow_rate" jdbcType="DECIMAL" property="borrowRate" />
+      <result column="asset_info" jdbcType="VARCHAR" property="assetInfo" />
+      <result column="borrower_type" jdbcType="INTEGER" property="borrowerType" />
+      <result column="borrower_info_id" jdbcType="INTEGER" property="borrowerInfoId" />
+      <result column="borrower_credit_id" jdbcType="INTEGER" property="borrowerCreditId" />
+      <result column="attach_info" jdbcType="INTEGER" property="attachInfo" />
+      <result column="asset_user_id" jdbcType="INTEGER" property="assetUserId" />
+      <result column="found_user_id" jdbcType="INTEGER" property="foundUserId" />
+      <result column="use_status" jdbcType="INTEGER" property="useStatus" />
+      <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime" />
+      <result column="lock_duration" jdbcType="INTEGER" property="lockDuration" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+    <select id="selectAssetItemPoolList" resultType="map" parameterType="map">
+        SELECT t.id,t3.name as borrower_name,t.borrow_amount,t.borrow_rate,t.borrow_deadline,t.repay_way,t.asset_info,t.use_status,t.item_title
+        FROM super_p2p.s_item_info t
+        JOIN s_user  t1 on t.asset_user_id = t1.id
+        <if test="company_type==0">
+            AND t1.company_id = #{company_id}
+        </if>
+        <if test="company_type==1">
+            AND  t.use_status = 3
+            AND t1.company_id IN (SELECT
+            t.company_id
+            FROM
+            s_black_white_list t
+            JOIN s_black_white_list t1 ON t.company_id = t1.target_company_id
+            AND t.target_company_id = t1.company_id
+            AND t.id != t1.id
+            AND t.target_company_id = #{company_id}
+            AND t.owner_type = 0)
+        </if>
+        left join s_personal_info t3 on t.borrower_info_id = t3.id
+    </select>
+
+    <select id="selectAssetItemCarList" resultType="map" parameterType="map">
+        SELECT t.id,t3.name as borrower_name,t.borrow_amount,t.borrow_rate,t.borrow_deadline,t.repay_way,t.asset_info,t.use_status,t.item_title
+        FROM s_item_info t
+        JOIN s_user  t1 on t.asset_user_id = t1.id
+        left join s_personal_info t3 on t.borrower_info_id = t3.id
+        where t.use_status=4 and t.found_user_id = #{userId}
+    </select>
+
+    <!-- 模糊查询-->
+    <select id="selectList" resultType="map" parameterType="map">
+        SELECT
+          t.item_title,t.asset_info,t.borrow_rate,t.borrow_deadline,t.borrow_amount,t.use_status
+        FROM s_item_info t
+        WHERE 1=1
+        <if test="asset_info != null and asset_info!=''">
+            AND asset_info = #{asset_info}
+        </if>
+        <if test="borrow_rate != null and borrow_rate!=''">
+            AND borrowRate = #{borrow_rate}
+        </if>
+        <if test="use_status != null and use_status!=''">
+            AND use_status = #{use_status}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="selectDetailList" resultType="map" parameterType="map">
+        SELECT
+        t.item_title,
+        t.asset_info,
+        t.borrow_rate,
+        t.borrow_deadline,
+        t.repay_way,
+        t.borrow_amount,
+        t.use_status,
+        t1.name,
+        t1.id_number,
+        t1.mobile,
+        t1.sex,
+        t1.bank_card_number,
+        t1.address,
+        t1.email,
+        t1.profession_type,
+        t1.salary,
+        t2.id_card_first_url,
+        t2.id_card_second_url,
+        t2.bank_card_first_url,
+        t2.bank_card_second_url
+        FROM
+        s_item_info t
+        LEFT JOIN
+        s_personal_info t1 ON t.borrower_info_id = t1.id
+        LEFT JOIN
+        s_persional_credit t2 ON t.borrower_credit_id = t2.id
+        WHERE 1 = 1
+        <if test="id != null and id!=''">
+            AND t.id = #{id}
+        </if>
+        order by t.create_time desc
+    </select>
+
+    <select id="selectLockItem" resultMap="BaseResultMap" parameterType="map">
+        <![CDATA[
+        SELECT * FROM s_item_info t WHERE lock_time < DATE_SUB(NOW(),INTERVAL  1 HOUR) and t.use_status = 4
+        ]]>
+    </select>
+
+    <update id="unLockItem">
+        <![CDATA[
+            update s_item_info set use_status = 3,found_user_id= null,lock_time= null,lock_duration= null where id in(
+            select t.id from (
+            SELECT id FROM s_item_info t WHERE lock_time < DATE_SUB(NOW(),INTERVAL  1 HOUR) and t.use_status = 4
+            ) t )
+        ]]>
+    </update>
+
+    <update id="exportCar" parameterType="map">
+        update s_item_info set use_status = 5 where id in
+        <foreach item="item" collection="idArray" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

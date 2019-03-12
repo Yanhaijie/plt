@@ -1,0 +1,114 @@
+.swiper-container{
+    width: 100%;
+    background-color:#fafafa;
+
+}
+.swiper-container img{
+    width: 100%;
+}
+.pro-box{
+    width: 100%;
+    height: 4.45333333rem/* 167px */;
+    margin-top: .26666667rem/* 10px */;
+}
+.name-box{
+    width: 100%;
+    height: 1.38666667rem/* 52px */;
+    display: flex;
+    align-items: center;
+    padding:.26666667rem .4rem;
+    box-sizing: border-box;
+}
+.pro-logo{
+    display: block;
+    width: .90666667rem/* 34px */;
+    height: .90666667rem/* 34px */;
+    margin-right: .26666667rem;
+}
+.score{
+    width: .26666667rem/* 10px */;
+    height: .26666667rem/* 10px */;
+}
+.pro-name{
+    font-size:.48rem/* 18px */;
+    color: #333333;
+    margin-right: .26666667rem;
+}
+.pro-score{
+    font-size: .32rem/* 12px */;
+    color: #F8564E;
+}
+.pro-detail,.detail-t{
+    width: 100%;
+    height: 1.76rem/* 66px */;
+    display: flex;
+    align-items: center;
+    padding:.26666667rem .4rem;
+    box-sizing: border-box;
+}
+.detail-tr{
+    background: #F8564E;
+    border-radius: 46px;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+.detail-right{
+    width: .26666667rem;
+    height: .26666667rem;
+}
+.detail-tl{
+    display: flex;
+    width: 3.06666667rem/* 115px */;
+    flex-direction: column;
+    border-right: 1px solid #F3F3F3;
+    box-sizing: border-box;
+}
+.detail-tm{
+    margin-left: .32rem/* 12px */;
+}
+.detail-tm div{
+    display: flex;
+    align-items: center;
+    font-size: .32rem/* 12px */;
+    color: #666666;
+}
+.loan-money{
+    font-size: .42666667rem/* 16px */;
+    color: #F8564E;
+}
+.money-detail{
+    font-size: .32rem/* 12px */;
+    color: #666666;
+}
+.detail-tm img{
+    width: .37333333rem/* 14px */;
+    height: .37333333rem/* 14px */;
+}
+.money-rate,.money-check{
+    display: inline-block;
+    margin-left: .16rem/* 6px */;
+    font-size: .32rem/* 12px */;
+    color: #666666;
+}
+.detail-tr{
+    width: 1.6rem/* 60px */;
+    height: .74666667rem/* 28px */;
+    background: #F8564E;
+    border-radius: 1.22666667rem/* 46px */; 
+    font-size: .37333333rem/* 14px */;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: .74666667rem/* 28px */;
+    margin-left: .90666667rem/* 34px */;
+    margin-right: .53333333rem/* 20px */;
+}
+.detail-b{
+    font-size: .32rem/* 12px */;
+    color: #999999;
+    margin-left: .8rem/* 30px */;
+    width:8.53333333rem/* 320px */;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    box-sizing: border-box;
+}

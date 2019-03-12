@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SAtCreditInformationMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SAtCreditInformation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="identity_id" jdbcType="INTEGER" property="identityId" />
+    <result column="living_id" jdbcType="INTEGER" property="livingId" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="id_front_img" jdbcType="VARCHAR" property="idFrontImg" />
+    <result column="id_hold_img" jdbcType="VARCHAR" property="idHoldImg" />
+    <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="married" jdbcType="VARCHAR" property="married" />
+    <result column="religion" jdbcType="VARCHAR" property="religion" />
+    <result column="education" jdbcType="VARCHAR" property="education" />
+    <result column="live_address" jdbcType="VARCHAR" property="liveAddress" />
+    <result column="live_address_street" jdbcType="VARCHAR" property="liveAddressStreet" />
+    <result column="profession" jdbcType="INTEGER" property="profession" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="month_income" jdbcType="VARCHAR" property="monthIncome" />
+    <result column="company_phone" jdbcType="VARCHAR" property="companyPhone" />
+    <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="company_address_street" jdbcType="VARCHAR" property="companyAddressStreet" />
+    <result column="company_persons" jdbcType="VARCHAR" property="companyPersons" />
+    <result column="not_job_time" jdbcType="VARCHAR" property="notJobTime" />
+    <result column="last_industry" jdbcType="VARCHAR" property="lastIndustry" />
+    <result column="last_income" jdbcType="VARCHAR" property="lastIncome" />
+    <result column="not_job_source" jdbcType="VARCHAR" property="notJobSource" />
+    <result column="not_job_income" jdbcType="VARCHAR" property="notJobIncome" />
+    <result column="school_name" jdbcType="VARCHAR" property="schoolName" />
+    <result column="school_course" jdbcType="VARCHAR" property="schoolCourse" />
+    <result column="school_in" jdbcType="VARCHAR" property="schoolIn" />
+    <result column="school_out" jdbcType="VARCHAR" property="schoolOut" />
+    <result column="relative_type" jdbcType="VARCHAR" property="relativeType" />
+    <result column="relative_name" jdbcType="VARCHAR" property="relativeName" />
+    <result column="relative_phone" jdbcType="VARCHAR" property="relativePhone" />
+    <result column="urgent_name" jdbcType="VARCHAR" property="urgentName" />
+    <result column="urgent_phone" jdbcType="VARCHAR" property="urgentPhone" />
+    <result column="card_name" jdbcType="VARCHAR" property="cardName" />
+    <result column="card_id" jdbcType="VARCHAR" property="cardId" />
+    <result column="card_bank" jdbcType="VARCHAR" property="cardBank" />
+    <result column="card_account" jdbcType="VARCHAR" property="cardAccount" />
+    <result column="cur_step" jdbcType="INTEGER" property="curStep" />
+    <result column="credit_status" jdbcType="INTEGER" property="creditStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="credit_score" jdbcType="INTEGER" property="creditScore" />
+    <result column="credit_grade" jdbcType="INTEGER" property="creditGrade" />
+    <result column="credit_modify" jdbcType="INTEGER" property="creditModify" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+
+    <result column="e" jdbcType="VARCHAR" property="BPJSImg" />
+    <result column="KK_img" jdbcType="VARCHAR" property="KKImg" />
+    <result column="credit_card_img" jdbcType="VARCHAR" property="creditCardImg" />
+    <result column="work_card_img" jdbcType="VARCHAR" property="workCardImg" />
+    <result column="salary_cert_img" jdbcType="VARCHAR" property="salaryCertImg" />
+    <result column="company_affidavit_img" jdbcType="VARCHAR" property="companyAffidavitImg" />
+    <result column="bank_statement_img" jdbcType="VARCHAR" property="bankStatementImg" />
+    <result column="other_work_img" jdbcType="VARCHAR" property="otherWorkImg" />
+    <result column="account_img" jdbcType="VARCHAR" property="accountImg" />
+    <result column="day_history_img" jdbcType="VARCHAR" property="dayHistoryImg" />
+    <result column="week_history_img" jdbcType="VARCHAR" property="weekHistoryImg" />
+    <result column="month_history_img" jdbcType="VARCHAR" property="monthHistoryImg" />
+
+    <result column="children" jdbcType="VARCHAR" property="children" />
+
+  </resultMap>
+</mapper>

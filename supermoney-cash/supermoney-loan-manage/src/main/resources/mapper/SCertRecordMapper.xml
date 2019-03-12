@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SCertRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SCertRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="cert_type" jdbcType="TINYINT" property="certType" />
+      <result column="cert_status" jdbcType="TINYINT" property="certStatus" />
+  </resultMap>
+
+  <select id="selectStatusByUserId" resultType="map" parameterType="map">
+      select IFNULL(cert_status,0) AS certStatus
+      from s_cert_record
+      where user_id=#{userId} and cert_type=#{certType}
+      ORDER BY create_time DESC limit 1
+  </select>
+
+
+  <select id="selectAllStatusByUserId" resultType="map" parameterType="int">
+      select
+       IFNULL((select cert_status from s_cert_record where user_id=#{userId} and cert_type=0 ORDER BY create_time DESC limit 1),0) as identityCert,
+       IFNULL((select cert_status from s_cert_record where user_id=#{userId} and cert_type=1 ORDER BY create_time DESC limit 1),0) as livingyCert,
+       IFNULL((select cert_status from s_cert_record where user_id=#{userId} and cert_type=2 ORDER BY create_time DESC limit 1),0) as idUserCert
+      from s_user
+      where id=#{userId}
+  </select>
+</mapper>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SUserBindMapper">
+
+    <resultMap id="ResultUserBind" type="com.supermoney.loan.api.entity.SUserBind">
+    <result column="id" property="id" jdbcType="INTEGER"/>
+    <result column="user_id" property="userId" jdbcType="INTEGER"/>
+    <result column="card_type" property="cardType" jdbcType="INTEGER"/>
+    <result column="country" property="country" jdbcType="VARCHAR"/>
+    <result column="bank_id" property="bankId" jdbcType="INTEGER"/>
+    <result column="card_number" property="cardNumber" jdbcType="VARCHAR"/>
+    <result column="card_account" property="cardAccount" jdbcType="VARCHAR"/>
+    <result column="holding_name" property="holdingName" jdbcType="VARCHAR"/>
+    <result column="holding_phone" property="holdingPhone" jdbcType="VARCHAR"/>
+    <result column="card_status" property="cardStatus" jdbcType="INTEGER"/>
+    <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP"/>
+    <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP"/>
+    <result column="xendit_account_id" property="xenditAccountId" jdbcType="VARCHAR"/>
+    <result column="xendit_reference" property="xenditReference" jdbcType="VARCHAR"/>
+    <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+
+    </resultMap>
+
+
+    <resultMap id="UserBindVo" type="com.supermoney.loan.api.entity.vo.SUserBindVo">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="en_name" property="enName" jdbcType="VARCHAR"/>
+        <result column="cn_name" property="cnName" jdbcType="VARCHAR"/>
+        <result column="ab_name" property="abName" jdbcType="VARCHAR"/>
+        <result column="bank_code" property="bankCode" jdbcType="VARCHAR"/>
+        <result column="card_number" property="cardNumber" jdbcType="VARCHAR"/>
+        <result column="card_account" property="cardAccount" jdbcType="VARCHAR"/>
+        <result column="holding_name" property="holdingName" jdbcType="VARCHAR"/>
+        <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <select id="userBindTotal" resultType="INTEGER" parameterType="Integer">
+        select COUNT(*) from s_user_bind where card_status=0 and user_id=#{userId}
+    </select>
+
+
+    <select id="getUserBindCardList" resultMap="UserBindVo" parameterType="map">
+        select a.id,en_name,cn_name,ab_name,bank_code,card_number,card_account,holding_name,bind_time from s_user_bind a
+        left join s_bank b on a.bank_id=b.id
+        where card_status = 0
+        <if test="userId != null">
+            AND a.user_id=#{userId}
+        </if>
+        <if test="bankId!=null">
+            AND a.bank_id=#{bankId}
+        </if>
+        <if test="cardNumber != null ">
+            and a.card_number=#{cardNumber}
+        </if>
+        <if test="cardAccount != null ">
+            and a.card_account=#{cardAccount}
+        </if>
+        <if test="cardStatus != null  ">
+            and a.card_status=#{cardStatus}
+        </if>
+        <if test="id!=null">
+            and a.id=#{id}
+        </if>
+    </select>
+
+    <update id="updateUserCardStatus">
+        UPDATE s_user_bind set card_status=1 where 1 = 1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="userId!=null">
+            and user_id =#{userId}
+        </if>
+    </update>
+
+    <insert id="addUserCardBind" parameterType="com.supermoney.loan.api.entity.SUserBind" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO s_user_bind
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">
+                user_id,
+            </if>
+            <if test="cardType != null">
+                card_type,
+            </if>
+            <if test="country!=null">
+                country,
+            </if>
+            <if test="bankId!=null">
+                bank_id,
+            </if>
+            <if test="cardNumber!=null">
+                card_number,
+            </if>
+            <if test="cardAccount!=null">
+                card_account,
+            </if>
+            <if test="holdingName!=null">
+                holding_name,
+            </if>
+            <if test="holdingCard!=null">
+                holding_card,
+            </if>
+            <if test="holdingPhone!=null">
+                holding_phone,
+            </if>
+            <if test="cardStatus!=null">
+                card_status,
+            </if>
+            <if test="bindTime!=null">
+                bind_time,
+            </if>
+            <if test="cancelTime!=null">
+                cancel_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">
+                #{userId},
+            </if>
+            <if test="cardType != null">
+                #{cardType},
+            </if>
+            <if test="country!=null">
+                #{country},
+            </if>
+            <if test="bankId!=null">
+                #{bankId},
+            </if>
+            <if test="cardNumber!=null">
+                #{cardNumber},
+            </if>
+            <if test="cardAccount!=null">
+                #{cardAccount},
+            </if>
+            <if test="holdingName!=null">
+                #{holdingName},
+            </if>
+            <if test="holdingCard!=null">
+                #{holdingCard},
+            </if>
+            <if test="holdingPhone!=null">
+                #{holdingPhone},
+            </if>
+            <if test="cardStatus!=null">
+                #{cardStatus},
+            </if>
+            <if test="bindTime!=null">
+                #{bindTime},
+            </if>
+            <if test="cancelTime!=null">
+                #{cancelTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserCard" parameterType="com.supermoney.loan.api.entity.SUserBind">
+        UPDATE s_user_bind
+        <set>
+            <if test="cardType != null">
+                card_type=#{cardType},
+            </if>
+            <if test="country!=null">
+                country=#{country}
+            </if>
+            <if test="bankName!=null">
+                bank_name=#{bankName}
+            </if>
+            <if test="bankCode!=null">
+                bank_code= #{bankCode}
+            </if>
+            <if test="bankArea!=null">
+                bank_area= #{bankArea}
+            </if>
+            <if test="cardNumber!=null">
+                card_number=#{cardNumber}
+            </if>
+            <if test="cardAccount!=null">
+                card_account=#{cardAccount}
+            </if>
+            <if test="cardStatus!=null">
+                card_status=#{cardStatus}
+            </if>
+            <if test="bindTime!=null">
+                bind_time=#{bindTime}
+            </if>
+            <if test="cancelTime!=null">
+                cancel_time=#{cancelTime}
+            </if>
+        </set>
+        where 1=1
+        <if test="id!=null">
+            id=#{id}
+        </if>
+        <if test="userId!=null">
+            user_id = #{userId}
+        </if>
+    </update>
+</mapper>

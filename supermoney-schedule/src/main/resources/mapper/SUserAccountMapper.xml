@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.dao.SUserAccountMapper">
+    <resultMap id="resultUserAccount" type="com.supermoney.loan.entity.SUserAccount">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="account_id" jdbcType="VARCHAR" property="accountId"/>
+        <result column="account_type" jdbcType="INTEGER" property="accountType"/>
+        <result column="available_amount" jdbcType="DECIMAL" property="availableAmount"/>
+        <result column="freeze_amount" jdbcType="DECIMAL" property="freezeAmount"/>
+        <result column="account_status" jdbcType="INTEGER" property="accountStatus"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="opt" jdbcType="VARCHAR" property="opt"/>
+    </resultMap>
+
+    <resultMap id="resultOutBalanceVo" type="com.supermoney.loan.vo.WaitkeOutBalanceVo">
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="send_number" jdbcType="INTEGER" property="sendNumber"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="send_time" jdbcType="TIMESTAMP" property="sendTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="sms_send_number" jdbcType="INTEGER" property="smsSendNumber"/>
+    </resultMap>
+
+    <select id="getUserAccount" resultMap="resultOutBalanceVo">
+--         select
+--         sua.user_id as user_id,su.mobile as mobile,ssr.status as status,ssr.send_number as send_number,ssr.send_time as send_time
+--         from
+--         s_user su left join s_send_sms_record ssr on su.id = ssr.user_id
+--         right join s_user_account sua on sua.user_id=su.id
+--         where   su.user_status=0 and available_amount BETWEEN 0.17 and 0.21
+--         and (ssr.type is null or ssr.type=2)
+--         and (ssr.send_number is null or ssr.send_number &lt;3 or ssr.send_number =0)
+--
+        select
+        sua.user_id as user_id,su.real_name as real_name,su.mobile as mobile,
+		ssr.send_time as send_time,ssr.`status` as status,su.sms_send_number as sms_send_number
+        from
+        s_user su left join s_send_sms_record ssr on su.id = ssr.user_id
+        right join s_user_account sua on sua.user_id=su.id
+        where   su.user_status=0 and available_amount BETWEEN 0.17 and 0.21
+        and (ssr.status is null or ssr.status != 1) and (ssr.type is null or ssr.type=2)
+    </select>
+
+</mapper>

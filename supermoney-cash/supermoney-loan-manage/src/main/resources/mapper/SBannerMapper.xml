@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SBannerMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SBanner">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="shelves" jdbcType="TINYINT" property="shelves" />
+    <result column="have_time_limit" jdbcType="TINYINT" property="haveTimeLimit" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="ads_type" jdbcType="TINYINT" property="adsType" />
+    <result column="max_click_count" jdbcType="INTEGER" property="maxClickCount" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="buss_id" jdbcType="INTEGER" property="bussId" />
+    <result column="need_login" jdbcType="TINYINT" property="needLogin" />
+    <result column="put_position" jdbcType="VARCHAR" property="putPosition" />
+  </resultMap>
+
+  <select id="selectBannerByMap" resultType="map" parameterType="map">
+      SELECT
+      id,area_code As areaCode,title,picture,priority,shelves,have_time_limit AS haveTimeLimit, DATE_FORMAT(begin_time, '%Y-%m-%d %H:%i:%S') AS beginTime,DATE_FORMAT(end_time, '%Y-%m-%d %H:%i:%S') AS endTime,ads_type AS adsType,link,buss_id AS bussId,need_login AS needLogin,
+      (CASE shelves WHEN 0 THEN '下架' WHEN 1 THEN '已上架' END ) AS shelvesStatus,
+      (CASE ads_type WHEN 0 THEN '跳转链接' WHEN 1 THEN '赏金任务' WHEN 2 THEN '跳转分享' END ) AS adsTypeName,
+      (CASE ads_type WHEN 0 THEN link WHEN 1 THEN buss_id END ) AS bussIdOrLink,
+      (CASE need_login WHEN 0 THEN '否' WHEN 1 THEN '是' END ) AS needLoginStatus
+      FROM s_banner
+      WHERE put_position = #{putPosition}
+      <if test="areaCode!=null and areaCode!='' ">
+          AND area_code=#{areaCode}
+      </if>
+      <!-- area_code 默认的是印尼的数据-->
+      <if test="areaCode!=null and areaCode=='899' ">
+          OR area_code is null
+      </if>
+      ORDER BY shelves DESC,priority ASC,area_code ASC
+  </select>
+
+    <update id="updateBanner">
+        UPDATE s_banner
+        SET
+        title = #{title},picture = #{picture},priority = #{priority},
+        shelves = #{shelves},have_time_limit = #{haveTimeLimit},
+        begin_time = #{beginTime},end_time = #{endTime},ads_type = #{adsType},
+        link = #{link},buss_id = #{bussId},need_login = #{needLogin},area_code = #{areaCode}
+        WHERE id = #{id}
+    </update>
+</mapper>

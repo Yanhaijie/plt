@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SBountyLoanMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SBountyLoan">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bounty_Id" jdbcType="INTEGER" property="bountyId" />
+    <result column="loan_rate" jdbcType="DECIMAL" property="loanRate" />
+    <result column="loan_rate_unit" jdbcType="INTEGER" property="loanRateUnit" />
+    <result column="fee_moeny" jdbcType="DECIMAL" property="feeMoeny" />
+    <result column="fee_rate" jdbcType="DECIMAL" property="feeRate" />
+    <result column="fee_rate_unit" jdbcType="INTEGER" property="feeRateUnit" />
+    <result column="is_deduct_fee" jdbcType="INTEGER" property="isDeductFee" />
+    <result column="is_deduct_interest" jdbcType="INTEGER" property="isDeductInterest" />
+    <result column="bounty_loan_status" jdbcType="INTEGER" property="bountyLoanStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="loan_limit" jdbcType="INTEGER" property="loanLimit" />
+    <result column="overdue_rate" jdbcType="DECIMAL" property="overdueRate" />
+    <result column="repayment_method" jdbcType="INTEGER" property="repaymentMethod" />
+    <result column="day_rate" jdbcType="DECIMAL" property="dayRate" />
+
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select * from s_bounty_loan
+    WHERE 1=1
+    <if test="bountyId != null and bountyId!=''">
+      AND bounty_Id=#{bountyId}
+    </if>
+    <if test="bountyLoanStatus!=null and bountyLoanStatus!='' ">
+      AND bounty_loan_status=#{bountyLoanStatus}
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ update_time>= #{startDate}]]>
+      AND <![CDATA[ update_time<= #{endDate}]]>
+    </if>
+  </select>
+</mapper>

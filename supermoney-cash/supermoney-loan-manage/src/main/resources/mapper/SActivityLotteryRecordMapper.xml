@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SActivityLotteryRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SActivityLotteryRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="is_winning" jdbcType="TINYINT" property="isWinning" />
+    <result column="gift_id" jdbcType="INTEGER" property="giftId" />
+    <result column="gift_name" jdbcType="VARCHAR" property="giftName" />
+    <result column="gift_count" jdbcType="INTEGER" property="giftount" />
+  </resultMap>
+
+  <select id="selectLotteryRecordListByMap" parameterType="map" resultType="map">
+      SELECT
+      t1.user_id AS userId,
+      t3.user_name AS userName,
+      t3.real_name AS holdingName,
+      t3.mobile AS holdingPhone,
+      (CASE t1.is_winning WHEN 0 THEN '未中奖' WHEN 1 THEN '中奖' END ) AS isWinning,
+      t1.gift_name AS giftName,
+      t1.gift_count AS giftCount,
+      t1.create_time AS createTime
+      FROM s_activity_lottery_record t1
+      LEFT JOIN s_user t3 ON t1.user_id = t3.id
+      <where>
+          <if test="activityName!=null and activityName!='' ">
+            AND t1.activity_name =#{activityName}
+          </if>
+          <if test="userName!=null and userName!='' ">
+              AND t3.user_name LIKE concat('%',#{userName},'%')
+          </if>
+          <if test="userId!=null and userId!='' ">
+              AND t1.user_id =#{userId}
+          </if>
+          <if test="startDate!=null and startDate!='' ">
+              AND <![CDATA[ t1.create_time>= #{startDate}]]>
+          </if>
+          <if test="endDate!=null and endDate!='' ">
+              AND <![CDATA[ t1.create_time<= #{endDate}]]>
+          </if>
+          <if test="giftId!=null and giftId!='' ">
+              AND t1.gift_id =#{giftId}
+          </if>
+          <if test="isWinning!=null and isWinning!='' ">
+              AND t1.is_winning =#{isWinning}
+          </if>
+      </where>
+      order BY t1.create_time DESC
+  </select>
+
+    <select id="selectUserLotteryCount" parameterType="map" resultType="map">
+         SELECT
+        t1.id AS userId,
+        t1.user_name AS userName,
+        COUNT(1) AS totalCount,
+        COUNT((CASE t2.is_winning WHEN 0 THEN 1 END)) AS notWiningConut,
+        COUNT((CASE t2.is_winning WHEN 1 THEN 1 END)) AS winingConut,
+        (SELECT group_concat(b.gift_name) FROM s_activity_lottery_record a JOIN s_activity_gift b ON a.gift_id = b.id WHERE a.is_winning = 1 AND b.gift_type = 2 AND a.user_id = t1.id) AS realPrizes
+        FROM s_user t1
+        INNER JOIN s_activity_lottery_record t2 ON t1.id = t2.user_id
+        GROUP BY t1.id ORDER BY totalCount DESC
+    </select>
+</mapper>

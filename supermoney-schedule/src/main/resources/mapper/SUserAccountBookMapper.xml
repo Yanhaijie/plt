@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.dao.SUserAccountBookMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.entity.SUserAccountBook">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="buss_type" jdbcType="INTEGER" property="bussType" />
+    <result column="opt_type" jdbcType="INTEGER" property="optType" />
+    <result column="buss_id" jdbcType="INTEGER" property="bussId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="after_amount" jdbcType="DECIMAL" property="afterAmount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+    <resultMap id="resultOutBalanceVo" type="com.supermoney.loan.vo.WaitkeOutBalanceVo">
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="send_number" jdbcType="INTEGER" property="sendNumber"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="send_time" jdbcType="TIMESTAMP" property="sendTime"/>
+        <result column="sms_send_number" jdbcType="INTEGER" property="smsSendNumber"/>
+    </resultMap>
+
+  <select id="getAllUserAccountBook" resultMap="resultOutBalanceVo">
+   select
+      sua.user_id as user_id,su.mobile as mobile,sss.send_time as send_time,su.sms_send_number as sms_send_number
+    from
+      s_user_account_book sua left join s_send_sms_record sss on sua.user_id=sss.user_id right join s_user su on su.id=sua.user_id
+    where buss_type=2 and opt_type=24 and su.user_status =0 and (sss.type is null or sss.type=4) and (sss.status is null or sss.status != 1)
+    group by sua.user_id,su.mobile,sss.send_time,su.sms_send_number having SUM(sua.amount) &gt;0.5
+  </select>
+
+    <!--<select id="getCount" resultType="java.lang.Integer">-->
+
+    <!--</select>-->
+</mapper>

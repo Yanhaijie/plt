@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SLoanOrderMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SLoanOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bounty_id" jdbcType="INTEGER" property="bountyId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="need_amount" jdbcType="DECIMAL" property="needAmount" />
+    <result column="loan_reason" jdbcType="VARCHAR" property="loanReason" />
+    <result column="loan_amount" jdbcType="DECIMAL" property="loanAmount" />
+    <result column="loan_interest" jdbcType="DECIMAL" property="loanInterest" />
+    <result column="fee_amount" jdbcType="DECIMAL" property="feeAmount" />
+    <result column="platform_amount" jdbcType="DECIMAL" property="platformAmount" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="loan_limit" jdbcType="INTEGER" property="loanLimit" />
+    <result column="loan_unit" jdbcType="INTEGER" property="loanUnit" />
+    <result column="period" jdbcType="INTEGER" property="period" />
+    <result column="overdue_rate" jdbcType="DECIMAL" property="overdueRate" />
+    <result column="repayment_method" jdbcType="INTEGER" property="repaymentMethod" />
+    <result column="repayment_limit" jdbcType="INTEGER" property="repaymentLimit" />
+    <result column="overdue_limit" jdbcType="INTEGER" property="overdueLimit" />
+    <result column="repayment_total" jdbcType="DECIMAL" property="repaymentTotal" />
+    <result column="order_audit_time" jdbcType="TIMESTAMP" property="orderAuditTime" />
+    <result column="loan_audit_time" jdbcType="TIMESTAMP" property="loanAuditTime" />
+    <result column="loan_time" jdbcType="TIMESTAMP" property="loanTime" />
+    <result column="interest_time" jdbcType="TIMESTAMP" property="interestTime" />
+    <result column="plan_repayment_time" jdbcType="TIMESTAMP" property="planRepaymentTime" />
+    <result column="repayment_time" jdbcType="TIMESTAMP" property="repaymentTime" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="fee_rate" jdbcType="DECIMAL" property="feeRate" />
+    <result column="overdue_amount" jdbcType="DECIMAL" property="overdueAmount" />
+    <result column="all_amount" jdbcType="DECIMAL" property="allAmount" />
+    <result column="got_amount" jdbcType="DECIMAL" property="gotAmount" />
+    <result column="virtual_account_id" jdbcType="VARCHAR" property="virtualAccountId" />
+      <result column="need_amount_usd" jdbcType="DECIMAL" property="needAmountUsd" />
+      <result column="loan_amount_usd" jdbcType="DECIMAL" property="loanAmountUsd" />
+      <result column="fee_amount_usd" jdbcType="DECIMAL" property="feeAmountUsd" />
+      <result column="overdue_amount_usd" jdbcType="DECIMAL" property="overdueAmountUsd" />
+      <result column="platform_amount_usd" jdbcType="DECIMAL" property="platformAmountUsd" />
+      <result column="repayment_total_usd" jdbcType="DECIMAL" property="repaymentTotalUsd" />
+      <result column="all_amount_usd" jdbcType="DECIMAL" property="allAmountUsd" />
+      <result column="got_amount_usd" jdbcType="DECIMAL" property="gotAmountUsd" />
+      <result column="loan_interest_usd" jdbcType="DECIMAL" property="loanInterestUsd" />
+
+      <result column="overdue_virtual_account_id" jdbcType="VARCHAR" property="overdueVirtualAccountId" />
+      <result column="overdue_num" jdbcType="INTEGER" property="overdueNum" />
+      <result column="pay_overdue_amount" jdbcType="DECIMAL" property="payOverdueAmount" />
+      <result column="pay_overdue_amount_usd" jdbcType="DECIMAL" property="payOverdueAmountUsd" />
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    SELECT *  FROM  s_loan_order
+    WHERE 1=1
+    <if test="bountyId != null and bountyId!=''">
+       AND bounty_id=#{bountyId}
+    </if>
+    <if test="userId!=null and userId!='' ">
+       AND user_id=#{userId}
+    </if>
+    <if test="ingStatus!=null and ingStatus!='' ">
+      AND order_status not in (2,8)
+    </if>
+  </select>
+
+    <select id="bountyHasOrder" parameterType="map" resultType="INTEGER">
+       SELECT  IFNULL(count(*),0) as sl  FROM  s_loan_order WHERE  user_id=#{userId} AND  bounty_id=#{bountyId} AND   order_status not in (2,8,4)
+    </select>
+
+  <select id="selectOrderList" parameterType="map" resultType="map">
+      SELECT
+      t1.id AS orderId,
+      t2.bounty_name AS bountyName,
+      t2.ads_ico AS adsIco,
+      t1.need_amount AS needAmount,
+      t1.loan_limit AS loanLimit,
+      DATE_FORMAT(t1.create_time, '%Y-%m-%d %H:%i:%S') AS createTime,
+      t1.order_status AS orderStatus,
+      t1.plan_repayment_time AS planRepaymentTime,
+      t1.virtual_account_id AS virtualAccountId
+      FROM s_loan_order t1
+      LEFT JOIN s_bounty t2 ON t1.bounty_id = t2.id
+      <where>
+        <if test="orderType != null and orderType!=''">
+          AND t1.order_status
+          <foreach collection="orderType" item="item" open=" IN (" close=")" separator=",">
+             #{item}
+          </foreach>
+        </if>
+        <if test="userId != null and userId!=''">
+          AND t1.user_id=#{userId}
+        </if>
+      </where>
+      ORDER BY t1.create_time DESC
+  </select>
+
+  <select id="selectOrderDetail" parameterType="map" resultType="map">
+     SELECT
+     t2.bounty_name AS bountyName,
+     t2.ads_ico AS adsIco,
+     t1.loan_amount AS needAmount,
+     t1.loan_amount AS loanAmount,
+     t1.loan_limit AS loanLimit,
+     DATE_FORMAT(t1.create_time, '%Y-%m-%d %H:%i:%S') AS createTime,
+     t1.order_status AS orderStatus,
+     t1.loan_reason AS loanReason,
+     (t1.loan_interest + t1.fee_amount+t1.platform_amount) AS otherCharges,
+     t1.overdue_amount AS overdueAmount,
+     t1.got_amount AS gotAmount,
+     DATE_FORMAT(t1.plan_repayment_time, '%Y-%m-%d %H:%i:%S') AS planRepaymentTime,
+     t3.account_number AS virtualAccountId,
+     t3.bank_code AS bankCode
+     FROM s_loan_order t1
+     LEFT JOIN s_bounty t2 ON t1.bounty_id = t2.id
+	 LEFT JOIN s_xendit_virtual_account t3 ON t3.id=t1.virtual_account_id
+     WHERE t1.user_id=#{userId} AND t1.id=#{orderId}
+  </select>
+
+
+    <select id="selectOrderVirtualAccount" parameterType="map" resultType="map">
+       SELECT t2.*
+       FROM s_loan_order t1
+       JOIN s_xendit_virtual_account t2 ON t1.virtual_account_id = t2.id
+       WHERE  t1.id=#{orderId}
+       AND t1.user_id=#{userId}
+    </select>
+
+    <select id="identityOrder" parameterType="map" resultType="map">
+        select
+        t1.identity_status as idNum,
+        t2.sl as orderNum ,
+        (SELECT count(*) FROM s_user_bind a WHERE a.user_id=#{userId} AND a.card_status=0) AS bindCardNum
+        from s_at_identity  t1
+        left join (select count(*) as sl,user_id from s_loan_order where order_status=1 AND user_id=#{userId}) t2 on t1.user_id = t2.user_id
+        WHERE t1.user_id=#{userId} AND t1.identity_status=3 ORDER BY t1.create_time desc limit 1
+    </select>
+
+    <select id="selectByVirtualId" parameterType="map"  resultMap="BaseResultMap" >
+        select * from s_loan_order where virtual_account_id=#{virtualId} or  overdue_virtual_account_id=#{virtualId}
+    </select>
+
+</mapper>

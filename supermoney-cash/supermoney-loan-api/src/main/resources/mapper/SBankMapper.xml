@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SBankMapper">
+    <resultMap id="resultBank" type="com.supermoney.loan.api.entity.SBank">
+        <result property="id" jdbcType="INTEGER" column="id"/>
+        <result property="country" jdbcType="VARCHAR" column="country"/>
+        <result property="enName" jdbcType="VARCHAR" column="en_name"/>
+        <result property="cnName" jdbcType="VARCHAR" column="cn_name"/>
+        <result property="abName" jdbcType="VARCHAR" column="ab_name"/>
+        <result property="bankCode" jdbcType="VARCHAR" column="bank_code"/>
+        <result property="swiftCode" jdbcType="VARCHAR" column="swift_code"/>
+    </resultMap>
+
+    <select id="getBankList" parameterType="map" resultMap="resultBank">
+        select id,country,en_name,cn_name,ab_name,bank_code,swift_code
+        from s_bank
+        where 1=1
+        <if test="country!=null">
+            and country=#{country}
+        </if>
+        <if test="search!=null">
+            and (en_name like CONCAT('%',#{search},'%') or cn_name like CONCAT('%',#{search},'%') or ab_name like CONCAT('%',#{search},'%'))
+        </if>
+        <if test="bankCode!=null">
+            and bank_code=#{bankCode}
+        </if>
+
+    </select>
+
+</mapper>

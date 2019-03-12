@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SLoanOrderMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SLoanOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bounty_id" jdbcType="INTEGER" property="bountyId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="need_amount" jdbcType="DECIMAL" property="needAmount" />
+    <result column="loan_reason" jdbcType="VARCHAR" property="loanReason" />
+    <result column="loan_amount" jdbcType="DECIMAL" property="loanAmount" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="loan_interest" jdbcType="DECIMAL" property="loanInterest" />
+    <result column="fee_rate" jdbcType="DECIMAL" property="feeRate" />
+    <result column="fee_amount" jdbcType="DECIMAL" property="feeAmount" />
+    <result column="overdue_rate" jdbcType="DECIMAL" property="overdueRate" />
+    <result column="overdue_amount" jdbcType="DECIMAL" property="overdueAmount" />
+    <result column="platform_amount" jdbcType="DECIMAL" property="platformAmount" />
+    <result column="loan_limit" jdbcType="INTEGER" property="loanLimit" />
+    <result column="loan_unit" jdbcType="INTEGER" property="loanUnit" />
+    <result column="period" jdbcType="INTEGER" property="period" />
+    <result column="repayment_method" jdbcType="INTEGER" property="repaymentMethod" />
+    <result column="repayment_limit" jdbcType="INTEGER" property="repaymentLimit" />
+    <result column="overdue_limit" jdbcType="INTEGER" property="overdueLimit" />
+    <result column="repayment_total" jdbcType="DECIMAL" property="repaymentTotal" />
+    <result column="order_audit_time" jdbcType="TIMESTAMP" property="orderAuditTime" />
+    <result column="loan_audit_time" jdbcType="TIMESTAMP" property="loanAuditTime" />
+    <result column="loan_time" jdbcType="TIMESTAMP" property="loanTime" />
+    <result column="interest_time" jdbcType="TIMESTAMP" property="interestTime" />
+    <result column="plan_repayment_time" jdbcType="TIMESTAMP" property="planRepaymentTime" />
+    <result column="repayment_time" jdbcType="TIMESTAMP" property="repaymentTime" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="all_amount" jdbcType="DECIMAL" property="allAmount" />
+    <result column="got_amount" jdbcType="DECIMAL" property="gotAmount" />
+    <result column="virtual_account_id" jdbcType="VARCHAR" property="virtualAccountId" />
+
+      <result column="need_amount_usd" jdbcType="DECIMAL" property="needAmountUsd" />
+      <result column="loan_amount_usd" jdbcType="DECIMAL" property="loanAmountUsd" />
+      <result column="fee_amount_usd" jdbcType="DECIMAL" property="feeAmountUsd" />
+      <result column="overdue_amount_usd" jdbcType="DECIMAL" property="overdueAmountUsd" />
+      <result column="platform_amount_usd" jdbcType="DECIMAL" property="platformAmountUsd" />
+      <result column="repayment_total_usd" jdbcType="DECIMAL" property="repaymentTotalUsd" />
+      <result column="all_amount_usd" jdbcType="DECIMAL" property="allAmountUsd" />
+      <result column="got_amount_usd" jdbcType="DECIMAL" property="gotAmountUsd" />
+      <result column="loan_interest_usd" jdbcType="DECIMAL" property="loanInterestUsd" />
+
+      <result column="overdue_virtual_account_id" jdbcType="VARCHAR" property="overdueVirtualAccountId" />
+      <result column="overdue_num" jdbcType="INTEGER" property="overdueNum" />
+      <result column="pay_overdue_amount" jdbcType="DECIMAL" property="payOverdueAmount" />
+      <result column="pay_overdue_amount_usd" jdbcType="DECIMAL" property="payOverdueAmountUsd" />
+
+  </resultMap>
+
+  <resultMap id="BaseVo"  extends="BaseResultMap" type="com.supermoney.loan.mg.entity.vo.SLoanOrderVo">
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="bounty_name" jdbcType="VARCHAR" property="bountyName" />
+    <result column="creditId" jdbcType="INTEGER" property="creditId" />
+      <result column="identityStatus" jdbcType="INTEGER" property="identityStatus" />
+
+      <result column="BPJS_img" jdbcType="VARCHAR" property="BPJSImg" />
+      <result column="KK_img" jdbcType="VARCHAR" property="KKImg" />
+      <result column="credit_card_img" jdbcType="VARCHAR" property="creditCardImg" />
+      <result column="work_card_img" jdbcType="VARCHAR" property="workCardImg" />
+      <result column="salary_cert_img" jdbcType="VARCHAR" property="salaryCertImg" />
+      <result column="company_affidavit_img" jdbcType="VARCHAR" property="companyAffidavitImg" />
+      <result column="bank_statement_img" jdbcType="VARCHAR" property="bankStatementImg" />
+      <result column="other_work_img" jdbcType="VARCHAR" property="otherWorkImg" />
+      <result column="account_img" jdbcType="VARCHAR" property="accountImg" />
+      <result column="day_history_img" jdbcType="VARCHAR" property="dayHistoryImg" />
+      <result column="week_history_img" jdbcType="VARCHAR" property="weekHistoryImg" />
+      <result column="month_history_img" jdbcType="VARCHAR" property="monthHistoryImg" />
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseVo" parameterType="map">
+      select t1.*,t2.user_name,t3.bounty_name,t4.id as creditId ,
+      t4.BPJS_img,t4.KK_img,t4.credit_card_img,t4.work_card_img,t4.salary_cert_img,t4.company_affidavit_img,t4.bank_statement_img,
+      t4.other_work_img,t4.account_img,t4.day_history_img,t4.week_history_img,t4.month_history_img,
+      (SELECT b.identity_status FROM s_at_identity b WHERE b.user_id = t1.user_id ORDER BY b.create_time DESC limit 1) AS identityStatus,
+      IFNULL(t5.card_status,1) as cardStatus
+      from  s_loan_order t1
+      inner  join s_user t2 on t2.id = t1.user_id
+      left join s_bounty t3 on t3.id = t1.bounty_id
+      left join s_at_credit_information t4 on t4.user_id=t1.user_id
+      left join  ( select * from  s_user_bind where card_status=0 limit 1 ) t5 on t5.user_id = t1.user_id and t5.card_status=0
+      where 1=1
+      <if test=" userId!=null and userId!='' ">
+         AND  t1.user_id = #{userId}
+      </if>
+      <if test=" mobile!=null and mobile!='' ">
+         AND t2.user_name=#{mobile}
+      </if>
+      <if test=" orderCode != null and orderCode!=''">
+         AND t1.order_code=#{orderCode}
+      </if>
+      <if test=" orderStatus!=null and orderStatus!='' ">
+          AND t1.order_status=#{orderStatus}
+      </if>
+      <if test=" startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+          AND <![CDATA[ t1.update_time>= #{startDate}]]>
+          AND <![CDATA[ t1.update_time<= #{endDate}]]>
+      </if>
+      <if test=" start != null and start!='' and end!=null and end!='' ">
+          AND <![CDATA[ t1.create_time>= #{start}]]>
+          AND <![CDATA[ t1.create_time<= #{end}]]>
+      </if>
+      ORDER BY t1.create_time DESC
+  </select>
+    
+    <select id="selectBlackListOrderList" resultMap="BaseResultMap" parameterType="map">
+        SELECT * FROM s_loan_order WHERE order_status = 0
+    </select>
+
+   <select id="overdueList" resultMap="BaseResultMap" parameterType="map">
+       select * from s_loan_order where now()>plan_repayment_time and  (order_status=7 or order_status=9)
+   </select>
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SActivityIssueRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SActivityIssueRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="issue_type" jdbcType="TINYINT" property="issueType" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+
+  <select id="getTodayIssueRecord" resultType="long" parameterType="map">
+    SELECT count(1)
+    FROM s_activity_issue_record t1
+    WHERE t1.user_id = #{userId} AND t1.activity_name = #{activityName} AND left(create_time,10) = #{nowDay} AND t1.issue_type=#{issueType}
+  </select>
+</mapper>

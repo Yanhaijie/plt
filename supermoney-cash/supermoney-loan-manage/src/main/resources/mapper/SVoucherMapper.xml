@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SVoucherMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SVoucher">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="voucher_name" jdbcType="VARCHAR" property="voucherName" />
+    <result column="voucher_dsc" jdbcType="VARCHAR" property="voucherDsc" />
+    <result column="voucher_buss_type" jdbcType="INTEGER" property="voucherBussType" />
+    <result column="voucher_type" jdbcType="INTEGER" property="voucherType" />
+    <result column="voucher_val" jdbcType="DECIMAL" property="voucherVal" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="use_day" jdbcType="INTEGER" property="useDay" />
+    <result column="voucher_status" jdbcType="INTEGER" property="voucherStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="bounty_ids" jdbcType="VARCHAR" property="bountyIds" />
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select * from s_voucher
+    WHERE 1=1
+    <if test="voucherName != null and voucherName!=''">
+      AND voucher_name LIKE CONCAT('%',trim(#{voucherName}),'%')
+    </if>
+    <if test="voucherStatus!=null and voucherStatus!='' ">
+      AND voucher_status=#{voucherStatus}
+    </if>
+  </select>
+</mapper>

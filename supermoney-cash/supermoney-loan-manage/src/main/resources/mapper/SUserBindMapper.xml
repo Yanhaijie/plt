@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SUserBindMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SUserBind">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="card_type" jdbcType="INTEGER" property="cardType" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="bank_id" jdbcType="INTEGER" property="bankId" />
+    <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
+    <result column="holding_name" jdbcType="VARCHAR" property="holdingName" />
+    <result column="holding_card" jdbcType="VARCHAR" property="holdingCard" />
+    <result column="holding_phone" jdbcType="VARCHAR" property="holdingPhone" />
+    <result column="card_status" jdbcType="INTEGER" property="cardStatus" />
+    <result column="bind_time" jdbcType="TIMESTAMP" property="bindTime" />
+    <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
+    <result column="card_account" jdbcType="VARCHAR" property="cardAccount" />
+    <result column="xendit_account_id" jdbcType="VARCHAR" property="xenditAccountId" />
+    <result column="xendit_reference" jdbcType="VARCHAR" property="xenditReference" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+  </resultMap>
+
+    <resultMap id="UserBindVo" type="com.supermoney.loan.mg.entity.vo.SUserBindVo">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="en_name" property="enName" jdbcType="VARCHAR"/>
+        <result column="cn_name" property="cnName" jdbcType="VARCHAR"/>
+        <result column="ab_name" property="abName" jdbcType="VARCHAR"/>
+        <result column="bank_code" property="bankCode" jdbcType="VARCHAR"/>
+        <result column="card_number" property="cardNumber" jdbcType="VARCHAR"/>
+        <result column="card_account" property="cardAccount" jdbcType="VARCHAR"/>
+        <result column="holding_name" property="holdingName" jdbcType="VARCHAR"/>
+        <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+  <select id="getUserBindList" resultType="map" parameterType="map">
+      SELECT
+      t3.id as userId,
+      t3.user_name AS userName,
+      t1.holding_name AS holdingName,
+      t1.holding_card AS holdingCard,
+      t1.holding_phone AS holdingPhone,
+      t2.cn_name AS bankName,
+      t1.card_number AS cardNumber,
+      t2.country AS country,
+      t1.bind_time AS bindTime,
+      t1.card_account AS cardAccount
+      FROM s_user_bind t1
+      LEFT JOIN s_bank t2 ON t1.bank_id = t2.id
+      LEFT JOIN s_user t3 ON t1.user_id = t3.id
+      <where>
+          <if test="userName!=null and userName!='' ">
+              AND t3.user_name LIKE CONCAT('%',#{userName},'%')
+          </if>
+          <if test="userId!=null and userId!='' ">
+              AND t3.id = #{userId}
+          </if>
+          <if test="holdingName!=null and holdingName!='' ">
+              AND t1.holding_name LIKE CONCAT('%',#{holdingName},'%')
+          </if>
+          <if test="holdingCard!=null and holdingCard!='' ">
+              AND t1.holding_card LIKE CONCAT('%',#{holdingCard},'%')
+          </if>
+          <if test="holdingPhone!=null and holdingPhone!='' ">
+              AND t1.holding_phone LIKE CONCAT('%',#{holdingPhone},'%')
+          </if>
+          <if test="cardNumber!=null and cardNumber!='' ">
+              AND t1.card_number LIKE CONCAT('%',#{cardNumber},'%')
+          </if>
+          <if test="startDate!=null and startDate!='' ">
+              AND <![CDATA[ t1.bind_time>= #{startDate}]]>
+          </if>
+          <if test="endDate!=null and endDate!='' ">
+              AND <![CDATA[ t1.bind_time<= #{endDate}]]>
+          </if>
+      </where>
+  </select>
+
+    <select id="getUserBindCardList" resultMap="UserBindVo" parameterType="map">
+        select a.id,en_name,cn_name,ab_name,bank_code,card_number,card_account,holding_name,bind_time from s_user_bind a
+        left join s_bank b on a.bank_id=b.id
+        where card_status = 0
+        <if test="userId != null">
+            AND a.user_id=#{userId}
+        </if>
+        <if test="bankId!=null">
+            AND a.bank_id=#{bankId}
+        </if>
+        <if test="cardNumber != null ">
+            and a.card_number=#{cardNumber}
+        </if>
+        <if test="cardAccount != null ">
+            and a.card_account=#{cardAccount}
+        </if>
+        <if test="cardStatus != null  ">
+            and a.card_status=#{cardStatus}
+        </if>
+        <if test="id!=null">
+            and a.id=#{id}
+        </if>
+    </select>
+
+
+</mapper>

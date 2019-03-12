@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supers.p2p.assets.dao.SUserMapper">
+  <resultMap id="BaseResultMap" type="com.supers.p2p.assets.entity.SUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="credit_score" jdbcType="INTEGER" property="creditScore" />
+    <result column="need_amount" jdbcType="INTEGER" property="needAmount" />
+    <result column="need_cycle" jdbcType="INTEGER" property="needCycle" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="use_status" jdbcType="INTEGER" property="useStatus" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+    <resultMap id="userVoResultMap" type="com.supers.p2p.assets.entity.vo.SUserVo" extends="BaseResultMap">
+        <result column="role_id" jdbcType="INTEGER" property="roleId" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    </resultMap>
+
+  <select id="selectList" resultMap="userVoResultMap" parameterType="map">
+      select t3.full_name as companyName,t1.*,t2.role_id from s_user t1
+      left join s_user_role t2 on t1.id =t2.user_id
+      left join s_company t3 on t1.company_id=t3.id
+      where 1=1
+      <if test="userId!=null ">
+         AND t1.id =#{userId}
+      </if>
+      <if test="parentId!=null ">
+        AND t1.parent_id =#{parentId}
+      </if>
+      <if test="userName!=null and userName!=''">
+        AND  t1.user_name LIKE CONCAT('%',#{userName},'%')
+      </if>
+      <if test="companyId!=null">
+        AND t1.company_id =#{companyId}
+      </if>
+      <if test="realName!=null and realName!='' ">
+        AND t1.real_name =#{realName}
+      </if>
+      <if test="useStatus!=null  ">
+        AND t1.use_status=#{userStatus}
+      </if>
+      <if test="userType!=null  and userType!='' ">
+        AND t1.user_type=#{userType}
+      </if>
+      <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+        AND <![CDATA[ t1.create_time>= #{startDate}]]>
+        AND <![CDATA[ t1.create_time<= #{endDate}]]>
+      </if>
+  </select>
+</mapper>

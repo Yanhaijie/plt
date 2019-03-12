@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SReportUtilMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SReportUtil">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sqlStr" jdbcType="VARCHAR" property="sqlstr" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+  </resultMap>
+
+  <select id="executeSelect" resultType="java.util.Map">
+    ${sql}
+  </select>
+</mapper>

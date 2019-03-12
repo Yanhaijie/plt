@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wi.data.clearapi.dao.CAppUserMapper">
+  <resultMap id="BaseResultMap" type="com.wi.data.clearapi.entity.CAppUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="unique_id" jdbcType="VARCHAR" property="uniqueId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="channel" jdbcType="VARCHAR" property="channel" />
+    <result column="app_name" jdbcType="VARCHAR" property="appName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <select id="selectAppUser" resultType="map" parameterType="map">
+    select  * from  c_app_user
+    <where>
+      <if test="username != null and username!=''">
+        AND username=#{username}
+      </if>
+      <if test="channel != null and channel!=''">
+        AND channel=#{channel}
+      </if>
+      <if test="appName != null and appName!=''">
+        AND app_name=#{appName}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectMobile" resultType="map" parameterType="map">
+    select t1.username,t2.* from  c_app_user t1
+    inner join c_mobile t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="username != null and username!=''">
+        AND t1.username=#{username}
+      </if>
+      <if test="name != null and name!=''">
+        AND t2.name=#{name}
+      </if>
+      <if test="number != null and number!=''">
+        AND t2.number=#{number}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectCallrecords" resultType="map" parameterType="map">
+    select t1.username,t2.* from  c_app_user t1
+    inner join c_device_callrecords t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="username != null and username!=''">
+        AND t1.username=#{username}
+      </if>
+      <if test="name != null and name!=''">
+        AND t2.name=#{name}
+      </if>
+      <if test="number != null and number!=''">
+        AND t2.number=#{number}
+      </if>
+      <if test="type != null and type!=''">
+        AND t2.type=#{type}
+      </if>
+      <if test="startTime != null and startTime!=''">
+        AND <![CDATA[ t2.time>= #{startTime}]]>
+      </if>
+      <if test="endTime!=null and endTime!='' ">
+        AND <![CDATA[ t2.time<= #{endTime}]]>
+      </if>
+    </where>
+    order by time desc
+  </select>
+
+  <select id="selectApp" resultType="map" parameterType="map">
+    select t1.username,t2.* from  c_app_user t1
+    inner join c_device_app t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="username != null and username!=''">
+        AND t1.username=#{username}
+      </if>
+      <if test="label != null and label!=''">
+        AND t2.label=#{label}
+      </if>
+      <if test="packageName != null and packageName!=''">
+        AND t2.packageName=#{packageName}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectLocation" resultType="map" parameterType="map">
+    select t1.username,t2.* from  c_app_user t1
+    inner join c_device_location t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="username != null and username!=''">
+        AND t1.username=#{username}
+      </if>
+      <if test="address != null and address!=''">
+        AND t2.address  LIKE CONCAT('%',#{address},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="selectMsg" resultType="map" parameterType="map">
+    select t1.username,t2.* from  c_app_user t1
+    inner join c_device_msg t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="username != null and username!=''">
+        AND t1.username=#{username}
+      </if>
+      <if test="number != null and number!=''">
+        AND t2.number=#{number}
+      </if>
+    </where>
+    ORDER BY time desc
+  </select>
+
+  <!--
+     minTime:用户有效通过记录最远时间
+     appNum:用户手机APP安装数量
+
+
+     recordNum:通话记录数量
+     callTypeNum:通话类型数量(O:打出 I:打入 M:未接 U:未知)
+     minTime: 用户有效通过记录最远时间
+  -->
+  <select id="selectItemCount" resultType="map" parameterType="map">
+    select t1.* ,t2.mobileNum,t3.recordNum,t4.appNum,t5.callTypeNum,t3.minTime from c_app_user t1
+    left join (select unique_id,count(*) as mobileNum from c_mobile where unique_id=#{uniqueId} GROUP BY unique_id ) t2 on t1.unique_id=t2.unique_id
+    left join (select unique_id,count(*) as recordNum,MIN(time) as minTime from c_device_callrecords where unique_id=#{uniqueId} GROUP BY unique_id ) t3 on t1.unique_id=t3.unique_id
+    left join (select unique_id,count(*) as appNum from c_app_user WHERE unique_id=#{uniqueId} GROUP BY unique_id ) t4 on t1.unique_id=t4.unique_id
+    left join (
+    select group_concat( CONCAT(callType,':',Total) separator ';') as callTypeNum,min(unique_id) as unique_id from (
+    select unique_id,IFNULL(type,'U') as callType,count(*) as Total from c_device_callrecords
+    WHERE unique_id=#{uniqueId}
+    GROUP BY unique_id, type) gdc
+    ) t5 on t1.unique_id=t5.unique_id
+
+    where t1.username=#{userName}
+  </select>
+
+  <select id="selectListCount" resultType="map" parameterType="map">
+    select t1.* ,t2.mobileNum,t3.recordNum,t4.appNum,t5.callTypeNum,t3.minTime from c_app_user t1
+    left join (select unique_id,count(*) as mobileNum from c_mobile  GROUP BY unique_id ) t2 on t1.unique_id=t2.unique_id
+    left join (select unique_id,count(*) as recordNum,MIN(time) as minTime from c_device_callrecords  GROUP BY unique_id ) t3 on t1.unique_id=t3.unique_id
+    left join (select unique_id,count(*) as appNum from c_app_user  GROUP BY unique_id ) t4 on t1.unique_id=t4.unique_id
+
+    left join (
+    select group_concat( CONCAT(callType,':',Total) separator ';') as callTypeNum,min(unique_id) as unique_id from (
+    select unique_id,IFNULL(type,'U') as callType,count(*) as Total from c_device_callrecords
+    GROUP BY unique_id, type) gdc
+    ) t5 on t1.unique_id=t5.unique_id
+  </select>
+
+  <select id="selectAllCount" resultType="map" parameterType="map">
+    select t1.* ,t2.mobileNum,t3.recordNum,t4.appNum,t5.callTypeNum,t6.msgNum,t3.minTime from c_app_user t1
+    left join (select unique_id,count(*) as mobileNum from c_mobile where unique_id=#{uniqueId} GROUP BY unique_id ) t2 on t1.unique_id=t2.unique_id
+    left join (select unique_id,count(*) as recordNum,MIN(time) as minTime from c_device_callrecords where unique_id=#{uniqueId} GROUP BY unique_id ) t3 on t1.unique_id=t3.unique_id
+    left join (select unique_id,count(*) as appNum from c_app_user WHERE unique_id=#{uniqueId} GROUP BY unique_id ) t4 on t1.unique_id=t4.unique_id
+    left join (
+    select group_concat( CONCAT(callType,':',Total) separator ';') as callTypeNum,min(unique_id) as unique_id from (
+    select unique_id,IFNULL(type,'U') as callType,count(*) as Total from c_device_callrecords
+    WHERE unique_id=#{uniqueId}
+    GROUP BY unique_id, type) gdc
+    ) t5 on t1.unique_id=t5.unique_id
+   left join (select unique_id,count(*) as msgNum from c_device_msg where unique_id=#{uniqueId} GROUP BY unique_id ) t6 on t1.unique_id=t6.unique_id
+    where t1.username=#{userName}
+  </select>
+
+  <select id="selectAppCount" resultType="map" parameterType="map">
+    select count(1) from  c_app_user t1
+    inner join c_device_app t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="label != null and label!=''">
+        AND t2.label in (#{label})
+      </if>
+      <if test="userName != null and userName!=''">
+        AND t1.username=#{userName}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectMsgCount" resultType="map" parameterType="map">
+    select count(1) from  c_app_user t1
+    inner join c_device_msg t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="userName != null and userName!=''">
+        AND t1.username=#{userName}
+      </if>
+      <if test="startTime != null and startTime!=''">
+        AND <![CDATA[ t2.time>= #{startTime}]]>
+      </if>
+      <if test="endTime!=null and endTime!='' ">
+        AND <![CDATA[ t2.time<= #{endTime}]]>
+      </if>
+    </where>
+  </select>
+
+  <select id="selectLocationCount" resultType="map" parameterType="map">
+    select count(1) from  c_app_user t1
+    inner join c_device_location t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="userName != null and userName!=''">
+        AND t1.username=#{userName}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectMobileCount" resultType="map" parameterType="map">
+    select count(1) from  c_app_user t1
+    inner join c_mobile t2 on t1.unique_id=t2.unique_id
+    <where>
+      <if test="userName != null and userName!=''">
+        AND t1.username=#{userName}
+      </if>
+    </where>
+  </select>
+
+
+  <select id="selectCallCount" resultType="map" parameterType="map">
+    select count(1) from  c_app_user t1
+    inner join c_device_callrecords t2 on t1.unique_id=t2.unique_id
+    <where>
+    <if test="userName != null and userName!=''">
+      AND t1.username=#{userName}
+    </if>
+    <if test="startTime != null and startTime!=''">
+      AND <![CDATA[ t2.time>= #{startTime}]]>
+    </if>
+    <if test="endTime!=null and endTime!='' ">
+      AND <![CDATA[ t2.time<= #{endTime}]]>
+    </if>
+    </where>
+  </select>
+
+
+  <select id="selectCountList" resultType="map" parameterType="map">
+    select t1.username,count(1) from  c_app_user t1
+    inner join #{tableName} t2 on t1.unique_id=t2.unique_id
+    WHERE t1.username in
+    <foreach collection="userNameList" item="items" open="(" close=")" separator=",">
+      #{items}
+    </foreach>
+    group by t1.username
+  </select>
+
+  <select id="executeSelect" resultType="java.util.Map">
+    ${sql}
+  </select>
+
+
+</mapper>

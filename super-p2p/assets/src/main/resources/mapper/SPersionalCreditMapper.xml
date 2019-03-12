@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supers.p2p.assets.dao.SPersionalCreditMapper">
+  <resultMap id="BaseResultMap" type="com.supers.p2p.assets.entity.SPersionalCredit">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="id_card_first_url" jdbcType="VARCHAR" property="idCardFirstUrl" />
+    <result column="id_card_second_url" jdbcType="VARCHAR" property="idCardSecondUrl" />
+    <result column="bank_card_first_url" jdbcType="VARCHAR" property="bankCardFirstUrl" />
+    <result column="bank_card_second_url" jdbcType="VARCHAR" property="bankCardSecondUrl" />
+    <result column="person_id_card_url" jdbcType="VARCHAR" property="personIdCardUrl" />
+    <result column="person_bank_card_url" jdbcType="VARCHAR" property="personBankCardUrl" />
+    <result column="pact_status" jdbcType="INTEGER" property="pactStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="id_card_fitst_orc" jdbcType="LONGVARCHAR" property="idCardFitstOrc" />
+    <result column="id_card_second_orc" jdbcType="LONGVARCHAR" property="idCardSecondOrc" />
+    <result column="bank_card_first_ocr" jdbcType="LONGVARCHAR" property="bankCardFirstOcr" />
+    <result column="bank_card_second_ocr" jdbcType="LONGVARCHAR" property="bankCardSecondOcr" />
+    <result column="pact_info" jdbcType="LONGVARCHAR" property="pactInfo" />
+  </resultMap>
+</mapper>

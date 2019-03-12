@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SMerchantUserMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SMerchantUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="merchant_type" jdbcType="INTEGER" property="merchantType" />
+    <result column="merchant_address" jdbcType="VARCHAR" property="merchantAddress" />
+    <result column="merchant_emial" jdbcType="VARCHAR" property="merchantEmial" />
+    <result column="merchant_mobile" jdbcType="VARCHAR" property="merchantMobile" />
+    <result column="merchant_status" jdbcType="INTEGER" property="merchantStatus" />
+    <result column="public_key" jdbcType="VARCHAR" property="publicKey" />
+    <result column="private_key" jdbcType="VARCHAR" property="privateKey" />
+    <result column="secret_key" jdbcType="VARCHAR" property="secretKey" />
+    <result column="validationo_token" jdbcType="VARCHAR" property="validationoToken" />
+    <result column="test_public_key" jdbcType="VARCHAR" property="testPublicKey" />
+    <result column="test_private_key" jdbcType="VARCHAR" property="testPrivateKey" />
+    <result column="test_secret_key" jdbcType="VARCHAR" property="testSecretKey" />
+    <result column="test_validationo_token" jdbcType="VARCHAR" property="testValidationoToken" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <select id="selectByParam" resultMap="BaseResultMap" parameterType="map">
+      SELECT
+      id,
+      merchant_id,
+      merchant_name,
+      merchant_type,
+      merchant_address,
+      merchant_emial,
+      merchant_mobile,
+      merchant_status,
+      public_key,
+      private_key,
+      secret_key,
+      validationo_token,
+      test_public_key,
+      test_private_key,
+      test_secret_key,
+      test_validationo_token,
+      DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%S') AS create_time
+      FROM s_merchant_user
+      <where>
+        <if test="merchantId != null and merchantId != ''">
+          AND merchant_id LIKE concat('%',#{merchantId},'%')
+        </if>
+        <if test="merchantStatus != null and merchantStatus != ''">
+          AND merchant_status LIKE concat('%',#{merchantStatus},'%')
+        </if>
+        <if test="merchantName != null and merchantName != ''">
+          AND merchant_name LIKE concat('%',#{merchantName},'%')
+        </if>
+      </where>
+      ORDER BY merchant_status,create_time DESC
+  </select>
+
+    <select id="selectDrop" resultType="map" parameterType="map">
+      SELECT merchant_id as id ,merchant_name from s_merchant_user order by create_time desc
+    </select>
+</mapper>

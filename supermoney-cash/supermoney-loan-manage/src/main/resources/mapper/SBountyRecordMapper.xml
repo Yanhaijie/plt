@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SBountyRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SBountyRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="bounty_id" jdbcType="INTEGER" property="bountyId" />
+    <result column="bounty_name" jdbcType="VARCHAR" property="bountyName" />
+    <result column="bounty_money" jdbcType="DECIMAL" property="bountyMoney" />
+    <result column="ads_id" jdbcType="VARCHAR" property="adsId" />
+    <result column="agency_down" jdbcType="INTEGER" property="agencyDown" />
+    <result column="click_id" jdbcType="VARCHAR" property="clickId" />
+    <result column="gaid" jdbcType="VARCHAR" property="gaid" />
+    <result column="idfa" jdbcType="VARCHAR" property="idfa" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="cb_event_name" jdbcType="VARCHAR" property="cbEventName" />
+    <result column="event_type" jdbcType="INTEGER" property="eventType" />
+    <result column="record_status" jdbcType="INTEGER" property="recordStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="use_dsc" jdbcType="VARCHAR" property="useDsc" />
+  </resultMap>
+
+  <resultMap id="BaseVoResultMap" extends="BaseResultMap" type="com.supermoney.loan.mg.entity.vo.SBountyRecordVo">
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseVoResultMap" parameterType="map">
+    select t1.*,t3.mobile from s_bounty_record t1
+    inner join s_bounty t2 on t2.id = t1.bounty_id
+    inner join s_user t3 on t3.id=t1.user_id
+    where 1=1
+    <if test="sysUser!=null and sysUser!='' ">
+      AND t1.user_id!=#{sysUser}
+    </if>
+    <if test="bountyId!=null and bountyId!='' ">
+      AND t1.bounty_id=#{bountyId}
+    </if>
+    <if test="mobile!=null and mobile!='' ">
+      AND t3.mobile LIKE CONCAT('%',#{mobile},'%')
+    </if>
+    <if test="recordStatus!=null and recordStatus!='' ">
+      AND t1.record_status=#{recordStatus}
+    </if>
+    <if test="userId!=null and userId!='' ">
+      AND (t1.user_id=#{userId} or t3.mobile=#{userId})
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ t1.update_time>= #{startDate}]]>
+      AND <![CDATA[ t1.update_time<= #{endDate}]]>
+    </if>
+    order by create_time DESC
+  </select>
+
+  <select id="executeSql" resultType="map">
+    ${sql}
+  </select>
+
+</mapper>

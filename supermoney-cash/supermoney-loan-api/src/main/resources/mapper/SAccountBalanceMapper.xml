@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SAccountBalanceMapper">
+    <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SAccountBalance">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="amount" jdbcType="DECIMAL" property="amount" />
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="account_id" jdbcType="INTEGER" property="accountId"/>
+        <result column="order_sn" jdbcType="VARCHAR" property="orderSn"/>
+        <result column="bank_code" jdbcType="VARCHAR" property="bankCode"/>
+        <result column="account_holder_name" jdbcType="VARCHAR" property="accountHolderName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="ext_id" jdbcType="VARCHAR" property="extId"/>
+        <result column="failure_code" jdbcType="VARCHAR" property="failureCode"/>
+        <result column="transaction_id" jdbcType="VARCHAR" property="transactionId"/>
+        <result column="transaction_sequence" jdbcType="VARCHAR" property="transactionSequence"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="updated" jdbcType="TIMESTAMP" property="updated"/>
+        <result column="usd_amount" jdbcType="DECIMAL" property="usdAmount" />
+        <result column="cash_id" jdbcType="INTEGER" property="cashId"/>
+        <result column="buss_type" jdbcType="INTEGER" property="bussType"/>
+    </resultMap>
+    <select id="getbalanceByOrderSn" parameterType="map" resultMap="BaseResultMap">
+        select
+        id,amount,usd_amount,user_id,cash_id,account_id,order_sn,card_number,bank_code,account_holder_name,remark,`status`,ext_id,failure_code,transaction_id,transaction_sequence,create_date,updated,buss_type
+        from s_account_balance where order_sn=#{orderSn}
+    </select>
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.STransfertoTopupFeeMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.STransfertoTopupFee">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product" jdbcType="INTEGER" property="product" />
+    <result column="transaction_price" jdbcType="INTEGER" property="transactionPrice" />
+    <result column="fee" jdbcType="VARCHAR" property="fee" />
+    <result column="retail_price" jdbcType="DECIMAL" property="retailPrice" />
+    <result column="wholesale_price" jdbcType="DECIMAL" property="wholesalePrice" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="phone_number_type" jdbcType="INTEGER" property="phoneNumberType" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
+  </resultMap>
+
+
+  <select id="selectList" parameterType="map" resultMap="BaseResultMap">
+    select  * from  s_transferto_topup_fee
+    <where>
+      <if test="phoneNumberType != null and phoneNumberType!=''">
+        AND phone_number_type=#{phoneNumberType}
+      </if>
+    </where>
+    order by product asc
+  </select>
+
+
+  <select id="topUpHistList" parameterType="map" resultType="map">
+    SELECT t1.user_name,t.destination_msisdn, t.product_requested,t.transaction_price,t.error_code,t.create_time
+    FROM s_transferto_topup_his t
+    left join s_user t1 on t.user_id = t1.id
+    <where>
+      <if test="phoneNumber != null and phoneNumber!=''">
+        AND t.destination_msisdn like  CONCAT('%',#{phoneNumber},'%')
+      </if>
+      <if test="userName != null and userName!=''">
+        AND t1.user_name like  CONCAT('%',#{userName},'%')
+      </if>
+    </where>
+    order by t.create_time desc
+  </select>
+
+
+
+</mapper>

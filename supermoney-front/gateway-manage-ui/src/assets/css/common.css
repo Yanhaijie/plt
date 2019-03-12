@@ -1,0 +1,21 @@
+.grid {
+    text-align: left;
+}
+.grid .toolbar{
+  padding: 0 4px 8px 4px;
+}
+
+.grid .searchbar{
+    background: #F5F7FA;
+    padding: 8px 4px;
+    border: 1px solid #E4E7ED;
+}
+.grid .w15{ width: 150px; }
+.grid .w18{ width: 180px; }
+.grid .w20{ width: 200px; }
+.gmain{     
+     margin-top: 4px;
+}
+.gpage{
+    margin-top: 14px;
+}

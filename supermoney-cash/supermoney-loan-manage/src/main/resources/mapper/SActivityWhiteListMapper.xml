@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SActivityWhiteListMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SActivityWhiteList">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="gift_id" jdbcType="INTEGER" property="giftId" />
+    <result column="lottery_count" jdbcType="INTEGER" property="lotteryCount" />
+    <result column="lottery_record_id" jdbcType="INTEGER" property="lotteryRecordId" />
+    <result column="is_sent" jdbcType="TINYINT" property="isSent" />
+  </resultMap>
+
+  <select id="selectWhiteListByMap" parameterType="map" resultType="map">
+      SELECT
+      t1.id AS id,
+      t1.user_id AS userId,
+      t1.gift_id AS giftId,
+      t3.user_name AS userName,
+      t3.real_name AS holdingName,
+      t3.mobile AS holdingPhone,
+      t2.gift_name AS giftName,
+      t2.gift_count AS giftCount,
+      t1.lottery_count AS lotteryCount,
+      (select count(1) from s_activity_lottery_record a WHERE a.user_id = t1.user_id) doLotteryCount,
+      t4.create_time AS lotteryTime,
+      (CASE t1.is_sent WHEN 0 THEN '未中奖' WHEN 1 THEN '已中奖' END) AS isSent,
+      t1.is_sent AS isSentStatus
+      FROM s_activity_white_list t1
+      LEFT JOIN s_activity_gift t2 ON t1.gift_id = t2.id
+      LEFT JOIN s_user t3 ON t1.user_id = t3.id
+      LEFT JOIN s_activity_lottery_record t4 ON t1.lottery_record_id = t4.id
+      <where>
+          <if test="activityName!=null and activityName!='' ">
+            AND t1.activity_name =#{activityName}
+          </if>
+          <if test="userId!=null and userId!='' ">
+              AND t1.user_id =#{userId}
+          </if>
+          <if test="userName!=null and userName!='' ">
+              AND t3.user_name LIKE concat('%',#{userName},'%')
+          </if>
+          <if test="isSent!=null and isSent!='' ">
+              AND t1.is_sent =#{isSent}
+          </if>
+      </where>
+  </select>
+</mapper>

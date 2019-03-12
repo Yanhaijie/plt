@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SExchangeRateMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SExchangeRate">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="exchange_name" jdbcType="VARCHAR" property="exchangeName" />
+    <result column="first_currency" jdbcType="VARCHAR" property="firstCurrency" />
+    <result column="second_currency" jdbcType="VARCHAR" property="secondCurrency" />
+    <result column="proportion" jdbcType="DECIMAL" property="proportion" />
+    <result column="exchange_val" jdbcType="DECIMAL" property="exchangeVal" />
+    <result column="exchange_status" jdbcType="INTEGER" property="exchangeStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
+  </resultMap>
+</mapper>

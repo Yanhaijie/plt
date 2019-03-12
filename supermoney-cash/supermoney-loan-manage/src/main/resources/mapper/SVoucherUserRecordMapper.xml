@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SVoucherUserRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SVoucherUserRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="voucher_id" jdbcType="INTEGER" property="voucherId" />
+    <result column="voucher_name" jdbcType="VARCHAR" property="voucherName" />
+    <result column="voucher_dsc" jdbcType="VARCHAR" property="voucherDsc" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="voucher_buss_type" jdbcType="INTEGER" property="voucherBussType" />
+    <result column="voucher_type" jdbcType="INTEGER" property="voucherType" />
+    <result column="voucher_val" jdbcType="DECIMAL" property="voucherVal" />
+    <result column="use_val" jdbcType="DECIMAL" property="useVal" />
+    <result column="use_id" jdbcType="INTEGER" property="useId" />
+    <result column="record_status" jdbcType="INTEGER" property="recordStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="viewed" jdbcType="INTEGER" property="viewed" />
+    <result column="bounty_ids" jdbcType="VARCHAR" property="bountyIds" />
+  </resultMap>
+
+  <select id="executeSql" resultType="map">
+    ${sql}
+  </select>
+
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select t1.mobile,t.* from s_voucher_user_record t left join s_user t1 on t.use_id = t1.id
+    where 1=1
+    <if test="mobile!=null and mobile!='' ">
+      AND t1.mobile  LIKE CONCAT('%',#{mobile},'%')
+    </if>
+    <if test="userId!=null and userId!='' ">
+      AND t.user_id =#{userId}
+    </if>
+    <if test="recordStatus!=null and recordStatus!='' ">
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ t.update_time>= #{startDate}]]>
+      AND <![CDATA[ t.update_time<= #{endDate}]]>
+    </if>
+  </select>
+
+
+</mapper>

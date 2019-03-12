@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1,user-scalable=no">
+<title>Bonus Saya</title>
+<script type="text/javascript" src="js/flexible.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<style>
+body{
+	width: 100%;
+	height: 100%;
+	background: #F5F5F5;
+	margin:0;
+}
+	.container{
+		width: 100%;
+		height: 100%;
+		background: #F5F5F5;
+		padding-top: .21333333rem/* 8px */;
+	}
+	.message-box{
+		display: flex;
+		width: 100%;
+		height: 2.16rem/* 81px */;
+		box-sizing: border-box;
+		padding: .42666667rem;
+		background: #FFFFFF;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.meg-left{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.meg-tit{
+		font-family: PingFangSC-Regular;
+		font-size: .42666667rem;
+		color: #333333;
+		letter-spacing: 0;
+		margin-bottom: .16rem/* 6px */;
+	}
+	.meg-time{
+		font-family: PingFangSC-Regular;
+		font-size: .37333333rem/* 14px */;
+		color: #BDBDBD;
+		letter-spacing: 0;
+		line-height: .56rem/* 21px */;
+	}
+	.meg-right{
+		font-family: PingFangSC-Regular;
+		font-size: .42666667rem;
+		color: #329BFF;
+		letter-spacing: 0;
+		text-align: right;
+	}
+	.no-more{
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		font-family: PingFangSC-Regular;
+		font-size: .37333333rem/* 14px */;
+		color: #CCCCCC;
+		letter-spacing: 0;
+		margin-top: .42666667rem;
+		padding-bottom: .53333333rem/* 20px */;
+	}
+	.none-record{
+		width: 100%;
+		height: 100%;
+	}
+	.none-record img{
+		display: block;
+		width: 50%;
+		margin:0 auto;
+		margin-top: 1.6rem;
+	}
+</style>
+</head>
+<body>
+    <div class="container">
+    	<!-- <div class="message-box">
+    		<div class="meg-left">
+    			<div class="meg-tit">获得“现金Rp5.000”</div>
+    			<div class="meg-time">2016-10-21 19:00:45</div>
+    		</div>
+    		<div class="meg-right">Rp5.000</div>
+    	</div>
+    	<div class="no-more">没有更多了</div> -->
+    	<div class="none-record">
+    		<img src="images/none.png">
+    	</div>
+    </div>
+</body>
+<script type="text/javascript">
+	var userInfo = window.control.getUserInfo();
+    var appSecret = JSON.parse(userInfo).appSecret;
+    var access_token = JSON.parse(userInfo).access_token;
+    var baseUrl = 'https://www.supermoneyshop.com';
+    // var baseUrl = 'http://192.168.0.114:8000';
+
+			//抽奖记录
+			$.ajax({
+				url: baseUrl + '/superapi/s/activity/lottery/lotteryRecord?appSecret=' + appSecret + '&access_token=' + access_token,
+				type: 'POST',
+        		dataType: 'json',
+        		data: ''
+			})
+			.done(function(res) {
+				console.log(res);
+				var data = res.data;
+				if (data.length != 0) {
+					var htl = '';
+					for(var a of data) {
+						console.log(a);
+						if (a.isWinning) {
+							htl += '<div class="message-box"><div class="meg-left"><div class="meg-tit">Selamat anda memnangkan' + a.giftName + '</div><div class="meg-time">'
+							 + a.createTime + '</div></div></div>'
+						}else{
+							htl += '<div class="message-box"><div class="meg-left"><div class="meg-tit">Terimakasih atas telah berpartisipasi</div><div class="meg-time">'
+							 + a.createTime + '</div></div></div>'
+						}
+					}
+					htl = htl+'<div class="no-more">Tidak ada yang lebih besar lagi</div>';
+					$('.container').html(htl);
+				}
+		
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+</script>
+</html>

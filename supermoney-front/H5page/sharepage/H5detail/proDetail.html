@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ProductDetail</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/flexible.js"></script>
+    <script src="js/swiper-4.2.2.min.js"></script>
+    <style>
+    html,body{
+    	width: 100%;
+    	height:100%; 
+    	margin: 0;
+    	padding: 0;
+    	position: relative;
+    }
+    .container{
+    	background-color: #f0f0f0;
+    }
+    .pro-box1{
+    	background-color: #fff;
+    	padding-bottom: .26666667rem;
+    }
+    .name-box{
+    width: 100%;
+    height: 1.38666667rem/* 52px */;
+    display: flex;
+    align-items: center;
+    padding:.26666667rem .4rem;
+    box-sizing: border-box;
+}
+.pro-logo{
+    display: block;
+    width: .90666667rem/* 34px */;
+    height: .90666667rem/* 34px */;
+    margin-right: .26666667rem;
+}
+.score{
+    width: .26666667rem/* 10px */;
+    height: .26666667rem/* 10px */;
+}
+.pro-name{
+    font-size:.48rem/* 18px */;
+    color: #333333;
+    margin-right: .26666667rem;
+}
+.pro-score{
+    font-size: .32rem/* 12px */;
+    color: #F8564E;
+}
+.detail-b{
+    font-size: .32rem/* 12px */;
+    color: #999999;
+    margin-left: .8rem/* 30px */;
+    width:8.53333333rem/* 320px */;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    box-sizing: border-box;
+}
+.reward-box{
+	padding: .26666667rem .42666667rem/* 16px */;
+	box-sizing: border-box;
+	margin-top: .26666667rem;
+	background-color: #fff;
+}
+		.title{
+			font-size: .37333333rem/* 14px */;
+			color: #333333;
+			margin-bottom: .26666667rem;
+		}
+		.reward-des{
+			display: flex;
+			align-items: center;
+			margin-bottom: .26666667rem;
+		}
+		.red-cir{
+			width: .26666667rem;
+			height: .26666667rem;			
+		}
+		.des-detail{
+			margin-left: .21333333rem/* 8px */;
+			width: 8rem/* 300px */;
+			font-size: .32rem/* 12px */;
+			color: #666666;
+		}
+		.des-img1{
+			width: .53333333rem/* 20px */;
+			height: .53333333rem/* 20px */;
+		}
+		.des-detail2{
+			margin-left: .53333333rem/* 20px */;
+		}
+		.des-title{
+			width: 8rem/* 300px */;
+			font-size: .32rem/* 12px */;
+			color: #333333;
+		}
+		.des-content{
+			width: 8rem/* 300px */;
+			font-size: .32rem/* 12px */;
+			color: #999999;
+		}
+		/* 计算器 */
+		.loan-box{
+			width: 100%;
+			height: 4.45333333rem/* 167px */;
+			background-color: #fff;
+			margin-top: .26666667rem;
+			padding: .42666667rem/* 16px */ .26666667rem;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+		.loan-t{
+			display: flex;
+			justify-content: space-between;
+		}
+		.loan-alt{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 4.66666667rem/* 175px */;
+			height: .90666667rem/* 34px */;
+			background: #F0F0F0;
+			border-radius: 44px;
+			margin-right: .13333333rem/* 5px */;
+		}
+		.loan-money{
+			font-size: .42666667rem/* 16px */;
+			color: #333;
+		}
+		.loan-alt img{
+			display: inline-block;
+			width: .32rem/* 12px */;
+			margin-left: .4rem;
+		}
+		.loan-limit{
+			width: 3.68rem/* 138px */;
+			font-size: .37333333rem/* 14px */;
+			color: #999999;
+			text-align: center;
+			margin-top: .21333333rem/* 8px */;
+		}
+		.loan-b{
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		.loan-blt{
+			font-size: .37333333rem/* 14px */;
+			color: #333333;
+		}
+		.loan-blb{
+			font-size: .32rem/* 12px */;
+			color: #666666;
+		}
+		.down-btn{
+			width: 80%;
+			height: 1.17333333rem/* 44px */;
+			position:fixed;
+			left: 50%;
+			bottom: 0;
+			z-index: 5;
+			font-size: .37333333rem/* 14px */;
+			color: #FFFFFF;
+			background: #F8564E;
+			border-radius: .58666667rem/* 22px */;
+			line-height: 1.17333333rem;
+			text-align: center;
+			-webkit-transform: translateX(-50%);
+    		-ms-transform: translateX(-50%);
+    		transform: translateX(-50%);
+    		margin-bottom: .4rem;
+		}
+		.reward-box2{
+			margin-bottom: 1.53333333rem;
+		}
+		.bg-alert-box{
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			z-index: 10;
+			top: 0;
+			left: 0;
+			background: rgba(0,0,0,0.44);
+		}
+		.alert-box{
+			width: 100%;
+			height: 8rem/* 300px */;
+			position: absolute;
+			bottom: 0;
+			background-color: #fff;
+		}
+		.num{
+			width: 100%;
+			height:1.65333333rem/* 62px */;
+			text-align: center;
+			line-height: 1.65333333rem/* 62px */;
+			border-bottom: 1px solid #E9E9E9;
+			border-top: 1px solid #E9E9E9;
+		}
+		.button-t{
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			width: 100%;
+			height: 2.13333333rem/* 80px */;
+		}
+		.button-t div{
+			width: 3.46666667rem/* 130px */;
+			height: .85333333rem/* 32px */;
+			border: 1px solid #CCCCCC;
+			border-radius: 1.2rem/* 45px */;
+			font-size: .42666667rem/* 16px */;
+			text-align: center;
+			line-height:  .85333333rem/* 32px */;
+		}
+		.button-l{
+			color: #CCCCCC;
+		}
+		.button-r{			
+			color: #F8564E;
+		}
+		.num-box{
+			width: 100%;
+			height: 6.02666667rem/* 226px */;
+			overflow: auto;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="pro-box1">
+            	<div class="name-box">
+            		<img src="images/icon.png"  class="pro-logo">
+            		<div class="pro-name">RupiahPlus</div>
+            		<div class="pro-score">4.5</div>
+            		<img src="images/rate.png" class="score">
+            	</div>
+            	<div class="detail-b">
+            			lulus 4.7 kecepatan penagihan 4.3 ,Urgent butuh duit? Solusi efektif Pin …
+            	</div>
+        </div>
+        <div class="loan-box">
+        	<div class="loan-t">
+        		<div class="loan-alert">
+        			<div class="loan-alt">
+        				<div class="loan-money">Rp500.000</div>
+        				<img src="images/pull_down.png">
+        			</div>
+        			<div class="loan-limit">Jumlah: Rp 500.000~1.500.000</div>
+        		</div>
+        		<div class="loan-alert">
+        			<div class="loan-alt">
+        				<div class="loan-money">Rp500.000</div>
+        				<img src="images/pull_down.png">
+        			</div>
+        			<div class="loan-limit">Waktu: 7~14 Hari</div>
+        		</div>
+        	</div>
+        	<div class="loan-b">
+        		<div class="loan-bl">
+        			<div class="loan-blt">Rp 524.500</div>
+        			<div class="loan-blb">Pembayaran</div>
+        		</div>
+        		<div class="loan-bl">
+        			<div class="loan-blt">Rp 524.500</div>
+        			<div class="loan-blb">Pinjaman</div>
+        		</div>
+        		<div class="loan-bl">
+        			<div class="loan-blt">Rp 524.500</div>
+        			<div class="loan-blb">Bunga + admin</div>
+        		</div>
+        	</div>
+        </div>
+        <div class="reward-box">
+        	<div class="title"> Penjelasan misi Reward</div>
+        	<div class="reward-des">
+        		<img src="images/red_ring.png" class="red-cir">
+        		<div class="des-detail">Download APP dan meminjam, mendapat bonus sebesar: Rp. 690,-</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/red_ring.png" class="red-cir">
+        		<div class="des-detail">Merekomendasikan teman mendownload dan meminjam mendapat bonus sebesar: Rp. 690,- *2</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/red_ring.png" class="red-cir">
+        		<div class="des-detail">Merekomendasikan teman mendaftar di Superpinjam dan menjadi bawahan anda, mendapat bonus sebesar: Rp. 690,- *3</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/red_ring.png" class="red-cir">
+        		<div class="des-detail">Teman kamu merekomendasikan orang lain medownload APP  mendapat bonus sebesar: Rp. 690,- *4</div>
+        	</div>
+        </div>
+        <div class="reward-box">
+        	<div class="title"> Proses peminjaman</div>
+        	<div class="reward-des">
+        		<img src="images/down.png" alt="" class="des-img1">
+        		<div class="des-detail">unduh program aplikasi</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/authentication.png" alt="" class="des-img1">
+        		<div class="des-detail">Akun registerasi, lengkapi sertifikasi nama asli</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/write_info.png" alt="" class="des-img1">
+        		<div class="des-detail">Verifikasi persyaratan informasi, isi informasi</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/wait.png" alt="" class="des-img1">
+        		<div class="des-detail">menunggu konfirmasi</div>
+        	</div>
+        </div>
+        <div class="reward-box reward-box2">
+        	<div class="title"> Penjelasan misi Reward</div>
+        	<div class="reward-des">
+        		<img src="images/ic_cam.png" alt="" class="des-img1">
+        		<div class="des-detail2">
+        			<div class="des-title">Verifikasi</div>
+        			<div class="des-content">No Ponsel & No Verifikasi</div>
+        		</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/ic_doller.png" alt="" class="des-img1">
+        		<div class="des-detail2">
+        			<div class="des-title">Memilih kuota pinjaman</div>
+        			<div class="des-content">Pilih kuota pinjaman & Batas pengembalian</div>
+        		</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/ic_id.png" alt="" class="des-img1">
+        		<div class="des-detail2">
+        			<div class="des-title">Melengkapi Data Identitas</div>
+        			<div class="des-content">Meliputi : Nama （yg tercantum pada KTP）, No KTP, Jenis Kelamin, Tempat Lahir, Tanggal Lahir, Suku, Pendidikan, Status Perkawinan, Jumlah tabungan, Alamat, Provinsi,Kota/Kabupaten, Kecamatan,Kelurahan, Kontak Perusahaaan, Lama Bekerja, Gaji per bulan, Kontak darurat sebanyak 2 org: Nama,No Ponsel</div>
+        		</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/id_id2.png" alt="" class="des-img1">
+        		<div class="des-detail2">
+        			<div class="des-title">Foto KTP</div>
+        			<div class="des-content">Selfie memegang KTP</div>
+        		</div>
+        	</div>
+        	<div class="reward-des">
+        		<img src="images/ic_card.png" alt="" class="des-img1">
+        		<div class="des-detail2">
+        			<div class="des-title">Data Rekening</div>
+        			<div class="des-content">Nama Bank, Nomor Rekening Bank, Nama Pemilik Rekening, Bank Pembayaran</div>
+        		</div>
+        	</div>
+        </div>     
+	</div>
+	<div class="down-btn">Pinjam</div>
+	<div class="bg-alert-box">
+		<div class="alert-box">
+			<div class="button-t">
+				<div class="button-l">Batal</div>
+				<div class="button-r">Konfirmasi</div>
+			</div>
+			<div class="num-box">
+				<div class="num">1</div>
+			</div>
+			
+		</div>
+	</div>
+	
+</body>
+</html>

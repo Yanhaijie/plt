@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SUserCashMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SUserCash">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_bind_id" jdbcType="INTEGER" property="userBindId" />
+    <result column="cash_money" jdbcType="DECIMAL" property="cashMoney" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="cash_platform" jdbcType="VARCHAR" property="cashPlatform" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="cash_status" jdbcType="INTEGER" property="cashStatus" />
+    <result column="cash_type" jdbcType="INTEGER" property="cashType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+  <select id="getCashCheckListByStatus" parameterType="map" resultType="map">
+    SELECT
+    t3.id as userId,
+    t1.id AS id,
+    t3.user_name AS userName,
+    t3.real_name AS realName,
+    t2.card_number AS bankAccount,
+    t1.cash_money AS cashMoney,
+    t1.cash_platform AS cashPlatform,
+    t1.cash_status AS cashStatus,
+    t1.update_time AS updateTime
+    FROM s_user_cash t1
+    LEFT JOIN s_user_bind t2 ON t1.user_bind_id = t2.id
+    LEFT JOIN s_user t3 ON t1.user_id = t3.id
+    <where>
+        <if test="cashStatus!=null and cashStatus!=''">
+          and t1.cash_status = #{cashStatus}
+        </if>
+        <if test="userName!=null and userName!=''">
+            and t3.user_name LIKE CONCAT('%',#{userName},'%')
+        </if>
+        <if test="userId!=null and userId!=''">
+            and t3.id = #{userId}
+        </if>
+        <if test="realName!=null and realName!=''">
+          and t3.real_name LIKE CONCAT('%',#{realName},'%')
+        </if>
+        <if test="bankAccount!=null and bankAccount!='' ">
+          and t2.card_number LIKE CONCAT('%',#{bankAccount},'%')
+        </if>
+        <if test="startDate!=null and startDate!='' ">
+            AND <![CDATA[ t1.update_time>= #{startDate}]]>
+        </if>
+        <if test="endDate!=null and endDate!='' ">
+            AND <![CDATA[ t1.update_time<= #{endDate}]]>
+        </if>
+    </where>
+
+      order by t1.create_time desc
+  </select>
+
+    <update id="doCashCheck" parameterType="map">
+        UPDATE s_user_cash
+        SET cash_status=#{status},remark=#{remark}
+        WHERE id in
+        <foreach collection="ids" item="idValue" open="(" close=")" separator=",">
+            #{idValue}
+        </foreach>
+    </update>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.dao.SSendSmsRecordMapper">
+  <resultMap id="SSendSmsRecordResultMap" type="com.supermoney.loan.entity.SSendSmsRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="sms_record" jdbcType="VARCHAR" property="smsRecord" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+  </resultMap>
+
+
+  <!--批量插入-->
+    <insert id="insertSendSmsRecord" parameterType="java.util.List">
+        insert into s_send_sms_record (user_id, type, status,send_time,mobile,sms_record) values
+        <foreach collection="list" item="item" index="index" separator=",">
+          (#{item.userId,jdbcType=INTEGER},
+          #{item.type,jdbcType=INTEGER},
+          #{item.status,jdbcType=INTEGER},
+          #{item.sendTime,jdbcType=TIMESTAMP},
+            #{item.mobile,jdbcType=VARCHAR},
+            #{item.smsRecord,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+
+      <!--批量修改-->
+      <update id="updateSendSmsRecord" parameterType="java.util.List">
+          update s_send_sms_record
+          <trim prefix="set" suffixOverrides=",">
+              <trim prefix="send_time =case" suffix="end,">
+                  <foreach collection="list" item="item" index="index">
+                      <if test="item.sendTime != null">
+                          when user_id=#{item.userId} then #{item.sendTime}
+                      </if>
+                  </foreach>
+              </trim>
+              <trim prefix="status =case" suffix="end,">
+                  <foreach collection="list" item="item" index="index">
+                      <if test="item.status != null and item.status != ''">
+                          when user_id=#{item.userId} then #{item.status}
+                      </if>
+                  </foreach>
+              </trim>
+              <trim prefix="sms_record =case" suffix="end,">
+                  <foreach collection="list" item="item" index="index">
+                      <if test="item.smsRecord != null and item.smsRecord != ''">
+                          when user_id=#{item.userId} then #{item.smsRecord}
+                      </if>
+                  </foreach>
+              </trim>
+          </trim>
+          <where>
+              <foreach collection="list" separator="or" item="item" index="index" >
+                  user_id =#{item.userId,jdbcType=INTEGER}
+              </foreach>
+          </where>
+      </update>
+</mapper>

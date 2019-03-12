@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SuperPinjam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    <link rel="stylesheet" href="stylesheets/sharesms.css">
+    <script src="javascripts/flexible.js"></script>
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <img src="images/qq.png" alt="" id="logo">
+        <div class="app-des">
+            <div class="app-name">SuperPinjam</div>
+            <div class="app-text ads-dsc">SuperPinjam is a personal enterprise platform loan, reward based finance, promotion platform.</div>
+            <div class="app-text text1">Bagikan dan dapat reward：1300 IDR</div>
+            <!-- <div class="app-text">Download and install <span class="get-money1">Rp 0</span></div> -->
+            <!-- <div class="app-text">Landing every day <span class="get-money2">Rp 0</span></div> -->
+        </div>
+        <div class="download-btn">Download APP</div>
+        <div class="share-btn">Bagikan untuk menghasilkan uang</div>
+    </div>
+    <div class="sign-box dis-none">
+        <div class="warp">
+            <div class="sign-tips">Please log in</div>
+            <div class="ipt-meg">
+                <input type="number" class="phone-num" placeholder="Phone number" onfocus="this.placeholder='08 **** ****'">
+                <input type="number" class="ver-code" placeholder="Verification Code">
+                <button id="send" class="send">Send</button>
+            </div>
+            <div class="sign-btn">Sign in</div>
+            <div class="sign-tip">Lakukan registrasi dapatkan bonus sebesar Rp 1.300,- , Mohon mengunduh & registrasi Super pinjam untuk menarik reward</div>
+            <div class="copy-close1"></div>
+        </div>
+    </div>
+    <div class="copy-box dis-none">
+        <div class="copy-warp">
+            <div class="copy-title">Bagikan</div>
+            <div class="copy-content">membagikan sebuah XXX kepada Anda Anda, klik tautan untuk mendownload APP dan mendapatkan cash 1000</div>
+            <div class="copy-tip">Tekan lama untuk menyalin, bagikan ke teman untuk mengklaim Reward</div>
+            <div class="download-sms">Download SuperPinjam untuk segera menarik Reward Anda</div>
+            <div class="copy-close"></div>
+        </div>
+    </div>
+</body>
+<script>
+// 翻译 英文版
+
+$(".text1").text("Share and can reward: 1300 USD");
+$(".download-btn").text("Download The APP");
+$(".share-btn").text("Share to make money");
+$(".sign-tip").text("Do the registration get bonuses of Rp 1,300,-, Please download the registration & Super borrowed to pull the reward");
+$(".copy-content").text("share a XXX to you You, click the link to download the APP and get 1000 cash");
+$(".copy-tip").text("Long press to copy it, distribute it to friends to claim Reward");
+$(".download-sms").text("Download SuperPinjam to immediately withdraw Your Reward");
+
+var baseUrl = 'http://app.teafunr.com/superapi'
+// 截取字符串
+var userId = getQueryString('userId');
+var bountyId = getQueryString('bountyId');
+var url = baseUrl + '/ut/share-bounty?userId=' + userId + '&bountyId=' + bountyId;
+//点击下载pinjam
+$(".download-sms").on('click',  function(e) {
+    // window.location.href = "https://play.google.com/store/apps/details?id=com.pinjam.rupiah";
+    window.location.href = 'market://details?id=com.pinjam.rupiah';
+});
+// 请求详情任务
+$.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        data: '',
+    })
+    .done(function(res) {
+        console.log(res.data);
+        console.log("success");
+        $('.container').on('click', '.download-btn', function(event) {
+            window.location = res.data.adsUrl;
+        });
+        // $('.container').on('click', '.share-btn', function(event) {
+        //     window.location = res.data.sharUrl;
+        // });
+        // $('.get-money1').html(res.data.bountyMoney);
+        $('.app-name').html(res.data.bountyName);
+        $('.ads-dsc').html(res.data.projectDsc);
+        $('#logo').attr({
+            'src': res.data.adsIco
+        });
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+// 获取验证码
+$('.container').on('click', '.share-btn', function(event) {
+    $('.sign-box').removeClass('dis-none');
+    $('.sign-box').on('click', '.send', function(event) {
+        var sendCodeUrl = baseUrl + '/ut/sendcode?mobile=' + $('.phone-num').val();
+        if (checkPhone()) {
+            invokeSettime("#send");
+            $.ajax({
+                    url: sendCodeUrl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {},
+                })
+                .done(function() {
+                    console.log("success");
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+
+
+        }
+    });;
+});
+
+// 注册
+$('.sign-box').on('click', '.send-active', function(event) {
+    var submitUrl = baseUrl + '/ut/down-codelogin?mobile=' + $('.phone-num').val() + '&code=' + $('.ver-code').val() + '&userId=' + userId + '&bountyId=' + bountyId;
+    $.ajax({
+            url: submitUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: {},
+        })
+        .done(function(res) {
+            console.log("success");
+            $('.sign-box').addClass('dis-none');
+            $('.copy-box').removeClass('dis-none');
+            $('.copy-content').html(res.data.sharUrl);
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+});
+$('.copy-close').on('click', function(event) {
+    $('.copy-box').addClass('dis-none');
+});
+$('.copy-close1').on('click', function(event) {
+    $('.sign-box').addClass('dis-none');
+});
+$(".sign-box").on("input", ".ver-code", function() {
+    setTimeout(function() {
+        var phone = $('.phone-num').val();
+        var code = $('.ver-code').val();
+        console.log(phone, code);
+        if (phone && code) {
+            $('.sign-btn').addClass('send-active');
+        }
+    }, 300);
+});
+// 检验手机号
+function checkPhone(e) {
+    var sMobile = $('.phone-num').val();
+    if (!(/^08/.test(sMobile))) {
+        alert("手机号不正确");
+        $('.inputPhone').focus();
+        return false;
+    }
+    return true;
+};
+// 按钮倒计时
+function invokeSettime(obj) {
+    var countdown = 60;
+    settime(obj);
+
+    function settime(obj) {
+        if (countdown == 0) {
+            $(obj).attr("disabled", false);
+            $(obj).text("Send");
+            countdown = 60;
+            return;
+        } else {
+            $(obj).attr("disabled", true);
+            $(obj).text(countdown + "s");
+            countdown--;
+        }
+        setTimeout(function() {
+            settime(obj)
+        }, 1000)
+    }
+};
+// 截取字符串
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return decodeURI(r[2]);
+    return null;
+};
+</script>
+
+</html>

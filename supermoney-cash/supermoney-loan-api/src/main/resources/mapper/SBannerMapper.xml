@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SBannerMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SBanner">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="shelves" jdbcType="TINYINT" property="shelves" />
+    <result column="have_time_limit" jdbcType="TINYINT" property="haveTimeLimit" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="ads_type" jdbcType="TINYINT" property="adsType" />
+    <result column="max_click_count" jdbcType="INTEGER" property="maxClickCount" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="buss_id" jdbcType="INTEGER" property="bussId" />
+    <result column="need_login" jdbcType="TINYINT" property="needLogin" />
+    <result column="put_position" jdbcType="VARCHAR" property="putPosition" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+  </resultMap>
+
+  <select id="selectBannerByParam" parameterType="map" resultType="map">
+      SELECT
+      title,picture,ads_type AS adsType,link,buss_id AS bussId,need_login AS needLogin,area_code AS areaCode
+      FROM s_banner
+      <![CDATA[
+        WHERE put_position=#{putPosition} AND shelves=1 AND (have_time_limit = 0 OR (have_time_limit = 1 AND (begin_time IS NOT NULL AND begin_time <= #{nowDate} OR  begin_time IS NULL) AND (end_time IS NOT NULL AND end_time >= #{nowDate} OR end_time IS NULL)))
+      ]]>
+      <if test="areaCode!=null and areaCode!='' ">
+        AND area_code=#{areaCode}
+      </if>
+      <!-- area_code 默认的是印尼的数据-->
+      <if test="areaCode!=null and areaCode=='899' ">
+        OR area_code is null
+      </if>
+      ORDER BY priority ASC,area_code ASC
+  </select>
+
+
+</mapper>

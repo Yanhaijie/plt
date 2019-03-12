@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wi.data.clear.dao.CDeviceLocationMapper">
+  <resultMap id="BaseResultMap" type="com.wi.data.clear.entity.CDeviceLocation">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="unique_id" jdbcType="VARCHAR" property="uniqueId" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="networkType" jdbcType="VARCHAR" property="networkType" />
+  </resultMap>
+
+
+  <update id="saveOrUpdateDeviceLocation">
+    insert into c_device_location(unique_id, latitude, longitude, address,networkType)
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      #{item.uniqueId,jdbcType=VARCHAR},
+      #{item.latitude,jdbcType=VARCHAR},
+      #{item.longitude,jdbcType=VARCHAR},
+      #{item.address,jdbcType=VARCHAR},
+      #{item.networkType,jdbcType=VARCHAR}
+      )
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+    unique_id = VALUES(unique_id),
+    latitude = VALUES(latitude),
+    longitude = VALUES(longitude),
+    address = VALUES(address),
+    networkType = VALUES(networkType)
+  </update>
+</mapper>

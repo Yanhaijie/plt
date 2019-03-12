@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supers.p2p.assets.dao.SItemPoolMapper">
+  <resultMap id="BaseResultMap" type="com.supers.p2p.assets.entity.SItemPool">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="item_id" jdbcType="INTEGER" property="itemId" />
+    <result column="found_company_id" jdbcType="INTEGER" property="foundCompanyId" />
+    <result column="use_status" jdbcType="INTEGER" property="useStatus" />
+    <result column="transaction_status" jdbcType="INTEGER" property="transactionStatus" />
+    <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime" />
+    <result column="comfirm_time" jdbcType="TIMESTAMP" property="comfirmTime" />
+    <result column="lock_duration" jdbcType="INTEGER" property="lockDuration" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+</mapper>

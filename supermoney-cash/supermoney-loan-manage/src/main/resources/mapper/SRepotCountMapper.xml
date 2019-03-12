@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SRepotCountMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SRepotCount">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="report_flag" jdbcType="VARCHAR" property="reportFlag" />
+    <result column="report_name" jdbcType="VARCHAR" property="reportName" />
+    <result column="report_sql" jdbcType="VARCHAR" property="reportSql" />
+    <result column="report_status" jdbcType="INTEGER" property="reportStatus" />
+    <result column="report_type" jdbcType="INTEGER" property="reportType" />
+  </resultMap>
+
+  <resultMap id="rewardMap" type="com.supermoney.loan.mg.entity.vo.RewardVO">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="bountyAmount" jdbcType="VARCHAR" property="bountyAmount" />
+    <result column="selfBountyAmount" jdbcType="VARCHAR" property="selfBountyAmount" />
+    <result column="secBountyAmount" jdbcType="VARCHAR" property="secBountyAmount" />
+    <result column="retailAmount" jdbcType="VARCHAR" property="retailAmount" />
+    <result column="wholeSaleAmount" jdbcType="VARCHAR" property="wholeSaleAmount" />
+    <result column="freezeBountyAmount" jdbcType="VARCHAR" property="freezeBountyAmount" />
+    <result column="freezeOutBountyAmount" jdbcType="VARCHAR" property="freezeOutBountyAmount" />
+    <result column="freezeBackBountyTotalAmount" jdbcType="VARCHAR" property="freezeBackBountyTotalAmount" />
+  </resultMap>
+  <!--赏金统计-->
+  <select id="bountyReport" resultMap="rewardMap" parameterType="map">
+    SELECT su.user_id,s.mobile,IFNULL(suab4.bountyAmount,0) bountyAmount,IFNULL(suab2.selfBountyAmount,0) selfBountyAmount,IFNULL(suab3.secBountyAmount,0) secBountyAmount,IFNULL(suab5.freezeBountyAmount,0) freezeBountyAmount,IFNULL(suab6.freezeOutBountyAmount,0) freezeOutBountyAmount,IFNULL(suab7.freezeBackBountyAmount,0) freezeBackBountyAmount,IFNULL(sum(CAST(stt.retail_price AS DECIMAL(18,6))),0) retailAmount,IFNULL(sum(CAST(stt.wholesale_price AS DECIMAL(18,6))),0) wholeSaleAmount FROM s_user_account_book su
+      LEFT JOIN s_user s ON su.user_id = s.id
+      LEFT JOIN s_transferto_topup_his stt ON stt.user_id = su.user_id AND stt.error_code = 0
+      LEFT JOIN (SELECT suab.user_id,sum(CAST(suab.amount AS DECIMAL(18,6))) selfBountyAmount FROM s_user_account_book suab WHERE suab.buss_type = 2 AND suab.opt_type = 23 GROUP BY suab.user_id) suab2 ON su.user_id = suab2.user_id
+      LEFT JOIN (SELECT suab.user_id,sum(CAST(suab.amount AS DECIMAL(18,6))) secBountyAmount FROM s_user_account_book suab WHERE suab.buss_type = 2 AND suab.opt_type = 24 GROUP BY suab.user_id) suab3 ON su.user_id = suab3.user_id
+      LEFT JOIN (SELECT suab.user_id,sum(CAST(suab.amount AS DECIMAL(18,6))) bountyAmount FROM s_user_account_book suab WHERE suab.buss_type = 2  GROUP BY suab.user_id) suab4 ON su.user_id = suab4.user_id
+      LEFT JOIN (SELECT suab.user_id,sum(CAST(suab.amount AS DECIMAL(18,6))) freezeBountyAmount FROM s_user_account_book suab WHERE suab.buss_type = 2 AND suab.opt_type = 20 GROUP BY suab.user_id) suab5 ON su.user_id = suab5.user_id
+      LEFT JOIN (SELECT suab.user_id,sum(CAST(suab.amount AS DECIMAL(18,6))) freezeOutBountyAmount FROM s_user_account_book suab WHERE suab.buss_type = 2 AND suab.opt_type = 21 GROUP BY suab.user_id) suab6 ON su.user_id = suab6.user_id
+      LEFT JOIN (SELECT suab.user_id,sum(CAST(suab.amount AS DECIMAL(18,6))) freezeBackBountyAmount FROM s_user_account_book suab WHERE suab.buss_type = 2 AND suab.opt_type = 22 GROUP BY suab.user_id) suab7 ON su.user_id = suab7.user_id
+    WHERE  su.buss_type = 2
+    <if test="userId!=null and userId!='' ">
+      AND su.user_id = #{userId}
+    </if>
+    <if test="mobile!=null and mobile!='' ">
+      AND s.mobile = #{mobile}
+    </if>
+    GROUP BY su.user_id
+    ORDER BY bountyAmount DESC
+    LIMIT #{pageIndex},#{pageSize}
+  </select>
+
+  <select id="bountyReportCount" resultType="INTEGER" parameterType="map">
+    SELECT COUNT(*) FROM
+      (SELECT  su.user_id FROM s_user_account_book su
+        LEFT JOIN s_user s ON su.user_id = s.id
+        WHERE  su.buss_type = 2
+        <if test="userId!=null and userId!='' ">
+          AND su.user_id = #{userId}
+        </if>
+        <if test="mobile!=null and mobile!='' ">
+          AND s.mobile = #{mobile}
+        </if>
+        GROUP BY su.user_id ) temp
+  </select>
+
+  <resultMap id="reportMap" type="com.supermoney.loan.mg.entity.vo.SBountyReportVo">
+    <result column="retailTotalAmount" jdbcType="VARCHAR" property="retailTotalAmount" />
+    <result column="wholeSaleTotalAmount" jdbcType="VARCHAR" property="wholeSaleTotalAmount" />
+    <result column="freezeBountyTotalAmount" jdbcType="VARCHAR" property="freezeBountyTotalAmount" />
+    <result column="freezeOutBountyTotalAmount" jdbcType="VARCHAR" property="freezeOutBountyTotalAmount" />
+    <result column="freezeBackBountyTotalAmount" jdbcType="VARCHAR" property="freezeBackBountyTotalAmount" />
+    <result column="bountyTotalAmount" jdbcType="VARCHAR" property="bountyTotalAmount" />
+    <result column="selfBountyTotalAmount" jdbcType="VARCHAR" property="selfBountyTotalAmount" />
+    <result column="secBountyTotalAmount" jdbcType="VARCHAR" property="secBountyTotalAmount" />
+  </resultMap>
+
+  <select id="getBountyTotalAmount" resultMap="reportMap">
+    SELECT ifnull(sum(CASE WHEN opt_type = 20 THEN amount ELSE 0 END),0) freezeBountyTotalAmount,
+           ifnull(sum(CASE WHEN opt_type = 21 THEN amount ELSE 0 END),0) freezeOutBountyTotalAmount,
+           ifnull(sum(CASE WHEN opt_type = 22 THEN amount ELSE 0 END),0) freezeBackBountyTotalAmount,
+           ifnull(sum(CASE WHEN opt_type = 23 THEN amount ELSE 0 END),0) selfBountyTotalAmount,
+           ifnull(sum(CASE WHEN opt_type = 24 THEN amount ELSE 0 END),0) secBountyTotalAmount,
+           ifnull(sum(CAST(amount AS DECIMAL(18,6))),0) bountyTotalAmount
+    FROM s_user_account_book where buss_type = 2
+  </select>
+
+
+  <select id="getTransferToTotalAmount" resultMap="reportMap">
+    SELECT IFNULL(sum(CAST(stt.retail_price AS DECIMAL(18,6))),0) retailTotalAmount,IFNULL(sum(CAST(stt.wholesale_price AS DECIMAL(18,6))),0) wholeSaleTotalAmount FROM s_transferto_topup_his stt WHERE stt.error_code = 0
+  </select>
+
+  <resultMap id="regMap" type="com.supermoney.loan.mg.entity.vo.RegReportVo">
+    <result column="regCount" jdbcType="VARCHAR" property="regCount" />
+    <result column="reg_source" jdbcType="VARCHAR" property="regSource" />
+  </resultMap>
+
+  <select id="getRegReport" parameterType="map" resultMap="regMap">
+    SELECT COUNT(id) regCount,reg_source
+      FROM s_user
+      WHERE
+        id &lt;&gt; 1
+      <if test="PACKAGE!=null and PACKAGE!='' ">
+        AND reg_source LIKE CONCAT(CONCAT('%',#{PACKAGE}),'%')
+      </if>
+      <if test="VERSION!=null and VERSION!='' ">
+        AND reg_source LIKE CONCAT(CONCAT('%',#{VERSION}),'%')
+      </if>
+      <if test="CHANNEL!=null and CHANNEL!='' ">
+        AND reg_source LIKE CONCAT(CONCAT('%',#{CHANNEL}),'%')
+      </if>
+      <if test="share!=null and share!='' ">
+        AND reg_source LIKE CONCAT(CONCAT('%',#{share}),'%')
+      </if>
+    GROUP BY reg_source ORDER BY regCount DESC
+    LIMIT #{pageIndex},#{pageSize}
+  </select>
+  <select id="getRegReportCount" resultType="INTEGER" parameterType="map">
+    SELECT COUNT(*) FROM
+      (SELECT COUNT(id) regCount,reg_source
+        FROM s_user
+        WHERE
+        1=1
+        <if test="PACKAGE!=null and PACKAGE!='' ">
+          AND reg_source LIKE CONCAT(CONCAT('%',#{PACKAGE}),'%')
+        </if>
+        <if test="VERSION!=null and VERSION!='' ">
+          AND reg_source LIKE CONCAT(CONCAT('%',#{VERSION}),'%')
+        </if>
+        <if test="CHANNEL!=null and CHANNEL!='' ">
+          AND reg_source LIKE CONCAT(CONCAT('%',#{CHANNEL}),'%')
+        </if>
+        <if test="share!=null and share!='' ">
+          AND reg_source LIKE CONCAT(CONCAT('%',#{share}),'%')
+        </if>
+          GROUP BY reg_source ) temp
+  </select>
+</mapper>

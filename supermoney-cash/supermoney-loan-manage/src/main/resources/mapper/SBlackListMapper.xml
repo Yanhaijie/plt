@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SBlackListMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SBlackList">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="black_level" jdbcType="INTEGER" property="blackLevel" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+
+  <update id="saveOrUpdateBlackList">
+    insert into s_black_list(source, user_name, black_level, remark)
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      #{item.source,jdbcType=INTEGER},
+      #{item.userName,jdbcType=VARCHAR},
+      #{item.blackLevel,jdbcType=VARCHAR},
+      #{item.remark,jdbcType=VARCHAR}
+      )
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+    source = VALUES(source),
+    black_level = VALUES(black_level),
+    remark = VALUES(remark)
+  </update>
+
+  <select id="selectList" resultType="map" resultMap="BaseResultMap">
+    select  * from  s_black_list
+    <where>
+      <if test="userName != null and userName!=''">
+        AND user_name=#{userName}
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SActivityLotteryRecordMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SActivityLotteryRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="is_winning" jdbcType="TINYINT" property="isWinning" />
+    <result column="gift_id" jdbcType="INTEGER" property="giftId" />
+    <result column="gift_name" jdbcType="VARCHAR" property="giftName" />
+     <result column="gift_count" jdbcType="INTEGER" property="giftount" />
+  </resultMap>
+
+    <select id="selectLotteryRecordCountByUserId" resultType="long" parameterType="map">
+        SELECT count(1)
+        FROM s_activity_lottery_record
+        WHERE user_id = #{userId} AND activity_name = #{activityName}
+    </select>
+
+  <select id="selectLotteryRecordByUserId" resultType="map" parameterType="map">
+      SELECT
+      t1.is_winning AS isWinning,
+      DATE_FORMAT(t1.create_time, '%Y-%m-%d %H:%i:%S') AS createTime,
+      t1.gift_name AS giftName,
+      t1.gift_count AS giftCount
+      FROM s_activity_lottery_record t1
+      WHERE t1.user_id = #{userId} AND t1.activity_name = #{activityName} AND t1.is_winning=1
+      ORDER BY t1.create_time desc
+      <!--<if test="pageNum!=null and pageNum!=''">-->
+          <!--LIMIT #{pageNum},#{pageSize}-->
+      <!--</if>-->
+
+  </select>
+
+  <select id="selectPrizeRecordByUserId" resultType="map" parameterType="map">
+      SELECT *
+      FROM s_activity_lottery_record t1
+      JOIN s_activity_gift t2 ON t1.gift_id = t2.id
+      WHERE t1.is_winning = 1 AND t1.user_id = #{userId} AND t1.activity_name = #{activityName}
+      ORDER BY t1.create_time desc
+      <!--<if test="pageNum != null and pageNum != ''">-->
+          <!--LIMIT #{pageNum},#{pageSize}-->
+      <!--</if>-->
+  </select>
+
+    <select id="getTodayLotteryRecord" resultType="long" parameterType="map">
+        SELECT count(1)
+        FROM s_activity_lottery_record t1
+        WHERE t1.user_id = #{userId} AND t1.activity_name = #{activityName} AND left(create_time,10) = #{nowDay}
+    </select>
+
+    <select id="selectScroolLotteryRecord" parameterType="map" resultType="map">
+        SELECT t3.mobile AS mobile, t2.gift_name AS giftName,DATE_FORMAT(t1.create_time, '%Y-%m-%d %H:%i:%S') AS createTime
+        FROM s_activity_lottery_record t1
+        LEFT JOIN s_activity_gift t2 ON t1.gift_id = t2.id
+        LEFT JOIN s_user t3 ON t1.user_id = t3.id
+        WHERE t1.activity_name=#{activityName} AND t1.is_winning = 1
+        ORDER BY t1.create_time DESC
+        limit 0,20
+    </select>
+</mapper>

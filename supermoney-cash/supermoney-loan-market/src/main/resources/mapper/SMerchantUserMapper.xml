@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.market.dao.SMerchantUserMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.market.entity.SMerchantUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="merchant_type" jdbcType="INTEGER" property="merchantType" />
+    <result column="merchant_address" jdbcType="VARCHAR" property="merchantAddress" />
+    <result column="merchant_emial" jdbcType="VARCHAR" property="merchantEmial" />
+    <result column="merchant_mobile" jdbcType="VARCHAR" property="merchantMobile" />
+    <result column="merchant_status" jdbcType="INTEGER" property="merchantStatus" />
+    <result column="public_key" jdbcType="VARCHAR" property="publicKey" />
+    <result column="private_key" jdbcType="VARCHAR" property="privateKey" />
+    <result column="secret_key" jdbcType="VARCHAR" property="secretKey" />
+    <result column="validationo_token" jdbcType="VARCHAR" property="validationoToken" />
+    <result column="test_public_key" jdbcType="VARCHAR" property="testPublicKey" />
+    <result column="test_private_key" jdbcType="VARCHAR" property="testPrivateKey" />
+    <result column="test_secret_key" jdbcType="VARCHAR" property="testSecretKey" />
+    <result column="test_validationo_token" jdbcType="VARCHAR" property="testValidationoToken" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+</mapper>

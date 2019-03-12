@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1,user-scalable=no">
+    <meta charset="UTF-8">
+    <title>reward</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/swiper-4.2.2.min.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/flexible.js"></script>
+    <script src="js/swiper-4.2.2.min.js"></script>
+</head>
+
+<body>
+    <div class="game-content">
+        <div class="reward-record">
+            <img class="reward-record-img" src="images/moneybox.png">
+            <div class="swiper-container2">
+                <div class="swiper-wrapper reward-t1">
+                </div>
+            </div>
+
+        </div>
+        <div class="alert-bg box-none">
+            <div class="tip-box">
+                <div class="tip-text gift-name">Hari ini masih ada N kali kesempatan mendapatkan bonus</div>
+                <!-- <div class="tip-text reward-num1">Hari ini masih ada N kali kesempatan mendapatkan bonus</div> -->
+                <div class="btn">
+                    <div class="btn-again">OK</div>
+                </div>
+            </div>
+        </div>
+        <div class="alert-bg1 box-none">
+            <div class="tip-box">
+                <div class="tip-text">Hari ini sudah tidak ada kesempatan mengundi, apakah anda bersedia mengeluarkan Rp. 690 untuk mendapatkan kesempatan mengundi lagi?</div>
+                <div class="btn">
+                    <div class="btn-close1">No</div>
+                    <div class="btn-chance">Tukarkan</div>
+                </div>
+            </div>
+        </div>
+        <div class="alert-bg2 box-none">
+            <div class="tip-box">
+                <div class="tip-text">Download APP dan menangkan kesempatan mendapat lebih banyak bonus Download app and win a chance get more bonus;Bagikan link dan dapatkan 1 kesempatan mengundi hadiah Shared link and get a chance draw rewards</div>
+                <div class="btn">
+                    <div class="btn-close">Lakukan tugas</div>
+                    <div class="btn-share">bagikan</div>
+                </div>
+            </div>
+        </div>
+        <div class="alert-bg3 box-none">
+            <div class="tip-box tip-box1">
+                <div class="tip-text tip-text3">Hari ini masih ada N kali kesempatan mendapatkan bonus</div>
+                <div class="btn">
+                    <div class="btn-again">OK</div>
+                </div>
+            </div>
+        </div>
+        <div class="reward-num">Hari ini masih ada N kali kesempatan mendapatkan bonus</div>
+        <img src="images/2p.png">
+        <div class="game-goods-wrap">
+            <div class="game-goods-list">
+                <div class="game-goods" style="background: #efdb00;">
+                    <div class="game-goods-box" id="game1">
+                        <ul class="game-goods-ul" style="">
+                        </ul>
+                    </div>
+                </div>
+                <div class="game-goods" style="background: #efdb00;">
+                    <div class="game-goods-box" id="game2">
+                        <ul class="game-goods-ul" style="">
+                        </ul>
+                    </div>
+                </div>
+                <div class="game-goods" style="background: #efdb00;">
+                    <div class="game-goods-box" id="game3">
+                        <ul class="game-goods-ul">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="game-prize" href="https://www.supermoneyshop.com/static/sharepage/rewardactivity/rewardrecord.html"></a>
+        <span class="game-btn" id="myDIV"></span>
+        <a class="game-rule" href="https://www.supermoneyshop.com/static/sharepage/rewardactivity/rewardrule.html"></a>
+        <!-- 礼物展示 -->
+        <div class="gift-show">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="images/019.png"></div>
+                    <div class="swiper-slide"><img src="images/020.png"></div>
+                    <div class="swiper-slide"><img src="images/021.png"></div>
+                    <div class="swiper-slide"><img src="images/022.png"></div>
+                    <div class="swiper-slide"><img src="images/023.png"></div>
+                    <div class="swiper-slide"><img src="images/24.png"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var userInfo = window.control.getUserInfo();
+        var appSecret = JSON.parse(userInfo).appSecret;
+        var access_token = JSON.parse(userInfo).access_token;
+        var userId = JSON.parse(userInfo).userId;
+        var shareUrl = 'https://www.supermoneyshop.com/static/sharepage/shareH5.html?userId=' + userId
+        var baseUrl = 'https://www.supermoneyshop.com';
+        // var baseUrl = 'http://192.168.0.114:8000';
+        // var appSecret = 'HkQ4OPzsCgvgyU07-Ho03pBeLIcfB79t';
+        // var access_token = 'dba55085-8094-425e-882e-ad1ca9e9e26d';
+        // 分享
+        function sharepage(event) {
+            window.control.share(shareUrl, '', 'Teman mengajak kamu untuk memenangkan hadiah besar di SuperUang,  Tunggu kamu bawa pulang iPhone X，OPPO ' + shareUrl);
+        };
+        // 滚动抽奖记录
+        $.ajax({
+                url: baseUrl + '/superapi/s/activity/lottery/scrollLotteryList?appSecret=' + appSecret + '&access_token=' + access_token,
+                type: 'POST',
+                dataType: 'json',
+                data: ''
+            })
+            .done(function(res) {
+                console.log(res);
+                var data = res.data;
+                var ghtl = '';
+                if (res.code == 200) {
+                    for (var a of data) {
+                        ghtl += "<div class='swiper-slide reward-t'>" + a.mobile + 'Selamat anda memnangkane' + a.giftName + "</div>";
+                    }
+
+                    $('.reward-t1').html(ghtl);
+                    var mySwiper2 = new Swiper('.swiper-container2', {
+                        autoplay: true, //可选选项，自动滑动
+                        slidesPerView: 1,
+                        loop: true
+                    });
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
+        $.extend({
+            luckGame: function(options) {
+                var giftId = '';
+                var isWinning = '';
+                var defaults = {
+                    'gameLen': '6',
+                    'game_pagesize': 7 //生成多少圈同样的东西
+                        // 'zj_arr': { //中奖数组，第一个表示是否中奖，第二个中奖号码
+                        //     'is_win': 1,
+                        //     'number': 5
+                        // }
+                };
+                var settings = $.extend(defaults, options);
+                w_config = {
+                    'w': $(window).width(),
+                    'h': $(window).height()
+                }
+                var gameArr = [];
+                var gameLen = settings.gameLen;
+                var game_list_h = '';
+                var game_init = [];
+                var game_list_item_h = 0;
+
+                //每次进来随机3个数字，来启动当前的选择的状态
+                for (var i = 0; i < 3; i++) {
+
+                    game_init.push(Math.floor(Math.random() * gameLen));
+                }
+                createGame();
+                $(window).resize(function() {
+
+                    createGame();
+                })
+
+                function createGame() {
+                    getHeight();
+                    setLi();
+                    pushLi(gameArr);
+                    start();
+                }
+
+
+                function getHeight() {
+                    w_config = {
+                        'w': $(window).width(),
+                        'h': $(window).height()
+                    }
+                    game_list_item_h = (w_config.w * 550 / 750 * 0.5 * 0.7).toFixed(2);
+                }
+
+
+                //设置奖品
+                function setLi() {
+
+                    for (var j = 1; j <= settings.game_pagesize; j++) {
+                        for (var i = 1; i <= gameLen; i++) {
+                            gameArr.push({
+                                'type': j,
+                                'index': i,
+                                'src': 'images/' + i + '.png'
+                            });
+                        }
+                    }
+
+
+                }
+                //写入，初始化奖品的滚动
+                function pushLi(arr) {
+                    console.log(game_list_item_h);
+                    var html_str = '';
+                    for (var i = 0; i < arr.length; i++) {
+                        html_str += '<li style="height:' + game_list_item_h + 'px" data-index="' + arr[i]['index'] + '" data-type="' + arr[i]['type'] + '"><img src="' + arr[i]['src'] + '"></li>';
+                    }
+                    $(".game-goods-ul").each(function(e) {
+                        $(this).empty().append(html_str);
+                        game_list_h = $(this).height();
+                        console.log('game_list_item_h', game_init);
+                        y = game_list_item_h * game_init[e];
+
+                        $(this).css({
+                            'transition-duration': '0ms',
+                            'transform': 'translate(0px, -' + y + 'px) translateZ(0px)'
+                        })
+                    });
+
+
+                }
+
+                function start() {
+                    var gamebtn = document.getElementById("myDIV");
+                    gamebtn.addEventListener('click', goReward, false);
+
+                    function goReward() {
+                        gamebtn.removeEventListener('click', goReward, false);
+                        //抽奖结果
+                        $.ajax({
+                                url: baseUrl + '/superapi/s/activity/lottery/drawLottery?appSecret=' + appSecret + '&access_token=' + access_token,
+                                type: 'POST'
+                            })
+                            .done(function(res) {
+                                console.log(res);
+                                var reshtl = '';
+                                var data = res.data;
+                                if (res.code == 200) {
+                                    giftId = data.giftId - 1;
+                                    isWinning = data.isWinning;
+                                    var canExchange = data.canExchange;
+                                    settings = {
+                                        'gameLen': '6',
+                                        'game_pagesize': 7, //生成多少圈同样的东西
+                                        'zj_arr': { //中奖数组，第一个表示是否中奖，第二个中奖号码
+                                            'is_win': isWinning,
+                                            'number': giftId
+                                        }
+                                    }
+
+                                    //如果中奖
+                                    if (settings.zj_arr.is_win == 1) {
+
+                                        reshtl = 'Selamat anda memnangkan' + data.giftName;
+                                        $('.gift-name').html(reshtl);
+                                        $(".game-goods-ul").each(function(e) {
+
+                                            setTimeout(function() {
+                                                y = (settings.zj_arr.number + settings.gameLen * (settings.game_pagesize - 1)) * game_list_item_h;
+                                                $(".game-goods-ul").eq(e).css({
+                                                    'transition-duration': '5000ms',
+                                                    'transform': 'translate(0px, -' + y + 'px) translateZ(0px)'
+                                                })
+                                            }, e * 300);
+                                            //判断最后面是否完毕
+                                            $("#game3").find(".game-goods-ul").on("webkitTransitionEnd", function() {
+                                                y = settings.zj_arr.number * game_list_item_h;
+                                                $(".game-goods-ul").css({
+                                                    'transition-duration': '0ms',
+                                                    'transform': 'translate(0px, -' + y + 'px) translateZ(0px)'
+                                                })
+                                                $("#game3").find(".game-goods-ul").unbind("webkitTransitionEnd");
+                                                $('.alert-bg').removeClass('box-none');
+                                                gamebtn.addEventListener('click', goReward, false);
+                                            })
+                                        })
+
+                                    } else {
+                                        $('.gift-name').html('Sayang sekali, kali ini anda belum beruntung!');
+                                        numrand = randNum2();
+                                        console.log(numrand);
+                                        //不中奖的时候
+                                        $(".game-goods-ul").each(function(e) {
+                                            y2 = (numrand[0]) * game_list_item_h;
+                                            y3 = (numrand[1]) * game_list_item_h;
+                                            y4 = (numrand[2]) * game_list_item_h;
+                                            setTimeout(function() {
+                                                y = (numrand[e] + settings.gameLen * (settings.game_pagesize - 1)) * game_list_item_h;
+                                                $(".game-goods-ul").eq(e).css({
+                                                    'transition-duration': '5000ms',
+                                                    'transform': 'translate(0px, -' + y + 'px) translateZ(0px)'
+                                                })
+                                            }, e * 300);
+                                            //判断最后面是否完毕
+                                            $("#game3").find(".game-goods-ul").on("webkitTransitionEnd", function() {
+
+                                                $(".game-goods-ul").eq(2).css({
+                                                    'transition-duration': '00ms',
+                                                    'transform': 'translate(0px, -' + y4 + 'px) translateZ(0px)'
+                                                })
+                                                $("#game3").find(".game-goods-ul").unbind("webkitTransitionEnd");
+                                            })
+                                            $("#game2").find(".game-goods-ul").on("webkitTransitionEnd", function() {
+
+                                                $(".game-goods-ul").eq(1).css({
+                                                    'transition-duration': '00ms',
+                                                    'transform': 'translate(0px, -' + y3 + 'px) translateZ(0px)'
+                                                })
+                                                $("#game2").find(".game-goods-ul").unbind("webkitTransitionEnd");
+                                            })
+                                            $("#game1").find(".game-goods-ul").on("webkitTransitionEnd", function() {
+
+                                                $(".game-goods-ul").eq(0).css({
+                                                    'transition-duration': '00ms',
+                                                    'transform': 'translate(0px, -' + y2 + 'px) translateZ(0px)'
+                                                })
+                                                $("#game1").find(".game-goods-ul").unbind("webkitTransitionEnd");
+                                                $('.alert-bg').removeClass('box-none');
+                                                gamebtn.addEventListener('click', goReward, false);
+                                            })
+                                        })
+
+                                    }
+                                    setTimeout(function() {
+                                        //抽奖次数
+                                        $.ajax({
+                                                url: baseUrl + '/superapi/s/activity/lottery/userLotteryInfo?appSecret=' + appSecret + '&access_token=' + access_token,
+                                                type: 'POST',
+                                                dataType: 'json',
+                                                data: ''
+                                            })
+                                            .done(function(res) {
+                                                console.log(res);
+                                                var data = res.data;
+                                                var htl = '';
+
+                                                if (res.code == 200) {
+                                                    htl = 'Hari ini masih ada ' + data.lotteryCount + ' kali kesempatan mendapatkan bonus';
+                                                    $('.reward-num').html(htl);
+                                                    $('.reward-num1').html(htl);
+                                                }
+                                            })
+                                            .fail(function() {
+                                                console.log("error");
+                                            })
+                                            .always(function() {
+                                                console.log("complete");
+                                            });
+                                    }, 500)
+                                } else if (res.code == 11) {
+                                    //抽奖次数为0
+                                    if (res.data.canExchange == 1) {
+                                        $('.alert-bg1').removeClass('box-none');
+                                        $('.btn-chance').click(function(event) {
+                                            //兑换抽奖机会
+                                            $.ajax({
+                                                    url: baseUrl + '/superapi/s/activity/lottery/exchangeLotteryCount?appSecret=' + appSecret + '&access_token=' + access_token,
+                                                    type: 'POST',
+                                                    dataType: 'json',
+                                                    data: ''
+                                                })
+                                                .done(function(res) {
+                                                    let data = res.data;
+                                                    if (res.code == 200) {
+                                                        $('.tip-text3').html('Berhasil ditukarkan');
+                                                        $('.alert-bg3').removeClass('box-none');
+                                                        setTimeout(function() {
+                                                            $('.alert-bg3').addClass('box-none');
+                                                        }, 3000);
+                                                        //抽奖次数
+                                                        $.ajax({
+                                                                url: baseUrl + '/superapi/s/activity/lottery/userLotteryInfo?appSecret=' + appSecret + '&access_token=' + access_token,
+                                                                type: 'POST',
+                                                                dataType: 'json',
+                                                                data: ''
+                                                            })
+                                                            .done(function(res) {
+                                                                console.log(res);
+                                                                var data = res.data;
+                                                                var htl = '';
+                                                                if (res.code == 200) {
+                                                                    htl = 'Hari ini masih ada' + data.lotteryCount + 'kali kesempatan mendapatkan bonus';
+                                                                    $('.reward-num').html(htl);
+                                                                    $('.reward-num1').html(htl);
+                                                                }
+                                                            })
+                                                        $('.alert-bg1').addClass('box-none');
+                                                        gamebtn.addEventListener('click', goReward, false);
+                                                    } else {
+                                                        $('.tip-text3').html(res.message);
+                                                        $('.alert-bg3').removeClass('box-none');
+                                                        setTimeout(function() {
+                                                            $('.alert-bg3').addClass('box-none');
+                                                        }, 1000);
+                                                        gamebtn.addEventListener('click', goReward, false);
+                                                    }
+                                                })
+                                                .fail(function() {
+                                                    alert('Penukaran gagal');
+                                                })
+                                                .always(function() {
+                                                    console.log("complete");
+                                                });
+                                        });
+                                        $('.btn-close1').click(function(event) {
+                                            $('.alert-bg1').addClass('box-none');
+                                            $('.alert-bg2').removeClass('box-none');
+                                            $('.btn-share').click(function(event) {
+                                                sharepage();
+                                            });
+                                            gamebtn.addEventListener('click', goReward, false);
+
+                                        });
+                                    } else {
+                                        $('.alert-bg1').addClass('box-none');
+                                        $('.alert-bg2').removeClass('box-none');
+                                        $('.btn-share').click(function(event) {
+                                            sharepage();
+                                        });
+                                        gamebtn.addEventListener('click', goReward, false);
+                                    }
+
+
+                                } else {
+                                    alert(res.message);
+                                }
+                            })
+                            .fail(function() {
+                                console.log("error");
+                            })
+                            .always(function() {
+                                console.log("complete");
+                            });
+
+
+                        $('.btn-close').on('click', function() {
+                            window.control.close();
+                        });
+                        $('.alert-bg').on('click', function() {
+                            $('.alert-bg').addClass('box-none');
+                            gamebtn.addEventListener('click', goReward, false);
+                        });
+                        $('.alert-bg1').on('click', function() {
+                            $('.alert-bg1').addClass('box-none');
+                            gamebtn.addEventListener('click', goReward, false);
+                        });
+                        $('.alert-bg2').on('click', function() {
+                            $('.alert-bg2').addClass('box-none');
+                            gamebtn.addEventListener('click', goReward, false);
+                        });
+                    }
+                }
+
+                function randNum2() {
+                    a = Math.floor(Math.random() * gameLen);
+                    b = Math.floor(Math.random() * gameLen);
+                    c = Math.floor(Math.random() * gameLen);
+                    arr = [];
+                    if (a == b) {
+                        return randNum2();
+                    } else {
+                        return arr = [a, b, c];
+                    }
+                }
+            }
+        })
+
+        $(function() {
+            //抽奖次数
+            $.ajax({
+                    url: baseUrl + '/superapi/s/activity/lottery/userLotteryInfo?appSecret=' + appSecret + '&access_token=' + access_token,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: ''
+                })
+                .done(function(res) {
+                    console.log(res);
+                    var data = res.data;
+                    var htl = '';
+                    if (res.code == 200) {
+                        htl = 'Hari ini masih ada ' + data.lotteryCount + ' kali kesempatan mendapatkan bonus';
+                        $('.reward-num').html(htl);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+            $.luckGame({});
+        });
+    </script>
+</body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var mySwiper = new Swiper('.swiper-container', {
+            autoplay: true, //可选选项，自动滑动
+            slidesPerView: 4,
+            // loop: true,
+        });
+
+    });
+</script>
+
+</html>

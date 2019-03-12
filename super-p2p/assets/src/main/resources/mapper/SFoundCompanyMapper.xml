@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supers.p2p.assets.dao.SFoundCompanyMapper">
+  <resultMap id="BaseResultMap" type="com.supers.p2p.assets.entity.SFoundCompany">
+    <!--
+      WARNING - @mbg.generated
+    -->
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="company_id" jdbcType="INTEGER" property="companyId" />
+      <result column="asset_info" jdbcType="VARCHAR" property="assetInfo" />
+      <result column="forecast_asset_demand" jdbcType="DECIMAL" property="forecastAssetDemand" />
+      <result column="found_condition" jdbcType="VARCHAR" property="foundCondition" />
+      <result column="found_year_rate_rand" jdbcType="VARCHAR" property="foundYearRateRand" />
+      <result column="found_cost" jdbcType="DECIMAL" property="foundCost" />
+      <result column="month_transaction_rate" jdbcType="DECIMAL" property="monthTransactionRate" />
+      <result column="collect_fail_rate" jdbcType="DECIMAL" property="collectFailRate" />
+      <result column="business_area" jdbcType="VARCHAR" property="businessArea" />
+      <result column="platform_name" jdbcType="VARCHAR" property="platformName" />
+      <result column="url" jdbcType="VARCHAR" property="url" />
+      <result column="unReceived_principal" jdbcType="DECIMAL" property="unreceivedPrincipal" />
+      <result column="month_investment_amount" jdbcType="DECIMAL" property="monthInvestmentAmount" />
+      <result column="escrow" jdbcType="INTEGER" property="escrow" />
+      <result column="is_direct_investment" jdbcType="INTEGER" property="isDirectInvestment" />
+      <result column="is_straight_back" jdbcType="INTEGER" property="isStraightBack" />
+      <result column="month_transaction_amount" jdbcType="DECIMAL" property="monthTransactionAmount" />
+      <result column="margin" jdbcType="DECIMAL" property="margin" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+  <update id="saveFoundCompany">
+      UPDATE s_found_company
+      SET
+      platform_name=#{platformName},
+      url=#{url},
+      unReceived_principal=#{unreceivedPrincipal},
+      month_investment_amount=#{monthInvestmentAmount},
+      escrow=#{escrow},
+      is_direct_investment=#{isDirectInvestment},
+      is_straight_back=#{isStraightBack},
+      asset_info=#{assetInfo},
+      forecast_asset_demand=#{forecastAssetDemand},
+      found_condition=#{foundCondition},
+      found_year_rate_rand=#{foundYearRateRand},
+      found_cost=#{foundCost},
+      month_transaction_rate=#{monthTransactionRate},
+      collect_fail_rate=#{collectFailRate},
+      business_area=#{businessArea},
+      month_transaction_amount=#{monthTransactionAmount},
+      margin=#{margin}
+      WHERE id = #{id}
+  </update>
+    <select id="selectFoundCompanyDetail" parameterType="map" resultType="map">
+        SELECT
+        t2.id AS companyId,
+        t2.abbreviation_name AS abbreviationName,
+        t2.audit_status AS auditStatus,
+        t1.id,
+        t1.asset_info AS assetInfo,
+        t1.forecast_asset_demand AS forecastAssetDemand,
+        t1.found_condition AS foundCondition,
+        t1.found_year_rate_rand AS foundYearRateRand,
+        t1.found_cost AS foundCost,
+        t1.month_transaction_rate AS monthTransactionRate,
+        t1.collect_fail_rate AS collectFailRate,
+        t1.business_area AS businessArea,
+        t1.platform_name AS platformName,
+        t1.url,
+        t1.unReceived_principal AS unreceivedPrincipal,
+        t1.month_investment_amount AS monthInvestmentAmount,
+        t1.escrow,
+        t1.is_direct_investment AS isDirectInvestment,
+        t1.is_straight_back AS isStraightBack,
+        t1.month_transaction_amount as monthTransactionAmount,
+        t1.margin as margin
+      FROM s_company t2
+      LEFT JOIN s_found_company t1 ON t1.company_id = t2.id
+      LEFT JOIN s_user t3 ON t3.company_id = t2.id
+      WHERE t2.company_type =1
+      <if test="userId!=null and userId!=''">
+          AND t3.id = #{userId}
+      </if>
+      <if test="companyId!=null and companyId!=''">
+          AND t2.id = #{companyId}
+      </if>
+  </select>
+
+
+  <select id="selectFoundCompanyList" resultType="map" parameterType="map">
+    SELECT
+      t2.id AS companyId,
+      t2.abbreviation_name AS abbreviationName,
+      t1.asset_info AS assetInfo,
+      t1.forecast_asset_demand AS forecastAssetDemand,
+      t1.found_condition AS foundCondition,
+      t1.found_year_rate_rand AS foundYearRateRand,
+      t1.found_cost AS foundCost,
+      t1.month_transaction_rate AS monthTransactionRate,
+      t1.collect_fail_rate AS collectFailRate,
+      t1.unReceived_principal AS unreceivedPrincipal,
+      t1.month_investment_amount AS monthInvestmentAmount,
+      t1.escrow,
+      t1.is_direct_investment AS isDirectInvestment,
+      t1.is_straight_back AS isStraightBack,
+      t1.month_transaction_amount AS monthTransactionAmount,
+      t1.margin AS margin
+    FROM s_found_company t1
+    LEFT JOIN s_company t2 ON t1.company_id = t2.id
+    WHERE
+      t2.company_type =1 AND t2.audit_status=2
+      <if test="exceptCompanyId!=null and exceptCompanyId!=''">
+          AND t2.id != #{exceptCompanyId}
+      </if>
+      <if test="companyId!=null and companyId!=''">
+          AND t2.id=#{companyId}
+      </if>
+      <if test="assetInfo!=null and assetInfo!=''">
+          AND t1.asset_info LIKE concat('%',#{assetInfo},'%')
+      </if>
+      <if test="foundCostMin!=null and foundCostMin!=''">
+          <![CDATA[ AND t1.found_cost >= #{foundCostMin} ]]>
+      </if>
+      <if test="foundCostMax!=null and foundCostMax!=''">
+          <![CDATA[ AND t1.found_cost <= #{foundCostMax} ]]>
+      </if>
+      <if test="collectFailRate!=null and collectFailRate!=''">
+          <![CDATA[ AND t1.collect_fail_rate <= #{collectFailRate} ]]>
+      </if>
+      <if test="fullName!=null and fullName!=''">
+          AND t2.full_name LIKE concat('%',#{fullName},'%')
+      </if>
+      <if test="abbreviationName!=null and abbreviationName!=''">
+          AND t2.abbreviation_name LIKE #{abbreviationName}
+      </if>
+      <if test="businessArea!=null and businessArea!=''">
+          <foreach collection="businessArea" item="item" open="and (" close=")" separator="or">
+              t1.business_area LIKE concat('%',#{item},'%')
+          </foreach>
+      </if>
+      <!--
+     AND NOT EXISTS (SELECT 1 FROM s_black_white_list a WHERE a.target_company_id=t2.id AND a.company_id=#{exceptCompanyId})
+     -->
+  </select>
+
+    <select id="selectCoopFoundCompanyList" resultType="map" parameterType="map">
+        SELECT
+        t3.id AS whiteListId,
+        t2.id AS companyId,
+        t2.abbreviation_name AS abbreviationName,
+        t1.asset_info AS assetInfo,
+        t1.forecast_asset_demand AS forecastAssetDemand,
+        t1.found_condition AS foundCondition,
+        t1.found_year_rate_rand AS foundYearRateRand,
+        t1.found_cost AS foundCost,
+        t1.month_transaction_rate AS monthTransactionRate,
+        t1.collect_fail_rate AS collectFailRate,
+        t1.unReceived_principal AS unreceivedPrincipal,
+        t1.month_investment_amount AS monthInvestmentAmount,
+        t1.escrow,
+        t1.is_direct_investment AS isDirectInvestment,
+        t1.is_straight_back AS isStraightBack,
+        t1.month_transaction_amount AS monthTransactionAmount,
+        t1.margin AS margin
+        FROM s_found_company t1
+        LEFT JOIN s_company t2 ON t1.company_id = t2.id
+        LEFT JOIN s_black_white_list t3 ON t2.id = t3.target_company_id
+        WHERE
+        t2.company_type =1 AND t3.company_id = #{exceptCompanyId} AND t2.audit_status=2
+        <if test="companyId!=null and companyId!=''">
+            AND t2.id=#{companyId}
+        </if>
+        <if test="assetInfo!=null and assetInfo!=''">
+            AND t1.asset_info LIKE concat('%',#{assetInfo},'%')
+        </if>
+        <if test="foundCostMin!=null and foundCostMin!=''">
+            <![CDATA[ AND t1.found_cost >= #{foundCostMin} ]]>
+        </if>
+        <if test="foundCostMax!=null and foundCostMax!=''">
+            <![CDATA[ AND t1.found_cost <= #{foundCostMax} ]]>
+        </if>
+        <if test="collectFailRate!=null and collectFailRate!=''">
+            <![CDATA[ AND t1.collect_fail_rate <= #{collectFailRate} ]]>
+        </if>
+        <if test="fullName!=null and fullName!=''">
+            AND t2.full_name LIKE concat('%',#{fullName},'%')
+        </if>
+        <if test="abbreviationName!=null and abbreviationName!=''">
+            AND t2.abbreviation_name LIKE #{abbreviationName}
+        </if>
+        <if test="businessArea!=null and businessArea!=''">
+            <foreach collection="businessArea" item="item" open="and (" close=")" separator="or">
+                t1.business_area LIKE concat('%',#{item},'%')
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

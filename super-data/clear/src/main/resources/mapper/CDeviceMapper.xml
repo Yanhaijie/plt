@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wi.data.clear.dao.CDeviceMapper">
+  <resultMap id="BaseResultMap" type="com.wi.data.clear.entity.CDevice">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="unique_id" jdbcType="VARCHAR" property="uniqueId" />
+    <result column="imei" jdbcType="VARCHAR" property="imei" />
+    <result column="imsi" jdbcType="VARCHAR" property="imsi" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="manufacturer" jdbcType="VARCHAR" property="manufacturer" />
+    <result column="system" jdbcType="VARCHAR" property="system" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+
+  <update id="saveOrUpdateDevice">
+    insert into c_device(unique_id, imei, imsi, model, manufacturer, system)
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      #{item.uniqueId,jdbcType=VARCHAR},
+      #{item.imei,jdbcType=VARCHAR},
+      #{item.imsi,jdbcType=INTEGER},
+      #{item.model,jdbcType=INTEGER},
+      #{item.manufacturer,jdbcType=VARCHAR},
+      #{item.system,jdbcType=VARCHAR}
+      )
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+    imei = VALUES(imei),
+    imsi = VALUES(imsi),
+    model = VALUES(model),
+    manufacturer = VALUES(manufacturer),
+    system = VALUES(system)
+  </update>
+</mapper>

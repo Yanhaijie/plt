@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SMessageUserMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SMessageUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="message_id" jdbcType="INTEGER" property="messageId" />
+    <result column="message_type_id" jdbcType="INTEGER" property="messageTypeId" />
+    <result column="read_status" jdbcType="INTEGER" property="readStatus" />
+    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="message_title" jdbcType="VARCHAR" property="messageTitle" />
+    <result column="message_content" jdbcType="VARCHAR" property="messageContent" />
+  </resultMap>
+
+  <!-- 消息列表,先按未读，已读排序，再按创建时间排序 -->
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select * from s_message_user
+    where 1=1
+    <if test="userId!=null and userId!='' ">
+      AND user_id=#{userId}
+    </if>
+    <if test="messageTypeId != null and messageTypeId!=''">
+      AND message_type_id =#{messageTypeId}
+    </if>
+    <if test="readStatus != null">
+      AND read_status =#{readStatus}
+    </if>
+    <if test="deleteStatus != null">
+      AND delete_status =#{deleteStatus}
+    </if>
+    order by
+    read_status asc ,
+    create_time desc
+    <if test="takesize != null ">
+      limit #{takesize},#{size}
+    </if>
+  </select>
+
+
+  <select id="getCount" resultType="Integer" parameterType="com.supermoney.loan.api.entity.SMessageUser">
+    select count(*) from  s_message_user
+    where 1=1
+    <if test="userId!=null and userId!='' ">
+      AND user_id=#{userId}
+    </if>
+    <if test="messageTypeId != null and messageTypeId!=''">
+      AND message_type_id =#{messageTypeId}
+    </if>
+    <if test="readStatus != null">
+      AND read_status =#{readStatus}
+    </if>
+    <if test="deleteStatus != null">
+      AND delete_status =#{deleteStatus}
+    </if>
+  </select>
+
+</mapper>

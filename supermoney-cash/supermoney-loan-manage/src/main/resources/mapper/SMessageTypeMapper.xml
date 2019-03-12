@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SMessageTypeMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SMessageType">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="use_status" jdbcType="INTEGER" property="useStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+
+
+
+  <!-- 模糊查询-->
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select * from s_message_type
+    WHERE 1=1
+    <if test="name != null and name!=''">
+      AND name LIKE CONCAT('%',#{name},'%')
+    </if>
+    <if test="useStatus!=null and useStatus!='' ">
+      AND use_status=#{useStatus}
+    </if>
+    order by create_time desc
+  </select>
+</mapper>

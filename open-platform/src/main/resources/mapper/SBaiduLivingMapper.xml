@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.open.platform.dao.SBaiduLivingMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.open.platform.entity.SBaiduLiving">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="face_liveness" jdbcType="DECIMAL" property="faceLiveness" />
+    <result column="frr_1e_2" jdbcType="DECIMAL" property="frr1e2" />
+    <result column="frr_1e_3" jdbcType="DECIMAL" property="frr1e3" />
+    <result column="frr_1e_4" jdbcType="DECIMAL" property="frr1e4" />
+    <result column="face_token" jdbcType="VARCHAR" property="faceToken" />
+    <result column="face_left" jdbcType="VARCHAR" property="faceLeft" />
+    <result column="face_top" jdbcType="VARCHAR" property="faceTop" />
+    <result column="face_width" jdbcType="VARCHAR" property="faceWidth" />
+    <result column="face_height" jdbcType="VARCHAR" property="faceHeight" />
+    <result column="rotation" jdbcType="VARCHAR" property="rotation" />
+    <result column="face_probability" jdbcType="VARCHAR" property="faceProbability" />
+    <result column="face_yaw" jdbcType="VARCHAR" property="faceYaw" />
+    <result column="face_pitch" jdbcType="VARCHAR" property="facePitch" />
+    <result column="face_roll" jdbcType="VARCHAR" property="faceRoll" />
+  </resultMap>
+</mapper>

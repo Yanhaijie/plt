@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SXenditVirtualAccountMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SXenditVirtualAccount">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="owner_id" jdbcType="VARCHAR" property="ownerId" />
+    <result column="external_id" jdbcType="VARCHAR" property="externalId" />
+    <result column="bank_code" jdbcType="VARCHAR" property="bankCode" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="account_number" jdbcType="VARCHAR" property="accountNumber" />
+    <result column="is_single_use" jdbcType="VARCHAR" property="isSingleUse" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="xenditSecretKey" jdbcType="VARCHAR" property="xenditsecretkey" />
+    <result column="suggested_amount" jdbcType="VARCHAR" property="suggestedAmount" />
+    <result column="is_closed" jdbcType="VARCHAR" property="isClosed" />
+    <result column="expected_amount" jdbcType="VARCHAR" property="expectedAmount" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="udpate_time" jdbcType="VARCHAR" property="udpateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+  </resultMap>
+</mapper>

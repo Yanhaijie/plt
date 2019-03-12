@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SUserMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="user_level" jdbcType="INTEGER" property="userLevel" />
+    <result column="credit_score" jdbcType="INTEGER" property="creditScore" />
+    <result column="credit_grade" jdbcType="INTEGER" property="creditGrade" />
+    <result column="credit_modify" jdbcType="INTEGER" property="creditModify" />
+    <result column="need_amount" jdbcType="INTEGER" property="needAmount" />
+    <result column="need_cycle" jdbcType="INTEGER" property="needCycle" />
+    <result column="person_one" jdbcType="VARCHAR" property="personOne" />
+    <result column="person_two" jdbcType="VARCHAR" property="personTwo" />
+    <result column="person_three" jdbcType="VARCHAR" property="personThree" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="country_area" jdbcType="VARCHAR" property="countryArea" />
+    <result column="reg_source" jdbcType="VARCHAR" property="regSource" />
+    <result column="reg_ip" jdbcType="VARCHAR" property="regIp" />
+    <result column="user_status" jdbcType="INTEGER" property="userStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="lottery_count" jdbcType="INTEGER" property="lotteryCount" />
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select * from s_user
+    where 1=1
+    <if test="userId!=null and userId!='' ">
+      AND id =#{userId}
+    </if>
+    <if test="userName!=null and userName!='' ">
+      AND user_name =#{userName}
+    </if>
+    <if test="realName!=null and realName!='' ">
+      AND real_name =#{realName}
+    </if>
+    <if test="userStatus!=null and userStatus!='' ">
+      AND user_status=#{userStatus}
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ update_time>= #{startDate}]]>
+      AND <![CDATA[ update_time<= #{endDate}]]>
+    </if>
+  </select>
+
+  <select id="selectCreditModifyUser" resultType="map">
+    SELECT  id FROM s_user WHERE credit_modify=1
+  </select>
+
+  <update id="updateCreditInfo">
+    UPDATE s_user
+    SET credit_modify=#{creditModify}
+    <if test="creditGrade != null and creditGrade != ''">
+      ,credit_grade=#{creditGrade}
+    </if>
+    <if test="creditScore != null and creditScore != ''">
+      ,credit_score=#{creditScore}
+    </if>
+    WHERE id = #{userId}
+  </update>
+
+  <select id="reportNomalCount" resultType="map" parameterType="map">
+    select
+     t1.theDay,
+     IFNULL(t1.regCount,0) as regCount ,
+     IFNULL(t2.bindCount,0) as  bindCount,
+     IFNULL(t3.bountyCount,0) as bountyCount,
+     IFNULL(t4.identyCount,0) as identyCount,
+     IFNULL(t5.orderCount,0) as orderCount
+
+    from
+    (select DATE_FORMAT(create_time,'%Y-%m-%d') as theDay,count(*) regCount  from s_user WHERE  <![CDATA[ create_time>=#{startTime} and create_time<=#{endTime}  ]]> GROUP BY theDay ) t1
+    left join  (select DATE_FORMAT(bind_time,'%Y-%m-%d') as theDay,count(*) bindCount from s_user_bind  where card_status=0 and  <![CDATA[ bind_time>=#{startTime} and bind_time<=#{endTime}  ]]> GROUP BY theDay) t2 on t1.theDay=t2.theDay
+    left join (select DATE_FORMAT(create_time,'%Y-%m-%d') as theDay, count(*) bountyCount from s_bounty_record where  <![CDATA[ create_time>=#{startTime} and create_time<=#{endTime}  ]]>   GROUP BY theDay) t3 on t1.theDay=t3.theDay
+    left join (select DATE_FORMAT(update_time,'%Y-%m-%d') as theDay,count(*) identyCount from s_at_identity where identity_status=3  and  <![CDATA[  update_time>=#{startTime}  and update_time<=#{endTime}  ]]>  GROUP BY theDay) t4 on t1.theDay=t4.theDay
+    left join (select DATE_FORMAT(create_time,'%Y-%m-%d') as theDay, count(*) orderCount  from s_loan_order WHERE <![CDATA[  create_time>=#{startTime} and create_time<=#{endTime}  ]]>  GROUP BY theDay) t5 on t1.theDay=t5.theDay
+   order by t1.theDay ASC
+</select>
+
+  <select id="reportOrderCount" resultType="map" parameterType="map">
+     select  *  from  (select 'total' as label) t1
+        inner join (
+        select
+        'total' as label2,
+        IFNULL( sum(loan_amount),0) as waitLoanTotal,-- 待收借款总额
+        IFNULL(sum(loan_interest),0) as waitInterestAmount, -- 待收利息
+        IFNULL(sum(need_amount),0) as waitNeedAmount -- 待收本金
+        from
+        s_loan_order WHERE order_status=7) t2 on t1.label=t2.label2
+
+        inner join (
+        select
+        'total' as label3,
+        IFNULL(count(*),0) as overdueCount, -- 逾期订单数量
+        IFNULL(sum(overdue_amount),0) as waitOverdueAmount -- 待收逾期
+        from
+        s_loan_order  where order_status in (7,9) and now() > plan_repayment_time
+        ) t3 on t1.label=t3.label3
+
+        inner join (
+        select
+        'total' as label4,
+        IFNULL(count(*),0) as  repayedCount , -- 已还订单
+        IFNULL(sum(repayment_total),0) as repaymentTotal, -- 已还借款总额
+        IFNULL(sum(loan_interest),0) as repayInterestAmount, -- 已收利息
+        IFNULL(sum(need_amount),0) as repayNeedAmount, -- 一已收本金
+        IFNULL(sum(overdue_amount),0) as overdueAmounted -- 已收逾期
+        from s_loan_order   where order_status in (8)
+        ) t4 on t1.label=t4.label4
+        limit 1
+  </select>
+
+  <select id="reportOrderStatus" resultType="map" parameterType="map">
+     select order_status as orderStatus, count(*) statusCount from s_loan_order  GROUP BY order_status
+  </select>
+
+  <resultMap id="distributionMap" type="com.supermoney.loan.mg.entity.vo.DistributionVo">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+      <result column="country" jdbcType="VARCHAR" property="country" />
+      <result column="country_area" jdbcType="VARCHAR" property="countryArea" />
+      <result column="reg_source" jdbcType="VARCHAR" property="regSource" />
+      <result column="reg_ip" jdbcType="VARCHAR" property="regIp" />
+      <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+      <result column="user_pic" jdbcType="VARCHAR" property="userPic" />
+      <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+      <result column="subCount" jdbcType="INTEGER" property="subCount"/>
+  </resultMap>
+    <select id="getDistributions" resultMap="distributionMap" parameterType="map">
+        SELECT s1.id,s1.mobile,IFNULL(s2.nCount,0) subCount
+          from s_user s1
+          LEFT JOIN (SELECT parent_id,COUNT(parent_id) nCount FROM s_user  WHERE parent_id IS NOT NULL GROUP BY parent_id) s2
+            ON s1.id = s2.parent_id
+          WHERE s1.id &lt;&gt; 1
+          <if test="pid!=null and pid!='' ">
+              AND s1.parent_id = #{pid}
+          </if>
+          <if test="id!=null and id!='' ">
+              AND s1.id = #{id}
+          </if>
+          <if test="mobile!=null and mobile!='' ">
+            AND s1.mobile = #{mobile}
+          </if>
+          ORDER BY subCount desc
+          limit #{pageIndex},#{pageSize}
+    </select>
+    <select id="getDistributionCount" resultType="INTEGER" parameterType="map">
+        SELECT IFNULL(count(s1.id),0)
+        from s_user s1
+        LEFT JOIN (SELECT parent_id,COUNT(parent_id) nCount FROM s_user  WHERE parent_id IS NOT NULL GROUP BY parent_id) s2
+        ON s1.id = s2.parent_id
+        WHERE 1=1
+        <if test="pid!=null and pid!='' ">
+            AND s1.parent_id = #{pid}
+        </if>
+        <if test="id!=null and id!='' ">
+            AND s1.id = #{id}
+        </if>
+        <if test="mobile!=null and mobile!='' ">
+            AND s1.mobile = #{mobile}
+        </if>
+    </select>
+</mapper>

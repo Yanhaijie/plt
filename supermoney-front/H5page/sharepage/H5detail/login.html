@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/flexible.js"></script>
+
+<!-- HTTPS required. HTTP will give a 403 forbidden response -->
+<script src="https://sdk.accountkit.com/en_US/sdk.js"></script>
+<style>
+	div{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 8rem/* 300px */;
+	}
+	#country_code,#phone_number{
+		width: 50%;
+		height: 1.33333333rem/* 50px */;
+		outline: none;
+		font-size: .42666667rem/* 16px */;
+		border: 1px solid #666;
+		margin-bottom: .53333333rem/* 20px */;
+	}
+	#phone_number{
+		
+	}
+	button{
+		width: 50%;
+		color: red;
+		height: 1.06666667rem/* 40px */;
+		line-height:1.06666667rem ;
+		font-size: .42666667rem/* 16px */;
+		border-radius: .26666667rem;
+		outline: none;
+	}
+</style>
+
+</head>
+<body>
+	<div>
+		<input value="+86" id="country_code" />
+		<input value="17512097915" placeholder="phone number" id="phone_number"/>
+		<button onclick="smsLogin();">Login via SMS</button>
+	</div>
+
+
+
+
+    
+</body>
+
+
+<script>
+  // initialize Account Kit with CSRF protection
+  AccountKit_OnInteractive = function(){
+    AccountKit.init(
+      {
+        appId:"462525834236236", 
+        state:"dsffd44ad65654fda64fd4a", 
+        version:"v1.1",
+        fbAppEventsEnabled:true,
+        debug:true 
+      }
+    );
+  };
+  // login callback
+  function loginCallback(response) {
+    if (response.status === "PARTIALLY_AUTHENTICATED") {
+      var code = response.code;
+      var csrf = response.state;
+      console.log(code);
+      console.log(csrf);
+      alert(csrf);
+      alert(code);
+      // Send code to server to exchange for access token
+    }
+    else if (response.status === "NOT_AUTHENTICATED") {
+      // handle authentication failure
+      alert(11);
+    }
+    else if (response.status === "BAD_PARAMS") {
+      // handle bad parameters
+      alert(22);
+    }
+  }
+
+  // phone form submission handler
+  function smsLogin() {
+    var countryCode = document.getElementById("country_code").value;
+    var phoneNumber = document.getElementById("phone_number").value;
+    AccountKit.login(
+      'PHONE', 
+      {countryCode: countryCode, phoneNumber: phoneNumber}, // will use default values if not specified
+      loginCallback
+    );
+  }
+
+
+  // email form submission handler
+  function emailLogin() {
+    var emailAddress = document.getElementById("email").value;
+    AccountKit.login(
+      'EMAIL',
+      {emailAddress: emailAddress},
+      loginCallback
+    );
+  }
+</script>
+
+
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supers.p2p.assets.dao.SCompanyMapper">
+  <resultMap id="BaseResultMap" type="com.supers.p2p.assets.entity.SCompany">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="company_type" jdbcType="INTEGER" property="companyType" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="dsc" jdbcType="VARCHAR" property="dsc" />
+    <result column="abbreviation_name" jdbcType="VARCHAR" property="abbreviationName" />
+    <result column="link_man" jdbcType="VARCHAR" property="linkMan" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="legal_person_name" jdbcType="VARCHAR" property="legalPersonName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="id_card_first_url" jdbcType="VARCHAR" property="idCardFirstUrl" />
+    <result column="id_card_first_ocr" jdbcType="VARCHAR" property="idCardFirstOcr" />
+    <result column="id_card_second_url" jdbcType="VARCHAR" property="idCardSecondUrl" />
+    <result column="id_card_second_ocr" jdbcType="VARCHAR" property="idCardSecondOcr" />
+    <result column="unify_credit_num" jdbcType="VARCHAR" property="unifyCreditNum" />
+    <result column="unify_credit_url" jdbcType="VARCHAR" property="unifyCreditUrl" />
+    <result column="unify_credit_orc" jdbcType="VARCHAR" property="unifyCreditOrc" />
+    <result column="opening_bank_num" jdbcType="VARCHAR" property="openingBankNum" />
+    <result column="opening_bank_url" jdbcType="VARCHAR" property="openingBankUrl" />
+    <result column="opening_bank_ocr" jdbcType="VARCHAR" property="openingBankOcr" />
+    <result column="bank_credit_num" jdbcType="VARCHAR" property="bankCreditNum" />
+    <result column="bank_credit_url" jdbcType="VARCHAR" property="bankCreditUrl" />
+    <result column="bank_credit_orc" jdbcType="VARCHAR" property="bankCreditOrc" />
+    <result column="business_license_url" jdbcType="VARCHAR" property="businessLicenseUrl" />
+    <result column="tax_register_url" jdbcType="VARCHAR" property="taxRegisterUrl" />
+    <result column="asset_size" jdbcType="VARCHAR" property="assetSize" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select * from s_company
+    where 1=1 AND audit_status IN (1,2,3)
+    <if test="id!=null and id!='' ">
+      AND id =#{id}
+    </if>
+    <if test="companyType!=null and companyType!='' ">
+      AND company_type =#{companyType}
+    </if>
+    <if test="fullName!=null and fullName!='' ">
+      AND full_name LIKE CONCAT('%',#{fullName},'%')
+    </if>
+    <if test="abbreviationName!=null and abbreviationName!='' ">
+      AND abbreviation_name LIKE CONCAT('%',#{abbreviationName},'%')
+    </if>
+    <if test="auditStatus!=null and auditStatus!='' ">
+      AND audit_status=#{auditStatus}
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ create_time>= #{startDate}]]>
+      AND <![CDATA[ create_time<= #{endDate}]]>
+    </if>
+    order by create_time desc
+  </select>
+
+  <select id="selectCompanyExeclModel" resultType="java.util.Map" parameterType="map">
+    SELECT * FROM s_company t where t.audit_status = 0 order by t.id asc
+  </select>
+  <select id="selectAssetCompanyExeclModel" resultType="java.util.Map" parameterType="map">
+    SELECT t.id as company_no,t.abbreviation_name,t.full_name,t1.* FROM s_company t left join s_asset_company t1 on t.id = t1.company_id where t.company_type=0 and  t1.id is null order by t.id asc
+  </select>
+  <select id="selectFoundCompanyExeclModel" resultType="java.util.Map" parameterType="map">
+    SELECT t.id as company_no,t.abbreviation_name,t.full_name,t1.* FROM s_company t left join s_found_company t1 on t.id = t1.company_id where t.company_type=1 and t1.id is null order by t.id asc
+  </select>
+
+</mapper>

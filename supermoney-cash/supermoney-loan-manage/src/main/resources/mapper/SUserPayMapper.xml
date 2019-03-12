@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SUserPayMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SUserPay">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="pay_source_id" jdbcType="INTEGER" property="paySourceId" />
+    <result column="related_id" jdbcType="INTEGER" property="relatedId" />
+    <result column="pay_money" jdbcType="DECIMAL" property="payMoney" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="pay_platform" jdbcType="VARCHAR" property="payPlatform" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+    <result column="pay_type" jdbcType="INTEGER" property="payType" />
+    <result column="get_status" jdbcType="INTEGER" property="getStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+  <resultMap id="SUserPayVoMap" extends="BaseResultMap" type="com.supermoney.loan.mg.entity.vo.SUserPayVo">
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+  </resultMap>
+
+
+  <select id="selectList" resultMap="SUserPayVoMap" parameterType="map">
+    select ser.id as userId,ser.user_name,ser.real_name,pay.* from s_user_pay pay left join s_user ser
+    on pay.user_id = ser.id
+    WHERE 1=1
+    <if test="userName != null and userName!=''">
+      AND ser.user_name LIKE CONCAT('%',#{userName},'%')
+    </if>
+    <if test="userId != null and userId!=''">
+      AND ser.id=#{userId}
+    </if>
+    <if test="realName != null and realName!=''">
+      AND ser.real_name LIKE CONCAT('%',#{realName},'%')
+    </if>
+    <if test="payStatus!=null and payStatus!=''">
+      AND pay.pay_status=#{payStatus}
+    </if>
+    <if test="startTime != null and startTime!='' and endTime!=null and endTime!='' ">
+      AND <![CDATA[ pay.startTime>= #{startTime}]]>
+      AND <![CDATA[ pay.startTime<= #{startTime}]]>
+    </if>
+    order by pay.create_time desc
+  </select>
+
+
+  <update id="doPayCheck" parameterType="map">
+    UPDATE s_user_pay
+    SET pay_status=#{status},remark=#{remark}
+    WHERE id in
+    <foreach collection="ids" item="idValue" open="(" close=")" separator=",">
+      #{idValue}
+    </foreach>
+  </update>
+</mapper>

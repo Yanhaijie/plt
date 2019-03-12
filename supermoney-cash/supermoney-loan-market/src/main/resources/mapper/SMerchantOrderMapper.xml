@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mpper PUBLIC "-//mybtis.org//DTD Mpper 3.0//EN" "http://mybtis.org/dtd/mybtis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.market.dao.SMerchantOrderMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.market.entity.SMerchantOrder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bounty_id" jdbcType="INTEGER" property="bountyId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="m_order_code" jdbcType="VARCHAR" property="mOrderCode" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="loan_reason" jdbcType="VARCHAR" property="loanReason" />
+    <result column="loan_amount" jdbcType="DECIMAL" property="loanAmount" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="fee_rate" jdbcType="DECIMAL" property="feeRate" />
+    <result column="got_amount" jdbcType="DECIMAL" property="gotAmount" />
+    <result column="interest_amount" jdbcType="DECIMAL" property="interestAmount" />
+    <result column="fee_amount" jdbcType="DECIMAL" property="feeAmount" />
+    <result column="overdue_amount" jdbcType="DECIMAL" property="overdueAmount" />
+    <result column="overdue_limit" jdbcType="INTEGER" property="overdueLimit" />
+    <result column="wait_repay_amount" jdbcType="DECIMAL" property="waitRepayAmount" />
+    <result column="repaymented_amount" jdbcType="DECIMAL" property="repaymentedAmount" />
+    <result column="plan_repayment_time" jdbcType="TIMESTAMP" property="planRepaymentTime" />
+    <result column="repayment_time" jdbcType="TIMESTAMP" property="repaymentTime" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="repay_method" jdbcType="INTEGER" property="repayMethod" />
+    <result column="duration" jdbcType="INTEGER" property="duration" />
+    <result column="paycack_account_id" jdbcType="VARCHAR" property="paycackAccountId" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="use_status" jdbcType="INTEGER" property="useStatus" />
+  </resultMap>
+
+    <select id="selectOrderByOrderId" parameterType="string" resultMap="BaseResultMap">
+        SELECT  * FROM s_merchant_order WHERE order_code = #{orderId}
+    </select>
+
+  <select id="selectDemandOrder" parameterType="com.supermoney.loan.market.entity.requestVo.DemandRequestVo" resultType="com.supermoney.loan.market.entity.respondVo.DemandRespondVo">
+      SELECT
+      t1.order_code AS need_id,
+      t1.m_order_code AS merchant_product_code,
+      t2.real_name AS person,
+      t2.mobile AS user_mobile,
+      t1.create_time AS create_time,
+      t1.loan_amount AS amount,
+      t1.rate AS rate,
+      t1.fee_rate AS fee_rate,
+      0 AS rate_unit,
+      t1.duration AS duration,
+      0 AS duration_unit,
+      t1.loan_reason AS reason,
+      t1.repay_method AS repay_method,
+      (SELECT a.id_number FROM s_at_identity a WHERE a.user_id = t2.id AND a.identity_status=3 limit 1) id_number
+      FROM s_merchant_order t1
+      LEFT JOIN s_user t2 ON t1.user_id = t2.id
+      <where>
+          <if test="merchantId != null and merchantId != ''">
+               AND t1.merchant_id = #{merchantId}
+          </if>
+          <if test="start_time != null">
+              <![CDATA[ AND t1.create_time >= #{start_time} ]]>
+          </if>
+          <if test="end_time != null">
+              <![CDATA[ AND t1.create_time <= #{end_time} ]]>
+          </if>
+          <if test="start_amount != null and start_amount != ''">
+              <![CDATA[ AND t1.loan_amount >= #{start_amount} ]]>
+          </if>
+          <if test="end_amount != null and end_amount != ''">
+              <![CDATA[ AND t1.loan_amount <= #{end_amount} ]]>
+          </if>
+      </where>
+      ORDER BY t1.create_time DESC
+  </select>
+
+    <update id="updateDemandOrder" parameterType="list">
+        UPDATE s_merchant_order SET use_status = 2
+        WHERE order_code
+        <foreach collection="list" separator="," open=" in( "  close=")" item="item">
+            #{item.need_id}
+        </foreach>
+    </update>
+
+  <select id="selectUserCreditInfo" resultType="com.supermoney.loan.market.entity.respondVo.CreditRespondVo" parameterType="string">
+        SELECT
+        t1.order_code,
+        t2.real_name,
+        t1.id_number,
+        t2.sex AS gender,
+        '0000-00-00 00:00:00' AS birthday,
+        t3.education,
+        t1.img_front AS id_img_front,
+        t1.img_hold AS id_img_hold,
+        t3.religion,
+        t3.married,
+        t3.live_address,
+        t3.company_name,
+        t3.industry,
+        t3.company_phone,
+        t3.company_address,
+        (CASE t3.profession WHEN 1 THEN '白领' WHEN 2 THEN '商人' WHEN 3 THEN '无业' WHEN 4 THEN '学生' ELSE '' END) AS career,
+        t3.position,
+        t3.month_income,
+        '?' AS img_job,
+        t3.urgent_name,
+        t3.relative_type AS urgent_relation,
+        t3.relative_phone AS urgent_phone,
+        t3.urgent_phone AS friend_phone,
+        t3.urgent_name AS friend_name,
+        t1.bank_name,
+        t1.bank_account,
+        t1.card_name
+        FROM
+        (SELECT c.*,d.card_account AS bank_account,d.holding_name AS card_name , e.cn_name AS bank_name
+        FROM (SELECT b.order_code,a.* FROM s_merchant_order b LEFT JOIN s_at_identity a ON a.user_id = b.user_id WHERE b.order_code = #{orderId} ORDER BY a.create_time DESC limit 1) c
+        LEFT JOIN s_user_bind d ON c.user_id = d.user_id
+        LEFT JOIN s_bank e ON d.bank_id = e.id
+        WHERE d.card_status= 0 LIMIT 1) t1
+        LEFT JOIN s_user t2 ON t2.id = t1.user_id
+        LEFT JOIN s_at_credit_information t3 ON t1.user_id = t3.user_id
+  </select>
+
+    <select id="selectUserWorkInfo" parameterType="string" resultType="map">
+        SELECT  * FROM s_at_credit_information
+        WHERE user_id = #{userId}
+    </select>
+
+  <select id="findNeedClearUser"  resultMap="BaseResultMap">
+    SELECT distinct user_name FROM s_merchant_order t where t.use_status != 2 and t.use_status  != 1 order by t.use_status asc
+  </select>
+
+<update id="updateClearResult">
+    UPDATE s_merchant_order
+    SET use_status=#{useStatus}
+    WHERE user_name=#{userName}
+    and use_status != 2
+    and use_status != 1
+</update>
+
+</mapper>

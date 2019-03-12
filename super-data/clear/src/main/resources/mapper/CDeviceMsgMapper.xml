@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wi.data.clear.dao.CDeviceMsgMapper">
+  <resultMap id="BaseResultMap" type="com.wi.data.clear.entity.CDeviceMsg">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="unique_id" jdbcType="VARCHAR" property="uniqueId" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="messaage" jdbcType="VARCHAR" property="messaage" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="seen" jdbcType="VARCHAR" property="seen" />
+    <result column="dateSent" jdbcType="VARCHAR" property="datesent" />
+    <result column="read" jdbcType="VARCHAR" property="read" />
+    <result column="person" jdbcType="VARCHAR" property="person" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+
+
+  <update id="saveOrUpdateDeviceMsg">
+    SET NAMES utf8mb4;
+    insert into c_device_msg(`unique_id`, `number`, `messaage`, `time`,`seen`,`dateSent`,`read`,`person`)
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      #{item.uniqueId,jdbcType=VARCHAR},
+      #{item.number,jdbcType=VARCHAR},
+      #{item.messaage,jdbcType=VARCHAR},
+      #{item.time,jdbcType=VARCHAR},
+      #{item.seen,jdbcType=VARCHAR},
+      #{item.datesent,jdbcType=VARCHAR},
+      #{item.read,jdbcType=VARCHAR},
+      #{item.person,jdbcType=VARCHAR}
+      )
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+    `unique_id` = VALUES(`unique_id`),
+    `number` = VALUES(`number`),
+    `messaage` = VALUES(`messaage`),
+    `time` = VALUES(`time`),
+    `seen` = VALUES(`seen`),
+    `dateSent` = VALUES(`dateSent`),
+    `read` = VALUES(`read`),
+    `person` = VALUES(`person`)
+  </update>
+</mapper>

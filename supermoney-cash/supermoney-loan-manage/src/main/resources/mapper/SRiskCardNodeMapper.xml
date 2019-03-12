@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SRiskCardNodeMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SRiskCardNode">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="card_id" jdbcType="INTEGER" property="cardId" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="node_name" jdbcType="VARCHAR" property="nodeName" />
+    <result column="node_type" jdbcType="INTEGER" property="nodeType" />
+    <result column="node_status" jdbcType="INTEGER" property="nodeStatus" />
+    <result column="source_id" jdbcType="INTEGER" property="sourceId" />
+    <result column="proportion" jdbcType="DECIMAL" property="proportion" />
+    <result column="score_val" jdbcType="DECIMAL" property="scoreVal" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+</mapper>

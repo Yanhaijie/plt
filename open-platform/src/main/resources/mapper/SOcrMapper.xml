@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.open.platform.dao.SOcrMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.open.platform.entity.SOcr">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="identity_tag" jdbcType="VARCHAR" property="identityTag" />
+    <result column="nik" jdbcType="VARCHAR" property="nik" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="blood_type" jdbcType="VARCHAR" property="bloodType" />
+    <result column="religion" jdbcType="VARCHAR" property="religion" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="place_date_birth" jdbcType="VARCHAR" property="placeDateBirth" />
+    <result column="rt_rw" jdbcType="VARCHAR" property="rtRw" />
+    <result column="occupation" jdbcType="VARCHAR" property="occupation" />
+    <result column="Province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="village" jdbcType="VARCHAR" property="village" />
+    <result column="expiry_date" jdbcType="VARCHAR" property="expiryDate" />
+    <result column="marital_status" jdbcType="VARCHAR" property="maritalStatus" />
+    <result column="identity_info_status" jdbcType="INTEGER" property="identityInfoStatus" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="nationality" jdbcType="VARCHAR" property="nationality" />
+  </resultMap>
+  
+  <select id="selectOcrListByParam" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM s_ocr
+    <where>
+      <if test="nik != null and nik != ''">
+        AND nik = #{nik}
+      </if>
+      <if test="name != null and name != ''">
+        AND name = #{name}
+      </if>
+    </where>
+  </select>
+</mapper>

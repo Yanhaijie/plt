@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SActivityGiftMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SActivityGift">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="gift_name" jdbcType="VARCHAR" property="giftName" />
+    <result column="use_way" jdbcType="TINYINT" property="useWay" />
+    <result column="gift_type" jdbcType="TINYINT" property="giftType" />
+    <result column="gift_count" jdbcType="INTEGER" property="giftCount" />
+    <result column="gift_img" jdbcType="VARCHAR" property="giftImg" />
+    <result column="gift_desc" jdbcType="VARCHAR" property="giftDesc" />
+    <result column="probability" jdbcType="DECIMAL" property="probability" />
+    <result column="daily_count" jdbcType="INTEGER" property="dailyCount" />
+    <result column="remain_count" jdbcType="INTEGER" property="remainCount" />
+    <result column="max_count" jdbcType="INTEGER" property="maxCount" />
+  </resultMap>
+
+  <select id="selectCommonGiftByMap" resultMap="BaseResultMap" parameterType="map">
+      SELECT * FROM s_activity_gift WHERE activity_name=#{activityName} AND use_way = 0 AND remain_count > 0
+  </select>
+
+  <select id="selectGiftListByMap" resultType="map" parameterType="map">
+      SELECT
+      id AS  id,
+      gift_name AS giftName,
+      gift_type AS giftType,
+      gift_count AS giftCount,
+      gift_img AS giftImg,
+      remain_count AS remainCount,
+      max_count AS maxCount
+      FROM s_activity_gift WHERE activity_name=#{activityName} AND use_way in(0,1) ORDER BY probability ASC
+  </select>
+
+  <update id="subRemainCount">
+      UPDATE s_activity_gift SET remain_count=remain_count-1 WHERE id=#{id}
+  </update>
+
+  <update id="addRemainCount">
+      UPDATE s_activity_gift SET remain_count=remain_count+1 WHERE id=#{id}
+  </update>
+
+</mapper>

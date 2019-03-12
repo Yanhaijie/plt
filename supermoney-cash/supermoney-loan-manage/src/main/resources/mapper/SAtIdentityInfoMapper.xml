@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SAtIdentityInfoMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SAtIdentityInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="identity_id" jdbcType="INTEGER" property="identityId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="identity_tag" jdbcType="VARCHAR" property="identityTag" />
+    <result column="nik" jdbcType="VARCHAR" property="nik" />
+    <result column="namne" jdbcType="VARCHAR" property="namne" />
+    <result column="blood_type" jdbcType="VARCHAR" property="bloodType" />
+    <result column="religion" jdbcType="VARCHAR" property="religion" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="place_date_birth" jdbcType="VARCHAR" property="placeDateBirth" />
+    <result column="rt_rw" jdbcType="VARCHAR" property="rtRw" />
+    <result column="occupation" jdbcType="VARCHAR" property="occupation" />
+    <result column="Province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="village" jdbcType="VARCHAR" property="village" />
+    <result column="expiry_date" jdbcType="VARCHAR" property="expiryDate" />
+    <result column="marital_status" jdbcType="VARCHAR" property="maritalStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="identity_info_status" jdbcType="INTEGER" property="identityInfoStatus" />
+  </resultMap>
+</mapper>

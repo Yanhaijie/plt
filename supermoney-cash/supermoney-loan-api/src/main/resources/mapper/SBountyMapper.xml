@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SBountyMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SBounty">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bounty_name" jdbcType="VARCHAR" property="bountyName" />
+    <result column="bounty_dsc" jdbcType="VARCHAR" property="bountyDsc" />
+    <result column="bounty_money" jdbcType="DECIMAL" property="bountyMoney" />
+    <result column="ads_ico" jdbcType="VARCHAR" property="adsIco" />
+    <result column="ads_pic" jdbcType="VARCHAR" property="adsPic" />
+    <result column="ads_type" jdbcType="INTEGER" property="adsType" />
+    <result column="ads_id" jdbcType="VARCHAR" property="adsId" />
+    <result column="loan_min_money" jdbcType="DECIMAL" property="loanMinMoney" />
+    <result column="loan_max_money" jdbcType="DECIMAL" property="loanMaxMoney" />
+    <result column="loan_min_rate" jdbcType="DECIMAL" property="loanMinRate" />
+    <result column="loan_max_rate" jdbcType="DECIMAL" property="loanMaxRate" />
+    <result column="loan_limit" jdbcType="INTEGER" property="loanLimit" />
+    <result column="loan_limit_max" jdbcType="INTEGER" property="loanLimitMax" />
+    <result column="loan_limit_unit" jdbcType="INTEGER" property="loanLimitUnit" />
+
+    <result column="day_money" jdbcType="DECIMAL" property="dayMoney" />
+    <result column="bounty_score" jdbcType="DECIMAL" property="bountyScore" />
+    <result column="lenders_limit" jdbcType="INTEGER" property="lendersLimit" />
+    <result column="lenders_limit_unit" jdbcType="INTEGER" property="lendersLimitUnit" />
+    <result column="lenders_dsc" jdbcType="VARCHAR" property="lendersDsc" />
+    <result column="limit_dsc" jdbcType="VARCHAR" property="limitDsc" />
+    <result column="bounty_company" jdbcType="VARCHAR" property="bountyCompany" />
+
+    <result column="ads_url" jdbcType="VARCHAR" property="adsUrl" />
+    <result column="ads_callback_url" jdbcType="VARCHAR" property="adsCallbackUrl" />
+    <result column="lead_url" jdbcType="VARCHAR" property="leadUrl" />
+    <result column="lead_url_type" jdbcType="INTEGER" property="leadUrlType" />
+    <result column="bounty_status" jdbcType="INTEGER" property="bountyStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="loan_simple_dsc" jdbcType="VARCHAR" property="loanSimpleDsc" />
+    <result column="loan_dsc" jdbcType="VARCHAR" property="loanDsc" />
+    <result column="project_dsc" jdbcType="VARCHAR" property="projectDsc" />
+    <result column="front_sort" jdbcType="INTEGER" property="frontSort" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="merchant_product_code" jdbcType="VARCHAR" property="merchantProductCode" />
+  </resultMap>
+
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select * from s_bounty
+    WHERE 1=1
+    <if test="bountyName != null and bountyName!=''">
+      AND bounty_name LIKE CONCAT('%',#{bountyName},'%')
+    </if>
+    <if test="bountyStatus!=null and bountyStatus!='' ">
+      AND bounty_status=#{bountyStatus}
+    </if>
+    <if test="areaCode!=null and areaCode!='' and areaCode=='480'">
+      AND (area_code=#{areaCode} OR area_code is null)
+    </if>
+    <!-- area_code 默认的是菲律宾的数据-->
+    <if test="areaCode!=null and areaCode!='' and areaCode!='480' ">
+      OR area_code=#{areaCode}
+    </if>
+    <if test="startDate != null and startDate!='' and endDate!=null and endDate!='' ">
+      AND <![CDATA[ update_time>= #{startDate}]]>
+      AND <![CDATA[ update_time<= #{endDate}]]>
+    </if>
+    order by front_sort desc
+    <if test="takesize != null ">
+      limit #{takesize},#{size}
+    </if>
+
+
+  </select>
+
+</mapper>

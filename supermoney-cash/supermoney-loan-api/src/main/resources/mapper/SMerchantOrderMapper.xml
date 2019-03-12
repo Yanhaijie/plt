@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.api.dao.SMerchantOrderMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.api.entity.SMerchantOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bounty_id" jdbcType="INTEGER" property="bountyId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="m_order_code" jdbcType="VARCHAR" property="mOrderCode" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="loan_reason" jdbcType="VARCHAR" property="loanReason" />
+    <result column="loan_amount" jdbcType="DECIMAL" property="loanAmount" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="fee_rate" jdbcType="DECIMAL" property="feeRate" />
+    <result column="got_amount" jdbcType="DECIMAL" property="gotAmount" />
+    <result column="interest_amount" jdbcType="DECIMAL" property="interestAmount" />
+    <result column="fee_amount" jdbcType="DECIMAL" property="feeAmount" />
+    <result column="overdue_amount" jdbcType="DECIMAL" property="overdueAmount" />
+    <result column="overdue_limit" jdbcType="INTEGER" property="overdueLimit" />
+    <result column="wait_repay_amount" jdbcType="DECIMAL" property="waitRepayAmount" />
+    <result column="repaymented_amount" jdbcType="DECIMAL" property="repaymentedAmount" />
+    <result column="plan_repayment_time" jdbcType="TIMESTAMP" property="planRepaymentTime" />
+    <result column="repayment_time" jdbcType="TIMESTAMP" property="repaymentTime" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="repay_method" jdbcType="INTEGER" property="repayMethod" />
+    <result column="duration" jdbcType="INTEGER" property="duration" />
+    <result column="paycack_account_id" jdbcType="VARCHAR" property="paycackAccountId" />
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="use_status" jdbcType="INTEGER" property="useStatus" />
+  </resultMap>
+
+  <select id="bountyHasOrder" parameterType="map" resultType="INTEGER">
+     select  IFNULL(count(*),0) as sl  from s_merchant_order where user_id=#{userId} and bounty_id=#{bountyId} and  order_status not in (2,4,6)
+  </select>
+
+  <select id="hasUserData" parameterType="map" resultType="INTEGER">
+      select  count(*) sl from s_merchant_order where user_id=#{userId} and use_status in (1,2)
+  </select>
+
+</mapper>

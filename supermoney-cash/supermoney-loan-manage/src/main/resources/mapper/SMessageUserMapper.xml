@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermoney.loan.mg.dao.SMessageUserMapper">
+  <resultMap id="BaseResultMap" type="com.supermoney.loan.mg.entity.SMessageUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="message_id" jdbcType="INTEGER" property="messageId" />
+    <result column="message_type_id" jdbcType="INTEGER" property="messageTypeId" />
+    <result column="read_status" jdbcType="INTEGER" property="readStatus" />
+    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opt" jdbcType="VARCHAR" property="opt" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="message_title" jdbcType="VARCHAR" property="messageTitle" />
+    <result column="message_content" jdbcType="VARCHAR" property="messageContent" />
+  </resultMap>
+
+
+  <!-- 模糊查询-->
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select t.id,t.user_id,t.message_id,t.message_type_id,t.read_status,t.delete_status,t.create_time,t.update_time,t.opt,message_title,t.message_content,
+      t1.user_name from s_message_user t left join s_user t1 on t.user_id = t1.id
+    WHERE 1=1
+    <if test="userName != null and userName!=''">
+      AND t1.user_name LIKE CONCAT('%',#{userName},'%')
+    </if>
+    <if test="userId!=null and userId!='' ">
+      AND t.user_id=#{userId}
+    </if>
+    <if test="messageTitle != null and messageTitle!=''">
+      AND t.message_title LIKE CONCAT('%',#{messageTitle},'%')
+    </if>
+    <if test="messageId!=null and messageId!='' ">
+      AND t.message_id=#{messageId}
+    </if>
+    order by t.create_time desc
+  </select>
+
+
+    <!-- 批量插入 -->
+    <insert id="batchInsert">
+        insert into s_message_user(user_id,message_id,message_type_id,read_status,delete_status,opt,user_name,message_title,message_content)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.userId,jdbcType=INTEGER}
+            , #{item.messageId,jdbcType=INTEGER}
+            , #{item.messageTypeId,jdbcType=INTEGER}
+            , #{item.readStatus,jdbcType=INTEGER}
+            , #{item.deleteStatus,jdbcType=INTEGER}
+            , #{item.opt,jdbcType=VARCHAR}
+            , #{item.userName,jdbcType=VARCHAR}
+            , #{item.messageTitle,jdbcType=VARCHAR}
+            , #{item.messageContent,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

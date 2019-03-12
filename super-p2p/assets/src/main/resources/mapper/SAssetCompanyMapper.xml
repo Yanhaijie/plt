@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supers.p2p.assets.dao.SAssetCompanyMapper">
+  <resultMap id="BaseResultMap" type="com.supers.p2p.assets.entity.SAssetCompany">
+    <!--
+      WARNING - @mbg.generated
+    -->
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="company_id" jdbcType="INTEGER" property="companyId" />
+      <result column="asset_info" jdbcType="VARCHAR" property="assetInfo" />
+      <result column="asset_size" jdbcType="DECIMAL" property="assetSize" />
+      <result column="month_size" jdbcType="DECIMAL" property="monthSize" />
+      <result column="every_deadline" jdbcType="VARCHAR" property="everyDeadline" />
+      <result column="every_sum" jdbcType="DECIMAL" property="everySum" />
+      <result column="overdue_M0" jdbcType="VARCHAR" property="overdueM0" />
+      <result column="overdue_M1" jdbcType="VARCHAR" property="overdueM1" />
+      <result column="overdue_M2" jdbcType="VARCHAR" property="overdueM2" />
+      <result column="overdue_M3" jdbcType="VARCHAR" property="overdueM3" />
+      <result column="accept_found" jdbcType="DECIMAL" property="acceptFound" />
+      <result column="business_area" jdbcType="VARCHAR" property="businessArea" />
+      <result column="is_performance_insurance" jdbcType="INTEGER" property="isPerformanceInsurance" />
+      <result column="is_guarantee" jdbcType="INTEGER" property="isGuarantee" />
+      <result column="inventory" jdbcType="DECIMAL" property="inventory" />
+      <result column="starting_amount" jdbcType="DECIMAL" property="startingAmount" />
+      <result column="is_margin" jdbcType="INTEGER" property="isMargin" />
+      <result column="loan_form" jdbcType="VARCHAR" property="loanForm" />
+      <result column="remittance_form" jdbcType="VARCHAR" property="remittanceForm" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="opt" jdbcType="VARCHAR" property="opt" />
+  </resultMap>
+
+    <resultMap id="AssetCompanyVoMap" extends="BaseResultMap" type="com.supers.p2p.assets.entity.vo.SAssetCompanyVo">
+        <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+        <result column="abbreviation_name" jdbcType="VARCHAR" property="abbreviationName" />
+        <result column="company_no" jdbcType="INTEGER" property="companyNo" />
+        <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    </resultMap>
+
+
+    <select id="getAssetCompanyPoolList" resultType="java.util.Map" parameterType="map">
+    SELECT
+        t1.id,
+        t1.company_type,
+        t1.full_name,
+        t1.abbreviation_name,
+        t.asset_size,
+        t.month_size,
+        t.every_deadline,
+        t.every_sum,
+        CONCAT(CONCAT('M0:', overdue_M0, ','),
+                CONCAT('M1:', overdue_M1, ','),
+                CONCAT('M2:', overdue_M2, ','),
+                CONCAT('M3:', overdue_M3, ',')) AS overdue,
+        t.accept_found,
+        t.business_area,
+        t.is_performance_insurance,
+        t.is_guarantee
+    FROM
+        s_asset_company t
+        JOIN
+        s_company t1 ON t1.id = t.company_id
+    WHERE 1=1 and audit_status =2
+    <if test="my_company_id != null and my_company_id!=''">
+        AND t1.id !=#{my_company_id}
+    </if>
+    <if test="id != null and id!=''">
+      AND t.company_id=#{id}
+    </if>
+    <if test="asset_type != null and asset_type!=''">
+      AND CONCAT(',',t.asset_info,',') LIKE CONCAT('%,',#{asset_type},',%')
+    </if>
+    <if test="every_deadline != null and every_deadline!=''">
+      AND t.every_deadline=#{every_deadline}
+    </if>
+    <if test="every_sum != null and every_sum!=''">
+      AND t.every_sum=#{every_sum}
+    </if>
+    <if test="business_area!=null and business_area!=''">
+        <foreach collection="business_area" item="item" open="and (" close=")" separator="or">
+            t.business_area LIKE concat('%',#{item},'%')
+        </foreach>
+    </if>
+    <if test="full_name != null and full_name!=''">
+      AND t1.full_name LIKE CONCAT('%',#{full_name},'%')
+    </if>
+    <if test="abbreviation_name != null and abbreviation_name!=''">
+      AND t1.abbreviation_name LIKE CONCAT('%',#{abbreviation_name},'%')
+    </if>
+  </select>
+
+
+
+    <select id="findByParam" resultMap="AssetCompanyVoMap" parameterType="map">
+        SELECT
+        t.id as company_no,
+        t.full_name,
+        t.abbreviation_name,
+        t.audit_status,
+        t1.*
+        FROM
+        s_company t
+        left JOIN
+        s_asset_company t1 ON t.id = t1.company_id
+        WHERE 1=1
+        <if test="id != null and id!=''">
+            AND t.id=#{id}
+        </if>
+        order by t.create_time desc
+    </select>
+</mapper>

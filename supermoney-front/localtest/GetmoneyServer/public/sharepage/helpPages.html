@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bantuan</title>
+    <link rel="stylesheet" href="rewardactivity/css/swiper-4.2.2.min.css">
+    <script src="javascripts/flexible.js"></script>
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
+    <script src="rewardactivity/js/swiper-4.2.2.min.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: .26666667rem/* 10px */
+            ;
+            background: #f9f9f9;
+            box-sizing: border-box;
+        }
+        
+        .swiper-container {
+            width: 100%;
+            height: 3.46666667rem/* 130px */
+            ;
+        }
+        
+        .swiper-container a {
+            text-decoration: none;
+        }
+        
+        .banner-slide {
+            margin-bottom: .26666667rem/* 10px */
+            ;
+        }
+        
+        .tips {
+            width: 100%;
+            height: 2.8rem/* 105px */
+            ;
+            background: #FFFFFF;
+            margin: 0 auto;
+            border-bottom: 1px solid #f5f5f5;
+            box-sizing: border-box;
+            padding: .4rem/* 15px */
+            ;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tip-left {
+            width: 5.78666667rem/* 217px */
+            ;
+            height: 100%;
+        }
+        
+        .tip-right {
+            width: 3.04rem/* 114px */
+            ;
+            height: 2rem/* 75px */
+            ;
+            background: red;
+        }
+        
+        .tip-title {
+            font-family: PingFangSC-Medium;
+            font-size: .32rem/* 12px */
+            ;
+            color: #333333;
+            letter-spacing: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            margin-bottom: .64rem/* 24px */
+            ;
+        }
+        
+        .tips-box {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .tips-box img {
+            margin-right: .13333333rem/* 5px */
+            ;
+        }
+        
+        .tips-read-num,
+        .tips-good,
+        .tips-tipe {
+            display: flex;
+            align-items: center;
+            font-family: PingFangSC-Regular;
+            font-size: .32rem/* 12px */
+            ;
+            color: #999999;
+            letter-spacing: 0;
+        }
+        
+        .swiper-wrapper img {
+            width: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="banner-slide swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide tip1"><img src="images/help/1.png"></div>
+            </div>
+        </div>
+        <div class="tips tip1">
+            <div class="tip-left">
+                <div class="tip-title">Bagaimana cara mengajukan pinjaman?</div>
+                <div class="tips-box">
+                    <div class="tips-tipe">Tips</div>
+                    <div class="tips-read-num"><img src="images/see.png"><span>18.5k</span></div>
+                    <div class="tips-good"><img src="images/well.png"><span>13.2k</span></div>
+                </div>
+            </div>
+            <img src="images/help/X1.png" class="tip-right">
+        </div>
+        <div class="tips tip2">
+            <div class="tip-left">
+                <div class="tip-title">Penyabungkan Bank?</div>
+                <div class="tips-box">
+                    <div class="tips-tipe">Tips</div>
+                    <div class="tips-read-num"><img src="images/see.png"><span>16.1k</span></div>
+                    <div class="tips-good"><img src="images/well.png"><span>11.4k</span></div>
+                </div>
+            </div>
+            <img src="images/help/X2.png" class="tip-right">
+        </div>
+        <div class="tips tip3">
+            <div class="tip-left">
+                <div class="tip-title">Silahkan periksa proses pembayaran</div>
+                <div class="tips-box">
+                    <div class="tips-tipe">Tips</div>
+                    <div class="tips-read-num"><img src="images/see.png"><span>14.3k</span></div>
+                    <div class="tips-good"><img src="images/well.png"><span>12.6k</span></div>
+                </div>
+            </div>
+            <img src="images/help/X3.png" class="tip-right">
+        </div>
+    </div>
+</body>
+<script>
+    $('.tip1').click(function(event) {
+        window.control.openUrl('https://www.supermoneyshop.com/static/sharepage/howLoan.html');
+        // window.location.href="howLoan.html";
+    });
+    $('.tip2').click(function(event) {
+        window.control.openUrl('https://www.supermoneyshop.com/static/sharepage/howBindBank.html');
+        // window.location.href="howBindBank.html";
+    });
+    $('.tip3').click(function(event) {
+        window.control.openUrl('https://www.supermoneyshop.com/static/sharepage/howRepayment.html');
+        // window.location.href="howRepayment.html";
+    });
+    // var mySwiper = new Swiper ('.swiper-container', {
+    //        autoplay: true,//可选选项，自动滑动,
+    //        loop: true,
+    // })
+</script>
+
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SuperUang</title>
+    <script src="javascripts/flexible.js"></script>
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
+    <style>
+    html,
+    body {
+        width: 10rem;
+        height: 17.78666667rem/* 667px */;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: url('images/01.png') no-repeat;
+        background-size: 100%;
+    }
+
+    .container img {
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .text {
+        position: absolute;
+        z-index: 99;
+        top: 70%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8.21333333rem/* 308px */
+        ;
+        height: 1.36rem/* 51px */
+        ;
+        font-family: PingFangSC-Medium;
+        font-size: .32rem/* 12px */
+        ;
+        color: #FFFFFF;
+        text-align: center;
+        line-height: .45333333rem/* 17px */
+        ;
+    }
+
+    .text2 {
+        position: absolute;
+        z-index: 99;
+        top: 38%;
+        left: 53%;
+        transform: translateX(-50%);
+        width: 4.66666667rem/* 175px */
+        ;
+        height: 2rem/* 75px */
+        ;
+        font-family: PingFangSC-Medium;
+        font-size: .42666667rem;
+        color: #E11F0E;
+        text-align: center;
+    }
+
+    .text3 {
+        position: absolute;
+        z-index: 99;
+        top: 51%;
+        left: 53%;
+        transform: translateX(-50%);
+        width: 4.66666667rem/* 175px */
+        ;
+        height: 2rem/* 75px */
+        ;
+        font-family: PingFangSC-Medium;
+        font-size: .42666667rem;
+        color: #E11F0E;
+        text-align: center;
+    }
+
+    .ipt-meg {
+        position: absolute;
+        z-index: 99;
+        top: 55%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-bottom: .64rem/* 24px */
+        ;
+    }
+
+    .phone-num,
+    .ver-code {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding-left: .42666667rem;
+        -web-kit-appearance: none;
+        -moz-appearance: none;
+        outline: none;
+        display: block;
+        width: 6.82666667rem/* 256px */
+        ;
+        height: 1.06666667rem/* 40px */
+        ;
+        margin: 0 auto;
+        border: 1px solid #E9E9E9;
+        font-size: .37333333rem;
+    }
+
+    input::-webkit-input-placeholder {
+        font-size: .37333333rem/* 14px */
+        ;
+        color: #BBBBBB;
+        letter-spacing: 0.23px;
+    }
+
+    .ver-code {
+        border-top: none;
+    }
+
+    .ipt-meg button {
+        position: absolute;
+        top: 1.1rem;
+        right: 0;
+        height: 1.16666667rem/* 40px */
+        ;
+        line-height: 1.16666667rem/* 40px */
+        ;
+        transform: translateX(-80%);
+        font-size: .37333333rem/* 14px */
+        ;
+        background: transparent;
+        color: #F8564E;
+        letter-spacing: 0;
+        cursor: pointer;
+    }
+
+    .ipt-meg button::before {
+        content: '';
+        display: inline-block;
+        margin-right: .26666667rem/* 10px */
+        ;
+        vertical-align: middle;
+        height: .66666667rem/* 25px */
+        ;
+        width: 1px;
+        line-height: .66666667rem;
+        background: #D8D8D8;
+        border-radius: 4px;
+    }
+
+    .sign-btn {
+        position: absolute;
+        z-index: 99;
+        top: 80%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 7.92rem/* 297px */
+        ;
+        height: 1.38666667rem/* 52px */
+        ;
+        line-height: 1.38666667rem/* 52px */
+        ;
+        text-align: center;
+        background-image: linear-gradient(-180deg, #EDCF48 0%, #FFDD12 100%);
+        border-radius: 5.27px;
+        background: url('images/03.png') no-repeat;
+        background-size: 100%;
+        font-family: PingFangSC-Regular;
+        font-size: .53333333rem/* 20px */
+        ;
+        color: #B11608;
+    }
+
+    .sign-tip {
+        width: 5.73333333rem/* 215px */
+        ;
+        margin: 0 auto;
+        font-size: .32rem/* 12px */
+        ;
+        color: #999999;
+        letter-spacing: 0;
+    }
+
+    .dis-none {
+        display: none;
+    }
+
+    .send {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        border-top-style: none;
+        border-right-style: none;
+        border-bottom-style: none;
+        border-left-style: none;
+    }
+
+    .box {
+        position: absolute;
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        background: url('images/02.png') no-repeat;
+        background-size: 100%;
+    }
+
+    .box-none {
+        display: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="ipt-meg">
+            <input type="number" class="phone-num" placeholder="Nomor ponsel" onfocus="this.placeholder='08 **** ****'">
+            <input type="number" class="ver-code" placeholder="Kode verifikasi Code">
+            <button id="send" class="send">Send</button>
+        </div>
+        <div class="text2">Mendapatkan bonus sebesar Rp 2.000</div>
+        <div class="text">Verifikasi nomer posel, dan dapatkan uang! Kesempatan undian! iPhone X telah menunggu anda untuk dibawa pulang!</div>
+        <div class="sign-btn sign-btn-up">Segera lakukan penarikan</div>
+        <div class="box box-none">
+            <div class="text3">Unduh SuperUang untuk menarik bonus</div>
+            <div class="sign-btn download-sms">Penarikan uang</div>
+        </div>
+    </div>
+</body>
+<script>
+var baseUrl = ' https://www.supermoneyshop.com/superapi';
+// var baseUrl = 'http://192.168.0.114:8000/superapi';
+// 截取字符串
+var userId = getQueryString('userId');
+var source = getQueryString('source');
+// var bountyId = getQueryString('bountyId');
+var bountyId = '';
+//点击下载pinjam
+$(".download-sms").on('click', function(e) {
+    // window.location.href = "https://play.google.com/store/apps/details?id=com.pinjam.rupiah";
+    window.location.href = 'market://details?id=com.pinjam.rupiah';
+});
+// 获取验证码
+$('.container').on('click', '.send', function(event) {
+    var sendCodeUrl = baseUrl + '/ut/sendcode?mobile=' + $('.phone-num').val();
+    if (checkPhone()) {
+        invokeSettime("#send");
+        $.ajax({
+                url: sendCodeUrl,
+                type: 'POST',
+                dataType: 'json',
+                data: {},
+            })
+            .done(function() {
+                console.log("success");
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
+
+    }
+});;
+
+// 注册
+$('.container').on('click', '.sign-btn-up', function(event) {
+    var submitUrl = baseUrl + '/ut/down-codelogin?mobile=' + $('.phone-num').val() + '&code=' + $('.ver-code').val() + '&userId=' + userId + '&bountyId=' + bountyId+'&source='+source;
+    $.ajax({
+            url: submitUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: {},
+        })
+        .done(function(res) {
+            console.log("success");
+            $('.box').removeClass('box-none');
+
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+});
+$(".container").on("input", ".ver-code", function() {
+    setTimeout(function() {
+        var phone = $('.phone-num').val();
+        var code = $('.ver-code').val();
+        console.log(phone, code);
+        if (phone && code) {
+            $('.sign-btn').addClass('send-active');
+        }
+    }, 300);
+});
+// 检验手机号
+function checkPhone(e) {
+    var sMobile = $('.phone-num').val();
+    if (!(/^08/.test(sMobile))) {
+        alert("手机号不正确");
+        $('.inputPhone').focus();
+        return false;
+    }
+    return true;
+};
+// 按钮倒计时
+function invokeSettime(obj) {
+    var countdown = 60;
+    settime(obj);
+
+    function settime(obj) {
+        if (countdown == 0) {
+            $(obj).attr("disabled", false);
+            $(obj).text("Send");
+            countdown = 60;
+            return;
+        } else {
+            $(obj).attr("disabled", true);
+            $(obj).text(countdown + "s");
+            countdown--;
+        }
+        setTimeout(function() {
+            settime(obj)
+        }, 1000)
+    }
+};
+// 截取字符串
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return decodeURI(r[2]);
+    return null;
+};
+</script>
+
+</html>

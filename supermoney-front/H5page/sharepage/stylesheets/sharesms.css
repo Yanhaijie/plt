@@ -1,0 +1,333 @@
+.container {
+    width: 100%;
+    height: 100%;
+
+    background: #fff;
+}
+img{
+    display: block;
+     width: 1.92rem/* 72px */
+    ;
+    height: 1.92rem/* 72px */
+    ;
+    margin: 0 auto;
+    margin-top: 1.49333333rem/* 56px */
+    ;
+    margin-bottom: .42666667rem/* 16px */
+    ;
+    object-fit: cover;
+}
+.app-name {
+    font-size: .48rem/* 18px */
+    ;
+
+    width: 100%;
+
+    text-align: center;
+
+    color: #333;
+}
+
+.app-text {
+    font-size: .37333333rem/* 14px */
+    ;
+    line-height: .85333333rem/* 32px */
+    ;
+
+    width: 80%;
+    margin: 0 auto .64rem/* 24px */
+    ;
+
+    color: #666;
+}
+
+.get-money1, .get-money2{
+    font-family: PingFangSC-Regular;
+    font-size: .37333333rem/* 14px */
+    ;
+    line-height: .85333333rem/* 32px */
+    ;
+
+    color: #fd3f45;
+}
+
+.download-btn {
+    font-size: .37333333rem/* 14px */
+    ;
+    line-height: .96rem/* 36px */
+    ;
+
+    width: 8.8rem/* 330px */
+    ;
+    height: .96rem/* 36px */
+    ;
+    margin: 0 auto;
+    margin-bottom: .85333333rem/* 32px */
+    ;
+
+    text-align: center;
+
+    color: #fff;
+    border-radius: .96rem/* 36px */
+    ;
+    background: #f8564e;
+}
+
+.share-btn {
+    font-size: .37333333rem/* 14px */
+    ;
+    line-height: .96rem/* 36px */
+    ;
+
+    width: 8.8rem/* 330px */
+    ;
+    height: .96rem/* 36px */
+    ;
+    margin: 0 auto;
+
+    text-align: center;
+
+    color: #f8564e;
+    border: 1px solid #f8564e;
+    border-radius: .96rem/* 36px */
+    ;
+}
+
+
+
+
+/*注册弹窗*/
+
+.sign-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .4);
+}
+
+.warp {
+    width: 7.68rem/* 288px */
+    ;
+    height: 9.70666667rem/* 364px */
+    ;
+    margin: 1.6rem auto;
+    padding-top: .64rem/* 24px */
+    ;
+    background: #F5F5F5;
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.40);
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.40);
+    border-radius: 8px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.sign-tips {
+    width: 100%;
+    text-align: center;
+    font-size: .42666667rem/* 16px */
+    ;
+    color: #333333;
+    margin-bottom: 1.25333333rem/* 47px */
+    ;
+}
+
+.ipt-meg {
+    position: relative;
+    text-align: center;
+    margin-bottom: .64rem/* 24px */
+    ;
+}
+
+.phone-num,
+.ver-code {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: .42666667rem;
+    -web-kit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    display: block;
+    width: 6.82666667rem/* 256px */
+    ;
+    height: 1.06666667rem/* 40px */
+    ;
+    margin: 0 auto;
+    border: 1px solid #E9E9E9;
+    font-size: .37333333rem;
+}
+
+input::-webkit-input-placeholder {
+    font-size: .37333333rem/* 14px */
+    ;
+    color: #BBBBBB;
+    letter-spacing: 0.23px;
+}
+
+.ver-code {
+    border-top: none;
+}
+
+.ipt-meg button {
+    position: absolute;
+    top: 1.1rem;
+    right: 0;
+    height: 1.16666667rem/* 40px */
+    ;
+    line-height: 1.16666667rem/* 40px */
+    ;
+    transform: translateX(-80%);
+    font-size: .37333333rem/* 14px */
+    ;
+    background:transparent;
+    color: #F8564E;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+
+.ipt-meg button::before {
+    content: '';
+    display: inline-block;
+    margin-right: .26666667rem/* 10px */
+    ;
+    vertical-align: middle;
+    height: .66666667rem/* 25px */
+    ;
+    width: 1px;
+    line-height: .66666667rem;
+    background: #D8D8D8;
+    border-radius: 4px;
+}
+
+.sign-btn {
+    width: 6.82666667rem/* 256px */
+    ;
+    height: 1.06666667rem;
+    line-height: 1.06666667rem;
+    font-size: .42666667rem;
+    color: #FFFFFF;
+    margin: 0 auto;
+    text-align: center;
+    letter-spacing: 0.26px;
+    background: #C4C4C4;
+    border-radius: 4px;
+    margin-bottom: .42666667rem;
+}
+
+.sign-tip {
+    width: 5.73333333rem/* 215px */
+    ;
+    margin: 0 auto;
+    font-size: .32rem/* 12px */
+    ;
+    color: #999999;
+    letter-spacing: 0;
+}
+
+.dis-none {
+    display: none;
+}
+.send{
+    margin:0; padding:0; list-style-type:none;
+    border-top-style: none;
+border-right-style: none;
+border-bottom-style: none;
+border-left-style: none;
+}
+
+.send-active {
+    background-image: linear-gradient(-134deg, #F07456 0%, #F8544D 51%, #FD3E45 100%);
+    box-shadow: 0 1px 3px 0 #F9504C;
+    border-radius: 4px;
+}
+
+
+/*H5注册后分享*/
+
+.copy-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .4);
+}
+
+.copy-warp {
+    width: 9.65333333rem/* 362px */
+    ;
+    height: 11.25333333rem/* 422px */
+    ;
+    background: #FFFFFF;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.40);
+    border-radius: 8px;
+    margin: 1.70666667rem/* 64px */
+    auto;
+    padding-top: .64rem/* 24px */
+    ;
+    box-sizing: border-box;
+}
+
+.copy-title {
+    width: 100%;
+    text-align: center;
+    font-size: .42666667rem;
+    color: #333333;
+}
+
+.copy-content {
+    width: 7.94666667rem/* 298px */
+    ;
+    height: 2rem/* 72px */
+    ;
+    word-wrap:break-word;
+    text-align: center;
+    margin: 1.54666667rem/* 58px */
+    auto .64rem/* 24px */
+    ;
+    background: #FFFFFF;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 4px;
+    font-size: .37333333rem/* 14px */;
+    color: #2A2A2A;
+    letter-spacing: 0.23px;
+}
+
+.copy-tip {
+    width: 100%;
+    margin:0 auto;
+    text-align: center;
+    font-size: .37333333rem/* 14px */
+    ;
+    color: #F8564E;
+    letter-spacing: 0.23px;
+}
+.download-sms{
+    width: 6.13333333rem/* 230px */;
+    height: 1.30666667rem/* 49px */;
+    text-align: center;
+    margin:3rem/* 130px */ auto 0;
+    border: 1px solid #49AFF6;
+    border-radius: 31px;
+    color: #49AFF6;
+    font-size: .37333333rem/* 14px */
+    ;
+}
+.copy-close1{
+    width: 1.1rem/* 31px */;
+    height: 1.8rem/* 52px */;
+    margin:1.8rem/* 20px */ auto;
+    background: url('../images/copy-close.png');
+    background-size: cover;
+}
+.copy-close{
+    width: 1.1rem/* 31px */;
+    height: 1.8rem/* 52px */;
+    margin:.53333333rem/* 20px */ auto;
+    background: url('../images/copy-close.png');
+    background-size: cover;
+}
